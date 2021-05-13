@@ -3,11 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
+		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
+		E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C08F26413340009CAB88 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08E26413340009CAB88 /* ViewController.swift */; };
@@ -38,6 +40,8 @@
 
 /* Begin PBXFileReference section */
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
+		E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7D3C08C26413340009CAB88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +108,7 @@
 		E7D3C08926413340009CAB88 /* sama */ = {
 			isa = PBXGroup;
 			children = (
+				E76E85EE264D1E4F00FAC1DF /* sama.entitlements */,
 				E7D3C0CB26413948009CAB88 /* Auth */,
 				E7D3C08A26413340009CAB88 /* AppDelegate.swift */,
 				E7D3C08C26413340009CAB88 /* SceneDelegate.swift */,
@@ -111,6 +117,7 @@
 				E7D3C09326413342009CAB88 /* Assets.xcassets */,
 				E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */,
 				E7D3C09826413342009CAB88 /* Info.plist */,
+				E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -158,6 +165,9 @@
 			dependencies = (
 			);
 			name = sama;
+			packageProductDependencies = (
+				E76E85E1264D195200FAC1DF /* FirebaseMessaging */,
+			);
 			productName = sama;
 			productReference = E7D3C08726413340009CAB88 /* sama.app */;
 			productType = "com.apple.product-type.application";
@@ -229,6 +239,9 @@
 				Base,
 			);
 			mainGroup = E7D3C07E26413340009CAB88;
+			packageReferences = (
+				E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = E7D3C08826413340009CAB88 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -246,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */,
+				E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */,
 				E7D3C09426413342009CAB88 /* Assets.xcassets in Resources */,
 				E7D3C09226413340009CAB88 /* Main.storyboard in Resources */,
 			);
@@ -452,14 +466,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = sama/sama.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 6QTT2B2N75;
 				INFOPLIST_FILE = sama/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.yoursama.sama;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yoursama.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Sama App Development";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -470,13 +488,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = sama/sama.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 6QTT2B2N75;
 				INFOPLIST_FILE = sama/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.yoursama.sama;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yoursama.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -603,6 +623,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E76E85E1264D195200FAC1DF /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E7D3C07F26413340009CAB88 /* Project object */;
 }
