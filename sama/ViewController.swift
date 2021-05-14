@@ -72,6 +72,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 
             let token = AuthToken(accessToken: accessToken, refreshToken: refreshToken)
             UserDefaults.standard.set(try? JSONEncoder().encode(token), forKey: "SAMA_AUTH_TOKEN")
+            RemoteNotificationsTokenSync.shared.syncToken()
             self.isLoggedIn = true
         }
         session.presentationContextProvider = self

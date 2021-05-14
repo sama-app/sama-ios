@@ -10,6 +10,7 @@
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
 		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
 		E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */; };
+		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C08F26413340009CAB88 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08E26413340009CAB88 /* ViewController.swift */; };
@@ -42,6 +43,7 @@
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
 		E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
+		E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTokenSync.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7D3C08C26413340009CAB88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				E7D3C08A26413340009CAB88 /* AppDelegate.swift */,
 				E7D3C08C26413340009CAB88 /* SceneDelegate.swift */,
 				E7D3C08E26413340009CAB88 /* ViewController.swift */,
+				E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */,
 				E7D3C09026413340009CAB88 /* Main.storyboard */,
 				E7D3C09326413342009CAB88 /* Assets.xcassets */,
 				E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */,
@@ -289,6 +292,7 @@
 				E7D3C08F26413340009CAB88 /* ViewController.swift in Sources */,
 				E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */,
 				E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */,
+				E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */,
 				E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */,
 				E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */,
 			);
