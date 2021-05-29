@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
+		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
 		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
 		E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		E732E958266256A9008A8B82 /* UIColors+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Branded.swift"; sourceTree = "<group>"; };
+		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
 		E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				E7F8DD82264EB61D00CD3759 /* CalendarView.swift */,
 				E7F8DD872651931500CD3759 /* TimelineView.swift */,
 				E732E958266256A9008A8B82 /* UIColors+Branded.swift */,
+				E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */,
 				E7D3C08F26413340009CAB88 /* ViewController.swift in Sources */,
 				E7F8DD83264EB61D00CD3759 /* CalendarView.swift in Sources */,

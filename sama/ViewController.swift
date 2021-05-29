@@ -43,6 +43,8 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
         let calendarSize = CGSize(width: cellSize.width * 7 + timelineWidth, height: contentHeight)
 
+        let topBar = setupTopBar()
+
         timelineScrollView = UIScrollView(frame: .zero)
         timelineScrollView.translatesAutoresizingMaskIntoConstraints = false
         timelineScrollView.isUserInteractionEnabled = false
@@ -50,7 +52,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         NSLayoutConstraint.activate([
             timelineScrollView.widthAnchor.constraint(equalToConstant: timelineWidth),
             timelineScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            timelineScrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            timelineScrollView.topAnchor.constraint(equalTo: topBar.bottomAnchor),
             view.bottomAnchor.constraint(equalTo: timelineScrollView.bottomAnchor)
         ])
 
@@ -59,7 +61,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: topBar.bottomAnchor),
             view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
@@ -77,6 +79,33 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         scrollView.isDirectionalLockEnabled = true
 
         self.drawCalendar(in: view, cellSize: cellSize, vOffset: contentVPadding)
+    }
+
+    func setupTopBar() -> UIView {
+        let topBar = UIView(frame: .zero)
+        topBar.translatesAutoresizingMaskIntoConstraints = false
+        topBar.backgroundColor = .base
+        view.addSubview(topBar)
+        topBar.pinLeadingAndTrailing(top: 0, and: [topBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44)])
+
+        let separator = UIView(frame: .zero)
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        separator.backgroundColor = .calendarGrid
+        topBar.addSubview(separator)
+        separator.pinLeadingAndTrailing(bottom: 0, and: [separator.heightAnchor.constraint(equalToConstant: 1)])
+
+        let title = UILabel(frame: .zero)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textColor = .neutral1
+        title.font = .systemFont(ofSize: 24)
+        title.text = "Sama"
+        topBar.addSubview(title)
+        NSLayoutConstraint.activate([
+            title.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
+            title.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 16)
+        ])
+
+        return topBar
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
