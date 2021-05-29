@@ -35,7 +35,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     }
 
     private func setupViews() {
-        let timelineWidth: CGFloat = 80
+        let timelineWidth: CGFloat = 56
         let cellSize = CGSize(width: 100, height: 65)
 
         let contentVPadding: CGFloat = 20
@@ -48,7 +48,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         timelineScrollView.isUserInteractionEnabled = false
         view.addSubview(timelineScrollView)
         NSLayoutConstraint.activate([
-            timelineScrollView.widthAnchor.constraint(equalToConstant: 80),
+            timelineScrollView.widthAnchor.constraint(equalToConstant: timelineWidth),
             timelineScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             timelineScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             view.bottomAnchor.constraint(equalTo: timelineScrollView.bottomAnchor)

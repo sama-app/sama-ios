@@ -25,7 +25,7 @@ final class TimelineView: UIView {
         let font=UIFont.systemFont(ofSize: 15)
         let text_style=NSMutableParagraphStyle()
         text_style.alignment=NSTextAlignment.center
-        let text_color = UIColor.secondary
+        let text_color = UIColor.neutral2
         let attributes: [NSAttributedString.Key : Any] = [
             .font: font,
             .paragraphStyle: text_style,

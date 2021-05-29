@@ -24,8 +24,9 @@ final class CalendarView: UIView {
         }
 
         //text attributes
-        let font=UIFont.systemFont(ofSize: 15, weight: .semibold)
-        let text_style=NSMutableParagraphStyle()
+        let font=UIFont.systemFont(ofSize: 12, weight: .regular)
+        let text_style = NSMutableParagraphStyle()
+        text_style.lineBreakMode = .byTruncatingTail
 //        text_style.alignment=NSTextAlignment.center
         let text_color = UIColor.secondary
         let attributes: [NSAttributedString.Key : Any] = [
@@ -37,6 +38,8 @@ final class CalendarView: UIView {
         //vertically center (depending on font)
 //        let text_h=font.lineHeight
 
+        let padding: CGFloat = 8
+
         for i in (0 ..< 7) {
             for hour in (8 ... 20).filter { $0 != (12 + i) } {
                 let lengthHour = 1
@@ -47,15 +50,15 @@ final class CalendarView: UIView {
                     roundedRect: CGRect(
                         x: x,
                         y: y,
-                        width: cellSize.width - 1,
+                        width: cellSize.width - 2,
                         height: cellSize.height * CGFloat(lengthHour) - 2
                     ),
                     byRoundingCorners: .allCorners,
                     cornerRadii: CGSize(width: 4, height: 4)
                 ).fill(with: .normal, alpha: 1)
-                let text_y = y + 6
-                let text_rect=CGRect(x: x + 4, y: text_y, width: cellSize.width - 8, height: 30)
-                "Lunch with Peter".draw(in: text_rect.integral, withAttributes: attributes)
+                let text_y = y + padding
+                let textRect = CGRect(x: x + padding, y: text_y, width: cellSize.width - padding, height: 16)
+                "Lunch with Peter".draw(in: textRect.integral, withAttributes: attributes)
             }
         }
 

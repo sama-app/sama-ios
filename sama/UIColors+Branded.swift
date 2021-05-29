@@ -18,8 +18,13 @@ extension UIColor {
     /// #6B5844
     static var secondary = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 1)
 
+    /// #000000
     static var neutral1 = UIColor.black
+
+    /// #000000 0.8
     static var neutral2 = UIColor.black.withAlphaComponent(0.8)
+
+    /// #FFFFFF
     static var neutralN = UIColor.white
 
     /// #684c2b 0.17
