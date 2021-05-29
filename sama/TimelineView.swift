@@ -13,10 +13,10 @@ final class TimelineView: UIView {
     var vOffset: CGFloat = 0
 
     override func draw(_ rect: CGRect) {
-        UIColor(red: 248/255.0, green: 224/255.0, blue: 197/255.0, alpha: 1).setFill()
+        UIColor.base.setFill()
         UIRectFill(rect)
 
-        UIColor(red: 107/255.0, green: 88/255.0, blue: 69/255.0, alpha: 0.1).setFill()
+        UIColor.calendarGrid.setFill()
         for i in (0 ... 24) {
             UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
         }
@@ -25,7 +25,7 @@ final class TimelineView: UIView {
         let font=UIFont.systemFont(ofSize: 15)
         let text_style=NSMutableParagraphStyle()
         text_style.alignment=NSTextAlignment.center
-        let text_color=UIColor(red: 50/255.0, green: 45/255.0, blue: 39/255.0, alpha: 1)
+        let text_color = UIColor.secondary
         let attributes: [NSAttributedString.Key : Any] = [
             .font: font,
             .paragraphStyle: text_style,

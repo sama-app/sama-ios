@@ -28,7 +28,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         super.viewDidLoad()
         isLoggedIn = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN") != nil
 
-        view.backgroundColor = UIColor(red: 248/255.0, green: 224/255.0, blue: 197/255.0, alpha: 1)
+        view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
         self.setupViews()
