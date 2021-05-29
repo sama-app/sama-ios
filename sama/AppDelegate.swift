@@ -104,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // MARK: Firebase messaging
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("Firebase registration token: \(String(describing: fcmToken))")
+        print("Firebase registration token: \(fcmToken ?? "N/A")")
 
         RemoteNotificationsTokenSync.shared.syncToken()
 //        let dataDict:[String: String] = ["token": fcmToken ?? ""]

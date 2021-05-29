@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -13,47 +13,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="sama" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jxF-bR-LWE">
-                                <rect key="frame" x="119.5" y="124" width="175" height="30"/>
-                                <state key="normal" title="Connect Google calendar"/>
-                                <connections>
-                                    <action selector="onConnectCalendar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tpu-Ef-esK"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="di2-Mw-qku">
-                                <rect key="frame" x="110" y="124" width="194" height="30"/>
-                                <state key="normal" title="Disconnect Google calendar"/>
-                                <connections>
-                                    <action selector="onDisconnectCalendar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TBZ-rJ-aeT"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5G-O4-Ib4">
-                                <rect key="frame" x="156" y="175" width="102" height="30"/>
-                                <state key="normal" title="Fetch calendar"/>
-                                <connections>
-                                    <action selector="onFetchCalendar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LjD-vr-Njs"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="F5G-O4-Ib4" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="5jS-LY-aim"/>
-                            <constraint firstItem="di2-Mw-qku" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="80" id="H4S-gl-t5I"/>
-                            <constraint firstItem="F5G-O4-Ib4" firstAttribute="top" secondItem="di2-Mw-qku" secondAttribute="bottom" constant="21" id="LMa-Bx-G4h"/>
-                            <constraint firstItem="jxF-bR-LWE" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="RQf-RU-ZgK"/>
-                            <constraint firstItem="di2-Mw-qku" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="aaa-gR-8sr"/>
-                            <constraint firstItem="jxF-bR-LWE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="80" id="mfi-IC-9Tl"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="connectButton" destination="jxF-bR-LWE" id="daZ-fa-DuV"/>
-                        <outlet property="disconnectButton" destination="di2-Mw-qku" id="sqS-Ze-8ja"/>
-                        <outlet property="fetchCalendarButton" destination="F5G-O4-Ib4" id="Vx9-Vb-z5C"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

@@ -20,6 +20,8 @@
 		E7D3C0A226413342009CAB88 /* samaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0A126413342009CAB88 /* samaTests.swift */; };
 		E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0AC26413342009CAB88 /* samaUITests.swift */; };
 		E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
+		E7F8DD83264EB61D00CD3759 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD82264EB61D00CD3759 /* CalendarView.swift */; };
+		E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD872651931500CD3759 /* TimelineView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		E7D3C0AC26413342009CAB88 /* samaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = samaUITests.swift; sourceTree = "<group>"; };
 		E7D3C0AE26413342009CAB88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7D3C0CC26413952009CAB88 /* AuthDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDirections.swift; sourceTree = "<group>"; };
+		E7F8DD82264EB61D00CD3759 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		E7F8DD872651931500CD3759 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +125,8 @@
 				E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */,
 				E7D3C09826413342009CAB88 /* Info.plist */,
 				E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */,
+				E7F8DD82264EB61D00CD3759 /* CalendarView.swift */,
+				E7F8DD872651931500CD3759 /* TimelineView.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -290,11 +296,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D3C08F26413340009CAB88 /* ViewController.swift in Sources */,
+				E7F8DD83264EB61D00CD3759 /* CalendarView.swift in Sources */,
 				E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */,
 				E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */,
 				E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */,
 				E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */,
 				E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */,
+				E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
