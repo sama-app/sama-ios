@@ -31,9 +31,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         view.backgroundColor = UIColor(red: 248/255.0, green: 224/255.0, blue: 197/255.0, alpha: 1)
         overrideUserInterfaceStyle = .light
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.setupViews()
-        }
+        self.setupViews()
     }
 
     private func setupViews() {
@@ -105,33 +103,6 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             view.trailingAnchor.constraint(equalTo: calendar.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: calendar.bottomAnchor)
         ])
-    }
-
-    private func viewCalendar() {
-        for i in (0 ..< Int(view.frame.width / 10)) {
-            for j in (0 ..< Int(view.frame.height / 10)) {
-                let v = UIView(frame: CGRect(x: i * 10, y: j * 10, width: 10, height: 10))
-                v.backgroundColor = UIColor(red: CGFloat.random(in: (0 ..< 256)) / 255.0, green: CGFloat.random(in: (0 ..< 256)) / 255.0, blue: CGFloat.random(in: (0 ..< 256)) / 255.0, alpha: 1.0)
-                view.addSubview(v)
-            }
-        }
-    }
-
-    private func autolayoutCalendar() {
-        for i in (0 ..< Int(view.frame.width / 10)) {
-            for j in (0 ..< Int(view.frame.height / 10)) {
-                let v = UIView(frame: .zero)
-                v.translatesAutoresizingMaskIntoConstraints = false
-                v.backgroundColor = UIColor(red: CGFloat.random(in: (0 ..< 256)) / 255.0, green: CGFloat.random(in: (0 ..< 256)) / 255.0, blue: CGFloat.random(in: (0 ..< 256)) / 255.0, alpha: 1.0)
-                view.addSubview(v)
-                NSLayoutConstraint.activate([
-                    v.widthAnchor.constraint(equalToConstant: 10),
-                    v.heightAnchor.constraint(equalToConstant: 10),
-                    v.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(i * 10)),
-                    v.topAnchor.constraint(equalTo: view.topAnchor, constant: CGFloat(j * 10)),
-                ])
-            }
-        }
     }
 
     @IBAction func onConnectCalendar(_ sender: Any) {
