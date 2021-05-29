@@ -9,19 +9,16 @@ import UIKit
 
 final class TimelineView: UIView {
 
-    override func draw(_ rect: CGRect) {
-        //super.draw(rect)
-        UIColor(red: 248/255.0, green: 224/255.0, blue: 197/255.0, alpha: 1).setFill()
-//        UIColor.clear.setFill()
-        UIRectFill(rect)
+    var cellSize: CGSize = .zero
+    var vOffset: CGFloat = 0
 
-        let offsetY: CGFloat = 20
-        let offsetX: CGFloat = 80
-        let hourHeight = (rect.size.height - offsetY * 2) / 24
+    override func draw(_ rect: CGRect) {
+        UIColor(red: 248/255.0, green: 224/255.0, blue: 197/255.0, alpha: 1).setFill()
+        UIRectFill(rect)
 
         UIColor(red: 107/255.0, green: 88/255.0, blue: 69/255.0, alpha: 0.1).setFill()
         for i in (0 ... 24) {
-            UIRectFillUsingBlendMode(CGRect(x: 0, y: offsetY + CGFloat(i) * hourHeight, width: frame.width, height: 1), .normal)
+            UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
         }
 
         //text attributes
@@ -39,8 +36,8 @@ final class TimelineView: UIView {
         let text_h=font.lineHeight
 
         for i in (0 ... 23) {
-            let text_y = offsetY + (CGFloat(i) * hourHeight) + (hourHeight-text_h)/2
-            let text_rect=CGRect(x: 10, y: text_y, width: offsetX - 10, height: text_h)
+            let text_y = vOffset + (CGFloat(i) * cellSize.height) + (cellSize.height-text_h)/2
+            let text_rect=CGRect(x: 10, y: text_y, width: rect.width - 10, height: text_h)
             let leading = (i >= 10) ? 0 : 1
             let prefix = (0 ..< leading).map { _ in " " }.joined()
             "\(prefix)\(i):00".draw(in: text_rect.integral, withAttributes: attributes)

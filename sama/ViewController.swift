@@ -35,6 +35,14 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     }
 
     private func setupViews() {
+        let timelineWidth: CGFloat = 80
+        let cellSize = CGSize(width: 100, height: 65)
+
+        let contentVPadding: CGFloat = 20
+        let contentHeight = cellSize.height * 24 + contentVPadding * 2
+        let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
+        let calendarSize = CGSize(width: cellSize.width * 7 + timelineWidth, height: contentHeight)
+
         timelineScrollView = UIScrollView(frame: .zero)
         timelineScrollView.translatesAutoresizingMaskIntoConstraints = false
         timelineScrollView.isUserInteractionEnabled = false
@@ -56,19 +64,19 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
 
-        let timeline = TimelineView(frame: CGRect(x: 0, y: 0, width: 80, height: 65 * 24 + 20 * 2))
-        timelineScrollView.contentSize = CGSize(width: 80, height: 65 * 24 + 20 * 2)
+        let timeline = TimelineView(frame: CGRect(origin: .zero, size: timelineSize))
+        timeline.cellSize = cellSize
+        timeline.vOffset = contentVPadding
+        timelineScrollView.contentSize = timelineSize
         timelineScrollView.addSubview(timeline)
 
-        let contentSize = CGSize(width: 1620, height: 65 * 24 + 20 * 2)
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: contentSize.width, height: contentSize.height))
+        let view = UIView(frame: CGRect(origin: .zero, size: calendarSize))
         scrollView.addSubview(view)
-        scrollView.contentSize = contentSize
+        scrollView.contentSize = calendarSize
         scrollView.delegate = self
         scrollView.isDirectionalLockEnabled = true
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.drawCalendar(in: view)
-//        }
+
+        self.drawCalendar(in: view, cellSize: cellSize, vOffset: contentVPadding)
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -93,8 +101,10 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         timelineScrollView.contentOffset.y = scrollView.contentOffset.y
     }
 
-    private func drawCalendar(in view: UIView) {
+    private func drawCalendar(in view: UIView, cellSize: CGSize, vOffset: CGFloat) {
         let calendar = CalendarView(frame: .zero)
+        calendar.cellSize = cellSize
+        calendar.vOffset = vOffset
         calendar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(calendar)
         NSLayoutConstraint.activate([

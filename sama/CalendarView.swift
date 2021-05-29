@@ -9,19 +9,18 @@ import UIKit
 
 final class CalendarView: UIView {
 
+    var cellSize: CGSize = .zero
+    var vOffset: CGFloat = 0
+
     override func draw(_ rect: CGRect) {
         //super.draw(rect)
         UIColor(red: 248/255.0, green: 224/255.0, blue: 197/255.0, alpha: 1).setFill()
 //        UIColor.clear.setFill()
         UIRectFill(rect)
 
-        let offsetY: CGFloat = 20
-        let offsetX: CGFloat = 0
-        let hourHeight = (rect.size.height - offsetY * 2) / 24
-
         UIColor(red: 107/255.0, green: 88/255.0, blue: 69/255.0, alpha: 0.1).setFill()
         for i in (0 ... 24) {
-            UIRectFillUsingBlendMode(CGRect(x: 0, y: offsetY + CGFloat(i) * hourHeight, width: frame.width, height: 1), .normal)
+            UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
         }
 //
 //        //text attributes
@@ -63,21 +62,21 @@ final class CalendarView: UIView {
         for i in (0 ..< 7) {
             for hour in (8 ... 20).filter { $0 != (12 + i) } {
                 let lengthHour = 1
-                let x = offsetX + CGFloat(220 * i)
-                let y = offsetY + CGFloat(hour) * hourHeight + 1
+                let x = cellSize.width * CGFloat(i)
+                let y = vOffset + CGFloat(hour) * cellSize.height + 1
                 UIColor(red: 107/255.0, green: 88/255.0, blue: 69/255.0, alpha: 0.15).setFill()
                 UIBezierPath(
                     roundedRect: CGRect(
                         x: x,
                         y: y,
-                        width: 220 - 1,
-                        height: hourHeight * CGFloat(lengthHour) - 2
+                        width: cellSize.width - 1,
+                        height: cellSize.height * CGFloat(lengthHour) - 2
                     ),
                     byRoundingCorners: .allCorners,
                     cornerRadii: CGSize(width: 4, height: 4)
                 ).fill(with: .normal, alpha: 1)
                 let text_y = y + 6
-                let text_rect=CGRect(x: x + 4, y: text_y, width: 210, height: 30)
+                let text_rect=CGRect(x: x + 4, y: text_y, width: cellSize.width - 8, height: 30)
                 "Lunch with Peter".draw(in: text_rect.integral, withAttributes: attributes)
             }
         }
