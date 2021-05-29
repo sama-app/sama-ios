@@ -22,6 +22,8 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         }
     }
 
+    private var calendar: CalendarView!
+    private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
 
     override func viewDidLoad() {
@@ -38,7 +40,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         let timelineWidth: CGFloat = 56
         let cellSize = CGSize(width: 100, height: 65)
 
-        let contentVPadding: CGFloat = 20
+        let contentVPadding: CGFloat = 48
         let contentHeight = cellSize.height * 24 + contentVPadding * 2
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
         let calendarSize = CGSize(width: cellSize.width * 7 + timelineWidth, height: contentHeight)
@@ -66,7 +68,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
 
-        let timeline = TimelineView(frame: CGRect(origin: .zero, size: timelineSize))
+        timeline = TimelineView(frame: CGRect(origin: .zero, size: timelineSize))
         timeline.cellSize = cellSize
         timeline.vOffset = contentVPadding
         timelineScrollView.contentSize = timelineSize
@@ -128,10 +130,12 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         timelineScrollView.contentOffset.y = scrollView.contentOffset.y
+        timeline.headerInset = scrollView.contentOffset.y
+        calendar.headerInset = scrollView.contentOffset.y
     }
 
     private func drawCalendar(in view: UIView, cellSize: CGSize, vOffset: CGFloat) {
-        let calendar = CalendarView(frame: .zero)
+        calendar = CalendarView(frame: .zero)
         calendar.cellSize = cellSize
         calendar.vOffset = vOffset
         calendar.translatesAutoresizingMaskIntoConstraints = false

@@ -12,14 +12,27 @@ final class CalendarView: UIView {
     var cellSize: CGSize = .zero
     var vOffset: CGFloat = 0
 
+    var headerInset: CGFloat = 0 {
+        didSet {
+            for v in headerViews {
+                v.frame.origin.y = headerInset
+            }
+        }
+    }
+
+    private var isHeaderSetUp = false
+    private var headerViews: [UIView] = []
+
     override func draw(_ rect: CGRect) {
         //super.draw(rect)
+        setupHeaderIfNeeded()
+
         UIColor.base.setFill()
 //        UIColor.clear.setFill()
         UIRectFill(rect)
 
         UIColor.calendarGrid.setFill()
-        for i in (0 ... 24) {
+        for i in (1 ... 24) {
             UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
         }
 
@@ -61,15 +74,27 @@ final class CalendarView: UIView {
                 "Lunch with Peter".draw(in: textRect.integral, withAttributes: attributes)
             }
         }
+    }
 
+    private func setupHeaderIfNeeded() {
+        guard !isHeaderSetUp else { return }
+        isHeaderSetUp = true
 
+        let cellHeight: CGFloat = 48
+        for i in (0 ..< 7) {
+            let v = UIView(frame: CGRect(x: cellSize.width * CGFloat(i), y: headerInset, width: cellSize.width, height: cellHeight))
+            v.backgroundColor = .base
 
-//        UIRectFillUsingBlendMode(CGRect(x: 0, y: offsetY + CGFloat(i) * hourHeight, width: frame.width, height: 1), .normal)
-//        for i in (0 ..< Int(rect.width / 10)) {
-//            for j in (0 ..< Int(rect.height / 10)) {
-//                UIColor(red: CGFloat.random(in: (0 ..< 256)) / 255.0, green: CGFloat.random(in: (0 ..< 256)) / 255.0, blue: CGFloat.random(in: (0 ..< 256)) / 255.0, alpha: 1.0).setFill()
-//                UIRectFill(CGRect(x: i * 10, y: j * 10, width: 10, height: 10))
-//            }
-//        }
+            let sepBtm = UIView(frame: CGRect(x: 0, y: cellHeight - 1, width: cellSize.width, height: 1))
+            sepBtm.backgroundColor = .calendarGrid
+            let sepRht = UIView(frame: CGRect(x: cellSize.width - 1, y: 0, width: 1, height: cellHeight))
+            sepRht.backgroundColor = .calendarGrid
+            v.addSubview(sepBtm)
+            v.addSubview(sepRht)
+
+            addSubview(v)
+
+            headerViews.append(v)
+        }
     }
 }

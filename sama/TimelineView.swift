@@ -12,12 +12,20 @@ final class TimelineView: UIView {
     var cellSize: CGSize = .zero
     var vOffset: CGFloat = 0
 
+    var headerInset: CGFloat = 0 {
+        didSet {
+            header?.frame.origin.y = headerInset
+        }
+    }
+
+    private var header: UIView?
+
     override func draw(_ rect: CGRect) {
         UIColor.base.setFill()
         UIRectFill(rect)
 
         UIColor.calendarGrid.setFill()
-        for i in (0 ... 24) {
+        for i in (1 ... 24) {
             UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
         }
 
@@ -42,5 +50,20 @@ final class TimelineView: UIView {
             let prefix = (0 ..< leading).map { _ in " " }.joined()
             "\(prefix)\(i):00".draw(in: text_rect.integral, withAttributes: attributes)
         }
+
+        let cellHeight: CGFloat = 48
+        let v = UIView(frame: CGRect(x: 0, y: headerInset, width: rect.width, height: cellHeight))
+        v.backgroundColor = .base
+
+        let sepBtm = UIView(frame: CGRect(x: 0, y: cellHeight - 1, width: rect.width, height: 1))
+        sepBtm.backgroundColor = .calendarGrid
+        let sepRht = UIView(frame: CGRect(x: rect.width - 1, y: 0, width: 1, height: cellHeight))
+        sepRht.backgroundColor = .calendarGrid
+        v.addSubview(sepBtm)
+        v.addSubview(sepRht)
+
+        addSubview(v)
+
+        header = v
     }
 }
