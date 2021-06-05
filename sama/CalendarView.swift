@@ -54,16 +54,17 @@ final class CalendarView: UIView {
         let padding: CGFloat = 8
 
         for i in (0 ..< 7) {
+            let x = cellSize.width * CGFloat(i)
             for hour in (8 ... 20).filter { $0 != (12 + i) } {
                 let lengthHour = 1
-                let x = cellSize.width * CGFloat(i)
+
                 let y = vOffset + CGFloat(hour) * cellSize.height + 1
                 UIColor.eventBackground.setFill()
                 UIBezierPath(
                     roundedRect: CGRect(
                         x: x,
                         y: y,
-                        width: cellSize.width - 2,
+                        width: cellSize.width - 3,
                         height: cellSize.height * CGFloat(lengthHour) - 2
                     ),
                     byRoundingCorners: .allCorners,
@@ -73,7 +74,12 @@ final class CalendarView: UIView {
                 let textRect = CGRect(x: x + padding, y: text_y, width: cellSize.width - padding, height: 16)
                 "Lunch with Peter".draw(in: textRect.integral, withAttributes: attributes)
             }
+
+            UIColor.calendarGrid.setFill()
+            UIRectFillUsingBlendMode(CGRect(x: x - 1, y: 0, width: 1, height: frame.height), .normal)
         }
+
+        UIColor.calendarGrid.setFill()
     }
 
     private func setupHeaderIfNeeded() {
@@ -81,7 +87,18 @@ final class CalendarView: UIView {
         isHeaderSetUp = true
 
         let cellHeight: CGFloat = 48
-        for i in (0 ..< 7) {
+
+        let v = [
+            ("31", "Mon"),
+            ("1", "Tue"),
+            ("2", "Wed"),
+            ("3", "Thu"),
+            ("4", "Fri"),
+            ("5", "Sat"),
+            ("6", "Sun")
+        ]
+
+        for (i, o) in v.enumerated() {
             let v = UIView(frame: CGRect(x: cellSize.width * CGFloat(i), y: headerInset, width: cellSize.width, height: cellHeight))
             v.backgroundColor = .base
 
@@ -93,6 +110,38 @@ final class CalendarView: UIView {
             v.addSubview(sepRht)
 
             addSubview(v)
+
+            let l1 = UILabel()
+            l1.translatesAutoresizingMaskIntoConstraints = false
+            l1.font = .systemFont(ofSize: 17, weight: .bold)
+            l1.text = o.0
+            l1.textAlignment = .center
+            if (o.0 == "1") {
+                l1.backgroundColor = .primary
+                l1.textColor = .neutralN
+            }
+            l1.layer.cornerRadius = 12
+            l1.layer.masksToBounds = true
+
+            let l2 = UILabel()
+            l2.font = .systemFont(ofSize: 12)
+            l2.translatesAutoresizingMaskIntoConstraints = false
+            l2.text = o.1
+            l2.textColor = .neutral2
+
+            let sv = UIStackView(arrangedSubviews: [l1, l2])
+            sv.axis = .vertical
+            sv.alignment = .center
+            sv.translatesAutoresizingMaskIntoConstraints = false
+            v.addSubview(sv)
+
+            NSLayoutConstraint.activate([
+                l1.widthAnchor.constraint(equalToConstant: 24),
+                l1.heightAnchor.constraint(equalToConstant: 24),
+                v.centerXAnchor.constraint(equalTo: sv.centerXAnchor),
+                v.centerYAnchor.constraint(equalTo: sv.centerYAnchor)
+            ])
+
 
             headerViews.append(v)
         }

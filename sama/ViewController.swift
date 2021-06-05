@@ -38,7 +38,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 
     private func setupViews() {
         let timelineWidth: CGFloat = 56
-        let cellSize = CGSize(width: 100, height: 65)
+        let cellSize = CGSize(width: (view.frame.width - timelineWidth) / 4, height: 65)
 
         let contentVPadding: CGFloat = 48
         let contentHeight = cellSize.height * 24 + contentVPadding * 2

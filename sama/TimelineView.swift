@@ -51,6 +51,9 @@ final class TimelineView: UIView {
             "\(prefix)\(i):00".draw(in: text_rect.integral, withAttributes: attributes)
         }
 
+        UIColor.calendarGrid.setFill()
+        UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
+
         let cellHeight: CGFloat = 48
         let v = UIView(frame: CGRect(x: 0, y: headerInset, width: rect.width, height: cellHeight))
         v.backgroundColor = .base
