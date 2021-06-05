@@ -43,7 +43,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         let contentVPadding: CGFloat = 48
         let contentHeight = cellSize.height * 24 + contentVPadding * 2
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
-        let calendarSize = CGSize(width: cellSize.width * 7 + timelineWidth, height: contentHeight)
+        let calendarSize = CGSize(width: cellSize.width * 7, height: contentHeight)
 
         let topBar = setupTopBar()
 
@@ -110,23 +110,23 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         return topBar
     }
 
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if (abs(velocity.x) > 0.01) {
-            let i = Int((scrollView.contentOffset.x - 80) / 220)
-            if (abs(velocity.x) > 0.4) {
-                let newI: Int
-                if (velocity.x > 0) {
-                    newI = i + 1
-                } else {
-                    newI = i
-                }
-                targetContentOffset.pointee = CGPoint(x: (newI > 0 ? -45 : 0) + 220 * CGFloat(newI), y: scrollView.contentOffset.y)
-            } else {
-                let i = Int((scrollView.contentOffset.x - 80) / 220)
-                targetContentOffset.pointee = CGPoint(x: 220 * CGFloat(i), y: scrollView.contentOffset.y)
-            }
-        }
-    }
+//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        if (abs(velocity.x) > 0.01) {
+//            let i = Int((scrollView.contentOffset.x - 80) / 220)
+//            if (abs(velocity.x) > 0.4) {
+//                let newI: Int
+//                if (velocity.x > 0) {
+//                    newI = i + 1
+//                } else {
+//                    newI = i
+//                }
+//                targetContentOffset.pointee = CGPoint(x: (newI > 0 ? -45 : 0) + 220 * CGFloat(newI), y: scrollView.contentOffset.y)
+//            } else {
+//                let i = Int((scrollView.contentOffset.x - 80) / 220)
+//                targetContentOffset.pointee = CGPoint(x: 220 * CGFloat(i), y: scrollView.contentOffset.y)
+//            }
+//        }
+//    }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         timelineScrollView.contentOffset.y = scrollView.contentOffset.y

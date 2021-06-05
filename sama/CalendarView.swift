@@ -88,15 +88,21 @@ final class CalendarView: UIView {
 
         let cellHeight: CGFloat = 48
 
-        let v = [
-            ("31", "Mon"),
-            ("1", "Tue"),
-            ("2", "Wed"),
-            ("3", "Thu"),
-            ("4", "Fri"),
-            ("5", "Sat"),
-            ("6", "Sun")
-        ]
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.firstWeekday = 2
+        let dt = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+
+        let dayF = DateFormatter()
+        dayF.dateFormat = "d"
+        let wkF = DateFormatter()
+        wkF.dateFormat = "E"
+        let v: [(String, String)] = (0 ..< 7).map {
+            let date = calendar.date(byAdding: .day, value: $0, to: dt)!
+            return (
+                dayF.string(from: date),
+                wkF.string(from: date)
+            )
+        }
 
         for (i, o) in v.enumerated() {
             let v = UIView(frame: CGRect(x: cellSize.width * CGFloat(i), y: headerInset, width: cellSize.width, height: cellHeight))
