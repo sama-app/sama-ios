@@ -115,6 +115,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             title.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 16)
         ])
 
+        let profileBtn = UIButton(type: .system)
+        profileBtn.translatesAutoresizingMaskIntoConstraints = false
+        profileBtn.tintColor = .secondary
+        profileBtn.setImage(UIImage(named: "profile")!, for: .normal)
+        profileBtn.addTarget(self, action: #selector(onProfileButton), for: .touchUpInside)
+        topBar.addSubview(profileBtn)
+        NSLayoutConstraint.activate([
+            profileBtn.widthAnchor.constraint(equalToConstant: 44),
+            profileBtn.heightAnchor.constraint(equalToConstant: 44),
+            profileBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
+            topBar.trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6)
+        ])
+
         return topBar
     }
 
@@ -184,5 +197,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         session.loadIfAvailableBlock(at: Int(round(Double(daysOffset) / Double(session.blockSize))))
 
         return cell
+    }
+
+    @objc private func onProfileButton() {
+        present(ProfileViewController(), animated: true, completion: nil)
     }
 }

@@ -30,6 +30,7 @@
 		E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
 		E7F5AD0D266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */; };
 		E7F5AD0F266FB03700138E42 /* UIFont+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */; };
+		E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */; };
 		E7F8DD83264EB61D00CD3759 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD82264EB61D00CD3759 /* CalendarView.swift */; };
 		E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD872651931500CD3759 /* TimelineView.swift */; };
 /* End PBXBuildFile section */
@@ -81,6 +82,7 @@
 		E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt Regular.otf"; sourceTree = "<group>"; };
 		E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt SemiBold.otf"; sourceTree = "<group>"; };
 		E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Branded.swift"; sourceTree = "<group>"; };
+		E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E7F8DD82264EB61D00CD3759 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		E7F8DD872651931500CD3759 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -164,6 +166,7 @@
 				E7957948266F6457005B9F39 /* OnboardingViewController.swift */,
 				E7F5AD09266FAF4B00138E42 /* fonts */,
 				E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */,
+				E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 				E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */,
 				E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */,
 				E7F8DD83264EB61D00CD3759 /* CalendarView.swift in Sources */,
+				E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */,
 				E7957949266F6457005B9F39 /* OnboardingViewController.swift in Sources */,
 				E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */,
 				E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */,
