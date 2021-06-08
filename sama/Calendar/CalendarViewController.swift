@@ -126,7 +126,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             targetContentOffset.pointee = CGPoint(x: i * cellSize.width, y: targetContentOffset.pointee.y)
         } else {
             let z = max(min((j - i), 1), -1)
-            targetContentOffset.pointee = CGPoint(x: (i + z) * cellSize.width, y: targetContentOffset.pointee.y)
+            let isChangedY = abs(velocity.y) > 0.1
+            targetContentOffset.pointee = CGPoint(x: (i + z) * cellSize.width, y: isChangedY ? targetContentOffset.pointee.y : scrollView.contentOffset.y)
         }
     }
 
