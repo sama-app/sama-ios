@@ -1,14 +1,15 @@
 //
-//  ViewController.swift
+//  CalendarViewController.swift
 //  sama
 //
-//  Created by Viktoras Laukevičius on 5/4/21.
+//  Created by Viktoras Laukevičius on 6/8/21.
 //
 
 import UIKit
-import AuthenticationServices
 
-class ViewController: UIViewController, ASWebAuthenticationPresentationContextProviding, UICollectionViewDelegate, UICollectionViewDataSource {
+class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+
+    var session: CalendarSession!
 
     private var calendar: UICollectionView!
     private var timeline: TimelineView!
@@ -18,9 +19,6 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     private var vOffset: CGFloat = 0
     private var isFirstLoad: Bool = true
 
-    private var session: CalendarSession!
-    private let currentDayIndex = 5000
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,15 +26,8 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         overrideUserInterfaceStyle = .light
 
         self.setupViews()
-
-        if
-            let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
-            let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
-        {
-            startSession(with: token)
-        } else {
-            connectCalendar()
-        }
+        session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
+        session.loadInitial()
     }
 
     override func viewDidLayoutSubviews() {
@@ -45,7 +36,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             let hr = CGFloat(ceil(Date().timeIntervalSince(Calendar.current.startOfDay(for: Date())) / 3600))
             let y = vOffset + cellSize.height * (hr + 1) - calendar.bounds.height / 2
             calendar.contentOffset = CGPoint(
-                x: cellSize.width * CGFloat(currentDayIndex),
+                x: cellSize.width * CGFloat(session.currentDayIndex),
                 y: y
             )
         }
@@ -98,11 +89,6 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 //        scrollView.isDirectionalLockEnabled = true
 
         self.drawCalendar(topBar: topBar, cellSize: cellSize, vOffset: contentVPadding)
-    }
-
-    private func startSession(with token: AuthToken) {
-        self.session = CalendarSession(token: token, currentDayIndex: currentDayIndex) { [weak self] in self?.calendar.reloadData() }
-        self.session.loadInitial()
     }
 
     func setupTopBar() -> UIView {
@@ -193,48 +179,5 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         cell.date = Calendar.current.date(byAdding: .day, value: -session.currentDayIndex + indexPath.item, to: Date())
         cell.setNeedsDisplay()
         return cell
-    }
-
-    private func connectCalendar() {
-        var req = URLRequest(url: URL(string: "https://app.yoursama.com/api/auth/google-authorize")!)
-        req.httpMethod = "post"
-        URLSession.shared.dataTask(with: req) { (data, resp, err) in
-            if let data = data, let directions = try? JSONDecoder().decode(AuthDirections.self, from: data) {
-                DispatchQueue.main.async {
-                    print(directions)
-                    self.authenticate(with: directions.authorizationUrl)
-                }
-            }
-        }.resume()
-    }
-
-    @IBAction func onDisconnectCalendar(_ sender: Any) {
-        UserDefaults.standard.removeObject(forKey: "SAMA_AUTH_TOKEN")
-    }
-
-    private func authenticate(with url: String) {
-        let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: "yoursama") { (callbackUrl, err) in
-            guard
-                let url = callbackUrl,
-                url.scheme == "yoursama",
-                url.host == "auth",
-                url.path == "/success",
-                let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
-                let accessToken = queryItems.first(where: { $0.name == "accessToken" })?.value,
-                let refreshToken = queryItems.first(where: { $0.name == "refreshToken" })?.value
-            else { return }
-
-            let token = AuthToken(accessToken: accessToken, refreshToken: refreshToken)
-            UserDefaults.standard.set(try? JSONEncoder().encode(token), forKey: "SAMA_AUTH_TOKEN")
-            RemoteNotificationsTokenSync.shared.syncToken()
-
-            self.startSession(with: token)
-        }
-        session.presentationContextProvider = self
-        session.start()
-    }
-
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return view.window!
     }
 }

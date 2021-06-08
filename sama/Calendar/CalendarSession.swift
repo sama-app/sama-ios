@@ -9,15 +9,15 @@ import Foundation
 
 final class CalendarSession {
 
-    private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
+    var reloadHandler: () -> Void = {}
     let currentDayIndex: Int
 
-    private let token: AuthToken
-    private let reloadHandler: () -> Void
+    private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
-    init(token: AuthToken, currentDayIndex: Int, reloadHandler: @escaping () -> Void) {
+    private let token: AuthToken
+
+    init(token: AuthToken, currentDayIndex: Int) {
         self.token = token
-        self.reloadHandler = reloadHandler
         self.currentDayIndex = currentDayIndex
     }
 
