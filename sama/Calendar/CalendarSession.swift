@@ -11,13 +11,15 @@ final class CalendarSession {
 
     var reloadHandler: () -> Void = {}
     let currentDayIndex: Int
+    let blockSize = 5
 
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
     private let token: AuthToken
-    private let blockSize = 5
     private let refDate = Date()
     private let calendar = Calendar.current
+
+    private var isBlockBusy: [Int: Bool] = [:]
 
     private lazy var dateF: DateFormatter = {
         let f = DateFormatter()
@@ -40,7 +42,18 @@ final class CalendarSession {
         loadCalendar(blockIndices: (-1 ... 1))
     }
 
+    func loadIfAvailableBlock(at index: Int) {
+        if !(isBlockBusy[index] ?? false) {
+            loadCalendar(blockIndices: (index ... index))
+        }
+    }
+
     private func loadCalendar(blockIndices: ClosedRange<Int>) {
+        for idx in blockIndices {
+            isBlockBusy[idx] = true
+        }
+
+        print("loadCalendar(\(blockIndices))")
         let daysBack = blockIndices.lowerBound * blockSize
         let daysForward = blockIndices.count * blockSize
         let start = calendar.date(byAdding: .day, value: daysBack, to: refDate)!
@@ -79,10 +92,14 @@ final class CalendarSession {
                     }
                     self.blocksForDayIndex[self.currentDayIndex + i] = result
                 }
-
-                DispatchQueue.main.async {
-                    self.reloadHandler()
+            } else {
+                for idx in blockIndices {
+                    self.isBlockBusy[idx] = false
                 }
+            }
+
+            DispatchQueue.main.async {
+                self.reloadHandler()
             }
         }.resume()
     }

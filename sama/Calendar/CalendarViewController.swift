@@ -176,8 +176,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         cell.vOffset = vOffset
         cell.blockedTimes = session.blocksForDayIndex[indexPath.item] ?? []
         cell.isCurrentDay = (indexPath.item == session.currentDayIndex)
-        cell.date = Calendar.current.date(byAdding: .day, value: -session.currentDayIndex + indexPath.item, to: Date())
+        let daysOffset = -session.currentDayIndex + indexPath.item
+        cell.date = Calendar.current.date(byAdding: .day, value: daysOffset, to: Date())
         cell.setNeedsDisplay()
+
+        session.loadIfAvailableBlock(at: Int(round(Double(daysOffset) / Double(session.blockSize))))
+
         return cell
     }
 }
