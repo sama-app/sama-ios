@@ -285,6 +285,8 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         calendar.delegate = self
         calendar.backgroundColor = .base
         calendar.decelerationRate = .fast
+        calendar.showsHorizontalScrollIndicator = false
+        calendar.showsVerticalScrollIndicator = false
 //        calendar = CalendarView(frame: .zero)
 //        calendar.cellSize = cellSize
 //        calendar.vOffset = vOffset
