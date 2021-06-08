@@ -13,6 +13,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
 
     private var currentBlock: UIView?
+    private var currentBlockLeadingConstraint: NSLayoutConstraint?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,14 +62,25 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             actionBtn.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40)
         ])
 
+        let leading = block.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: view.bounds.width)
         NSLayoutConstraint.activate([
             block.topAnchor.constraint(equalTo: illustration.bottomAnchor, constant: 56),
-            block.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: block.trailingAnchor),
+            block.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            leading,
             block.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+
+        leading.constant = 0
+
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        })
 
         currentBlock = block
+        currentBlockLeadingConstraint = leading
     }
 
     private func startSession(with token: AuthToken) {
@@ -78,8 +90,6 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     @objc private func onNextBlock() {
-        currentBlock?.removeFromSuperview()
-
         let block = UIView()
         block.translatesAutoresizingMaskIntoConstraints = false
 
@@ -111,12 +121,27 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             actionBtn.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40)
         ])
 
+        let leading = block.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: view.bounds.width)
         NSLayoutConstraint.activate([
             block.topAnchor.constraint(equalTo: illustration.bottomAnchor, constant: 56),
-            block.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: block.trailingAnchor),
+            block.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            leading,
             block.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+
+        leading.constant = 0
+
+        let prevBlock = currentBlock
+        currentBlockLeadingConstraint?.constant = -view.bounds.width
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        }, completion: { _ in prevBlock?.removeFromSuperview() })
+
+        currentBlock = block
     }
 
     @objc private func onConnectCalendar() {
