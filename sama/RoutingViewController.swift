@@ -14,14 +14,14 @@ class RoutingViewController: UIViewController {
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
-//        if
-//            let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
-//            let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
-//        {
-//            startSession(with: token)
-//        } else {
+        if
+            let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
+            let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
+        {
+            startSession(with: token)
+        } else {
             presentOnboarding()
-//        }
+        }
     }
 
     private func startSession(with token: AuthToken) {

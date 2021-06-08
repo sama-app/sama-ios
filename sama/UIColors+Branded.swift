@@ -24,6 +24,9 @@ extension UIColor {
     /// #000000 0.8
     static var neutral2 = UIColor.black.withAlphaComponent(0.8)
 
+    /// #333230
+    static var neutral3 = UIColor(red: 51/255.0, green: 50/255.0, blue: 48/255.0, alpha: 1)
+
     /// #FFFFFF
     static var neutralN = UIColor.white
 
