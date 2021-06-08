@@ -20,15 +20,23 @@ struct CalendarBlock: Decodable {
 
 final class CalendarSession {
 
-    private let token: AuthToken
+    private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
+    let currentDayIndex: Int
 
-    init(token: AuthToken) {
+    private let token: AuthToken
+    private let reloadHandler: () -> Void
+
+    init(token: AuthToken, currentDayIndex: Int, reloadHandler: @escaping () -> Void) {
         self.token = token
+        self.reloadHandler = reloadHandler
+        self.currentDayIndex = currentDayIndex
     }
 
     func loadInitial() {
-        let start = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
-        let end = Calendar.current.date(byAdding: .day, value: 5, to: Date())!
+        let daysBack = -3
+        let daysForward = 10
+        let start = Calendar.current.date(byAdding: .day, value: daysBack, to: Date())!
+        let end = Calendar.current.date(byAdding: .day, value: daysForward, to: Date())!
         let dateF = DateFormatter()
         dateF.dateFormat = "YYYY-MM-dd"
         var urlComps = URLComponents(string: "https://app.yoursama.com/api/calendar/blocks")!
@@ -40,11 +48,36 @@ final class CalendarSession {
         var req = URLRequest(url: urlComps.url!)
         req.httpMethod = "get"
         req.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+
+        let utcDateF = DateFormatter()
+        utcDateF.dateFormat = "YYYY-MM-dd'T'HH:mm:ss"
         URLSession.shared.dataTask(with: req) { (data, resp, err) in
             print("/calendar/blocks HTTP status code: \((resp as? HTTPURLResponse)?.statusCode ?? -1)")
             if err == nil, let data = data, let model = try? JSONDecoder().decode(CalendarBlocks.self, from: data) {
-//                model.blocks
-                print("OK")
+
+                for i in (daysBack ..< daysForward) {
+                    let date = Calendar.current.date(byAdding: .day, value: i, to: Date())!
+                    var result: [CalendarBlockedTime] = []
+                    for block in model.blocks {
+                        let start = utcDateF.date(from: String(block.startDateTime.dropLast(6)))!
+                        if Calendar.current.isDate(date, inSameDayAs: start) {
+                            let end = utcDateF.date(from: String(block.endDateTime.dropLast(6)))!
+                            let duration = end.timeIntervalSince(start)
+                            result.append(
+                                CalendarBlockedTime(
+                                    title: block.title,
+                                    start: Decimal(start.timeIntervalSince(Calendar.current.startOfDay(for: start)) / 3600),
+                                    duration: Decimal(duration / 3600)
+                                )
+                            )
+                        }
+                    }
+                    self.blocksForDayIndex[self.currentDayIndex + i] = result
+                }
+
+                DispatchQueue.main.async {
+                    self.reloadHandler()
+                }
             }
         }.resume()
     }
@@ -108,6 +141,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     private var isFirstLoad: Bool = true
 
     private var session: CalendarSession!
+    private let currentDayIndex = 5000
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,8 +155,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
             let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
         {
-            session = CalendarSession(token: token)
-            session.loadInitial()
+            startSession(with: token)
         } else {
             connectCalendar()
         }
@@ -131,7 +164,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if isFirstLoad {
-            calendar.contentOffset = CGPoint(x: cellSize.width * 5000, y: vOffset + cellSize.height * (17 + 1) - calendar.bounds.height / 2)
+            calendar.contentOffset = CGPoint(x: cellSize.width * CGFloat(currentDayIndex), y: vOffset + cellSize.height * (17 + 1) - calendar.bounds.height / 2)
         }
         isFirstLoad = false
     }
@@ -182,6 +215,11 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 //        scrollView.isDirectionalLockEnabled = true
 
         self.drawCalendar(topBar: topBar, cellSize: cellSize, vOffset: contentVPadding)
+    }
+
+    private func startSession(with token: AuthToken) {
+        self.session = CalendarSession(token: token, currentDayIndex: currentDayIndex) { [weak self] in self?.calendar.reloadData() }
+        self.session.loadInitial()
     }
 
     func setupTopBar() -> UIView {
@@ -265,15 +303,10 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         cell.headerInset = collectionView.contentOffset.y
         cell.cellSize = cellSize
         cell.vOffset = vOffset
-        cell.blockedTimes = [
-            CalendarBlockedTime(
-                title: "SAMA standup",
-                start: Decimal(12.5),
-                duration: 1
-            )
-        ]
-        cell.isCurrentDay = (indexPath.item == 5000)
-        cell.date = Calendar.current.date(byAdding: .day, value: -5000 + indexPath.item, to: Date())
+        cell.blockedTimes = session.blocksForDayIndex[indexPath.item] ?? []
+        cell.isCurrentDay = (indexPath.item == session.currentDayIndex)
+        cell.date = Calendar.current.date(byAdding: .day, value: -session.currentDayIndex + indexPath.item, to: Date())
+        cell.setNeedsDisplay()
         return cell
     }
 
@@ -310,8 +343,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             UserDefaults.standard.set(try? JSONEncoder().encode(token), forKey: "SAMA_AUTH_TOKEN")
             RemoteNotificationsTokenSync.shared.syncToken()
 
-            self.session = CalendarSession(token: token)
-            self.session.loadInitial()
+            self.startSession(with: token)
         }
         session.presentationContextProvider = self
         session.start()
