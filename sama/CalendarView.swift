@@ -16,6 +16,7 @@ final class CalendarView: UICollectionViewCell {
             setInfo()
         }
     }
+    var isCurrentDay = false
 
     var headerInset: CGFloat = 0 {
         didSet {
@@ -124,10 +125,6 @@ final class CalendarView: UICollectionViewCell {
             l1.font = .systemFont(ofSize: 17, weight: .bold)
 //            l1.text = o.0
             l1.textAlignment = .center
-//            if (o.0 == "1") {
-//                l1.backgroundColor = .primary
-//                l1.textColor = .neutralN
-//            }
             l1.layer.cornerRadius = 12
             l1.layer.masksToBounds = true
 
@@ -170,5 +167,13 @@ final class CalendarView: UICollectionViewCell {
 
         l1?.text = dayF.string(from: date)
         l2?.text = wkF.string(from: date)
+
+        if isCurrentDay {
+            l1?.backgroundColor = .primary
+            l1?.textColor = .neutralN
+        } else {
+            l1?.backgroundColor = .clear
+            l1?.textColor = .neutral1
+        }
     }
 }
