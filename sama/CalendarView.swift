@@ -7,10 +7,15 @@
 
 import UIKit
 
-final class CalendarView: UIView {
+final class CalendarView: UICollectionViewCell {
 
     var cellSize: CGSize = .zero
     var vOffset: CGFloat = 0
+    var date: Date! {
+        didSet {
+            setInfo()
+        }
+    }
 
     var headerInset: CGFloat = 0 {
         didSet {
@@ -22,6 +27,11 @@ final class CalendarView: UIView {
 
     private var isHeaderSetUp = false
     private var headerViews: [UIView] = []
+
+    private let days: Int = 1
+
+    private var l1: UILabel?
+    private var l2: UILabel?
 
     override func draw(_ rect: CGRect) {
         //super.draw(rect)
@@ -53,7 +63,7 @@ final class CalendarView: UIView {
 
         let padding: CGFloat = 8
 
-        for i in (0 ..< 7) {
+        for i in (0 ..< days) {
             let x = cellSize.width * CGFloat(i)
             for hour in (8 ... 20).filter { $0 != (12 + i) } {
                 let lengthHour = 1
@@ -88,24 +98,16 @@ final class CalendarView: UIView {
 
         let cellHeight: CGFloat = 48
 
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.firstWeekday = 2
-        let dt = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+//        let v: [(String, String)] = (0 ..< days).map {
+//            let date = calendar.date(byAdding: .day, value: $0, to: dt)!
+//            return (
+//                dayF.string(from: date),
+//                wkF.string(from: date)
+//            )
+//        }
 
-        let dayF = DateFormatter()
-        dayF.dateFormat = "d"
-        let wkF = DateFormatter()
-        wkF.dateFormat = "E"
-        let v: [(String, String)] = (0 ..< 7).map {
-            let date = calendar.date(byAdding: .day, value: $0, to: dt)!
-            return (
-                dayF.string(from: date),
-                wkF.string(from: date)
-            )
-        }
-
-        for (i, o) in v.enumerated() {
-            let v = UIView(frame: CGRect(x: cellSize.width * CGFloat(i), y: headerInset, width: cellSize.width, height: cellHeight))
+//        for (i, o) in v.enumerated() {
+            let v = UIView(frame: CGRect(x: 0, y: headerInset, width: cellSize.width, height: cellHeight))
             v.backgroundColor = .base
 
             let sepBtm = UIView(frame: CGRect(x: 0, y: cellHeight - 1, width: cellSize.width, height: 1))
@@ -120,19 +122,19 @@ final class CalendarView: UIView {
             let l1 = UILabel()
             l1.translatesAutoresizingMaskIntoConstraints = false
             l1.font = .systemFont(ofSize: 17, weight: .bold)
-            l1.text = o.0
+//            l1.text = o.0
             l1.textAlignment = .center
-            if (o.0 == "1") {
-                l1.backgroundColor = .primary
-                l1.textColor = .neutralN
-            }
+//            if (o.0 == "1") {
+//                l1.backgroundColor = .primary
+//                l1.textColor = .neutralN
+//            }
             l1.layer.cornerRadius = 12
             l1.layer.masksToBounds = true
 
             let l2 = UILabel()
             l2.font = .systemFont(ofSize: 12)
             l2.translatesAutoresizingMaskIntoConstraints = false
-            l2.text = o.1
+//            l2.text = o.1
             l2.textColor = .neutral2
 
             let sv = UIStackView(arrangedSubviews: [l1, l2])
@@ -148,8 +150,25 @@ final class CalendarView: UIView {
                 v.centerYAnchor.constraint(equalTo: sv.centerYAnchor)
             ])
 
-
+        self.l1 = l1
+        self.l2 = l2
             headerViews.append(v)
-        }
+//        }
+        setInfo()
+    }
+
+    private func setInfo() {
+//        var calendar = Calendar(identifier: .gregorian)
+//        calendar.timeZone = TimeZone(abbreviation: "GMT")!
+//        calendar.firstWeekday = 2
+//        let dt = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date))!
+
+        let dayF = DateFormatter()
+        dayF.dateFormat = "d"
+        let wkF = DateFormatter()
+        wkF.dateFormat = "E"
+
+        l1?.text = dayF.string(from: date)
+        l2?.text = wkF.string(from: date)
     }
 }

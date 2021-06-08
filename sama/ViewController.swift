@@ -8,7 +8,50 @@
 import UIKit
 import AuthenticationServices
 
-class ViewController: UIViewController, ASWebAuthenticationPresentationContextProviding, UIScrollViewDelegate {
+final class CalendarLayout: UICollectionViewLayout {
+
+    let size: CGSize
+
+    private var attrs: [UICollectionViewLayoutAttributes] = []
+
+    init(size: CGSize) {
+        self.size = size
+        super.init()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepare() {
+        let items = collectionView?.numberOfItems(inSection: 0) ?? 0
+
+        attrs = (0 ..< items).map {
+            let attrs = UICollectionViewLayoutAttributes(forCellWith: IndexPath(item: $0, section: 0))
+            attrs.frame = CGRect(x: size.width * CGFloat($0), y: 0, width: size.width, height: size.height)
+            return attrs
+        }
+    }
+
+    override var collectionViewContentSize: CGSize {
+        let items = collectionView?.numberOfItems(inSection: 0) ?? 0
+        return CGSize(width: size.width * CGFloat(items), height: size.height)
+    }
+
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        return attrs
+    }
+
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        return nil
+    }
+
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return false
+    }
+}
+
+class ViewController: UIViewController, ASWebAuthenticationPresentationContextProviding, UICollectionViewDelegate, UICollectionViewDataSource {
 
 //    @IBOutlet private var connectButton: UIButton!
 //    @IBOutlet private var disconnectButton: UIButton!
@@ -22,9 +65,13 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         }
     }
 
-    private var calendar: CalendarView!
+    private var calendar: UICollectionView!
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
+
+    private var cellSize: CGSize = .zero
+    private var vOffset: CGFloat = 0
+    private var isFirstLoad: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,14 +83,23 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         self.setupViews()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if isFirstLoad {
+            calendar.contentOffset = CGPoint(x: cellSize.width * 5000, y: vOffset + cellSize.height * (17 + 1) - calendar.bounds.height / 2)
+        }
+        isFirstLoad = false
+    }
+
     private func setupViews() {
         let timelineWidth: CGFloat = 56
-        let cellSize = CGSize(width: (view.frame.width - timelineWidth) / 4, height: 65)
+        cellSize = CGSize(width: (view.frame.width - timelineWidth) / 4, height: 65)
 
         let contentVPadding: CGFloat = 48
         let contentHeight = cellSize.height * 24 + contentVPadding * 2
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
         let calendarSize = CGSize(width: cellSize.width * 7, height: contentHeight)
+        vOffset = contentVPadding
 
         let topBar = setupTopBar()
 
@@ -58,15 +114,15 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             view.bottomAnchor.constraint(equalTo: timelineScrollView.bottomAnchor)
         ])
 
-        let scrollView = UIScrollView(frame: .zero)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(scrollView)
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: topBar.bottomAnchor),
-            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
-        ])
+//        let scrollView = UIScrollView(frame: .zero)
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(scrollView)
+//        NSLayoutConstraint.activate([
+//            scrollView.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
+//            scrollView.topAnchor.constraint(equalTo: topBar.bottomAnchor),
+//            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+//            view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+//        ])
 
         timeline = TimelineView(frame: CGRect(origin: .zero, size: timelineSize))
         timeline.cellSize = cellSize
@@ -74,13 +130,13 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         timelineScrollView.contentSize = timelineSize
         timelineScrollView.addSubview(timeline)
 
-        let view = UIView(frame: CGRect(origin: .zero, size: calendarSize))
-        scrollView.addSubview(view)
-        scrollView.contentSize = calendarSize
-        scrollView.delegate = self
-        scrollView.isDirectionalLockEnabled = true
+//        let view = UIView(frame: CGRect(origin: .zero, size: calendarSize))
+//        scrollView.addSubview(view)
+//        scrollView.contentSize = calendarSize
+//        scrollView.delegate = self
+//        scrollView.isDirectionalLockEnabled = true
 
-        self.drawCalendar(in: view, cellSize: cellSize, vOffset: contentVPadding)
+        self.drawCalendar(topBar: topBar, cellSize: cellSize, vOffset: contentVPadding)
     }
 
     func setupTopBar() -> UIView {
@@ -110,42 +166,50 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         return topBar
     }
 
-//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//        if (abs(velocity.x) > 0.01) {
-//            let i = Int((scrollView.contentOffset.x - 80) / 220)
-//            if (abs(velocity.x) > 0.4) {
-//                let newI: Int
-//                if (velocity.x > 0) {
-//                    newI = i + 1
-//                } else {
-//                    newI = i
-//                }
-//                targetContentOffset.pointee = CGPoint(x: (newI > 0 ? -45 : 0) + 220 * CGFloat(newI), y: scrollView.contentOffset.y)
-//            } else {
-//                let i = Int((scrollView.contentOffset.x - 80) / 220)
-//                targetContentOffset.pointee = CGPoint(x: 220 * CGFloat(i), y: scrollView.contentOffset.y)
-//            }
-//        }
-//    }
-
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         timelineScrollView.contentOffset.y = scrollView.contentOffset.y
         timeline.headerInset = scrollView.contentOffset.y
-        calendar.headerInset = scrollView.contentOffset.y
+//        calendar.headerInset = scrollView.contentOffset.y
+        for cell in calendar.visibleCells {
+            (cell as! CalendarView).headerInset = scrollView.contentOffset.y
+        }
     }
 
-    private func drawCalendar(in view: UIView, cellSize: CGSize, vOffset: CGFloat) {
-        calendar = CalendarView(frame: .zero)
-        calendar.cellSize = cellSize
-        calendar.vOffset = vOffset
+    private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
+        let layout = CalendarLayout(size: CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset))
+//        let layout = UICollectionViewFlowLayout()
+//        layout.itemSize = CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset)
+        calendar = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        calendar.isDirectionalLockEnabled = true
+        calendar.dataSource = self
+        calendar.delegate = self
+        calendar.backgroundColor = .base
+        calendar.decelerationRate = .fast
+//        calendar = CalendarView(frame: .zero)
+//        calendar.cellSize = cellSize
+//        calendar.vOffset = vOffset
+        calendar.register(CalendarView.self, forCellWithReuseIdentifier: "dayCell")
         calendar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(calendar)
         NSLayoutConstraint.activate([
-            calendar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            calendar.topAnchor.constraint(equalTo: view.topAnchor),
+            calendar.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
+            calendar.topAnchor.constraint(equalTo: topBar.bottomAnchor),
             view.trailingAnchor.constraint(equalTo: calendar.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: calendar.bottomAnchor)
         ])
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10000
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dayCell", for: indexPath) as! CalendarView
+        cell.headerInset = collectionView.contentOffset.y
+        cell.cellSize = cellSize
+        cell.vOffset = vOffset
+        cell.date = Calendar.current.date(byAdding: .day, value: -5000 + indexPath.item, to: Date())
+        return cell
     }
 
     @IBAction func onConnectCalendar(_ sender: Any) {
