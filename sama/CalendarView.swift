@@ -7,10 +7,18 @@
 
 import UIKit
 
+struct CalendarBlockedTime {
+    let title: String
+    let start: Decimal
+    let duration: Decimal
+}
+
 final class CalendarView: UICollectionViewCell {
 
     var cellSize: CGSize = .zero
     var vOffset: CGFloat = 0
+
+    var blockedTimes: [CalendarBlockedTime] = []
     var date: Date! {
         didSet {
             setInfo()
@@ -29,8 +37,6 @@ final class CalendarView: UICollectionViewCell {
     private var isHeaderSetUp = false
     private var headerViews: [UIView] = []
 
-    private let days: Int = 1
-
     private var l1: UILabel?
     private var l2: UILabel?
 
@@ -43,6 +49,7 @@ final class CalendarView: UICollectionViewCell {
         UIRectFill(rect)
 
         UIColor.calendarGrid.setFill()
+        UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
         for i in (1 ... 24) {
             UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
         }
@@ -64,33 +71,27 @@ final class CalendarView: UICollectionViewCell {
 
         let padding: CGFloat = 8
 
-        for i in (0 ..< days) {
-            let x = cellSize.width * CGFloat(i)
-            for hour in (8 ... 20).filter { $0 != (12 + i) } {
-                let lengthHour = 1
+        let x: CGFloat = 0
 
-                let y = vOffset + CGFloat(hour) * cellSize.height + 1
-                UIColor.eventBackground.setFill()
-                UIBezierPath(
-                    roundedRect: CGRect(
-                        x: x,
-                        y: y,
-                        width: cellSize.width - 3,
-                        height: cellSize.height * CGFloat(lengthHour) - 2
-                    ),
-                    byRoundingCorners: .allCorners,
-                    cornerRadii: CGSize(width: 4, height: 4)
-                ).fill(with: .normal, alpha: 1)
-                let text_y = y + padding
-                let textRect = CGRect(x: x + padding, y: text_y, width: cellSize.width - padding, height: 16)
-                "Lunch with Peter".draw(in: textRect.integral, withAttributes: attributes)
-            }
+        for block in blockedTimes {
+            let lengthHour = CGFloat(truncating: block.duration as NSNumber)
 
-            UIColor.calendarGrid.setFill()
-            UIRectFillUsingBlendMode(CGRect(x: x - 1, y: 0, width: 1, height: frame.height), .normal)
+            let y = vOffset + CGFloat(truncating: block.start as NSNumber) * cellSize.height + 1
+            UIColor.eventBackground.setFill()
+            UIBezierPath(
+                roundedRect: CGRect(
+                    x: x,
+                    y: y,
+                    width: cellSize.width - 3,
+                    height: cellSize.height * CGFloat(lengthHour) - 2
+                ),
+                byRoundingCorners: .allCorners,
+                cornerRadii: CGSize(width: 4, height: 4)
+            ).fill(with: .normal, alpha: 1)
+            let text_y = y + padding
+            let textRect = CGRect(x: x + padding, y: text_y, width: cellSize.width - padding, height: 16)
+            block.title.draw(in: textRect.integral, withAttributes: attributes)
         }
-
-        UIColor.calendarGrid.setFill()
     }
 
     private func setupHeaderIfNeeded() {

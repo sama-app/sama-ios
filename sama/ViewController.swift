@@ -265,6 +265,13 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         cell.headerInset = collectionView.contentOffset.y
         cell.cellSize = cellSize
         cell.vOffset = vOffset
+        cell.blockedTimes = [
+            CalendarBlockedTime(
+                title: "SAMA standup",
+                start: Decimal(12.5),
+                duration: 1
+            )
+        ]
         cell.isCurrentDay = (indexPath.item == 5000)
         cell.date = Calendar.current.date(byAdding: .day, value: -5000 + indexPath.item, to: Date())
         return cell
