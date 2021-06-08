@@ -77,5 +77,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Latinotype - Recoleta Alt Regular.otf</string>
+		<string>Latinotype - Recoleta Alt SemiBold.otf</string>
+	</array>
 </dict>
 </plist>

@@ -107,7 +107,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let title = UILabel(frame: .zero)
         title.translatesAutoresizingMaskIntoConstraints = false
         title.textColor = .neutral1
-        title.font = .systemFont(ofSize: 24)
+        title.font = .brandedFont(ofSize: 24, weight: .regular)
         title.text = "Sama"
         topBar.addSubview(title)
         NSLayoutConstraint.activate([

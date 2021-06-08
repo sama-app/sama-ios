@@ -40,7 +40,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         text.translatesAutoresizingMaskIntoConstraints = false
         text.text = "Hi.\nI’m Sama.\nI will help you find the best time for a meeting."
         text.textColor = .neutral3
-        text.font = .systemFont(ofSize: 28)
+        text.font = .brandedFont(ofSize: 28, weight: .regular)
         text.numberOfLines = 0
         text.lineBreakMode = .byWordWrapping
         block.addSubview(text)
@@ -54,7 +54,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         actionBtn.setTitle("Continue", for: .normal)
         actionBtn.translatesAutoresizingMaskIntoConstraints = false
         actionBtn.setTitleColor(.primary, for: .normal)
-        actionBtn.titleLabel?.font = UIFont.systemFont(ofSize: 28, weight: .semibold)
+        actionBtn.titleLabel?.font = .brandedFont(ofSize: 28, weight: .semibold)
         actionBtn.addTarget(self, action: #selector(onNextBlock), for: .touchUpInside)
         block.addSubview(actionBtn)
         NSLayoutConstraint.activate([
@@ -99,7 +99,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         text.translatesAutoresizingMaskIntoConstraints = false
         text.text = "Before I can help you, I need you to grant me access to your Google Calendar."
         text.textColor = .neutral3
-        text.font = .systemFont(ofSize: 28)
+        text.font = .brandedFont(ofSize: 28, weight: .regular)
         text.numberOfLines = 0
         text.lineBreakMode = .byWordWrapping
         block.addSubview(text)
@@ -113,7 +113,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         actionBtn.setTitle("Connect", for: .normal)
         actionBtn.translatesAutoresizingMaskIntoConstraints = false
         actionBtn.setTitleColor(.primary, for: .normal)
-        actionBtn.titleLabel?.font = UIFont.systemFont(ofSize: 28, weight: .semibold)
+        actionBtn.titleLabel?.font = .brandedFont(ofSize: 28, weight: .semibold)
         actionBtn.addTarget(self, action: #selector(onConnectCalendar), for: .touchUpInside)
         block.addSubview(actionBtn)
         NSLayoutConstraint.activate([
