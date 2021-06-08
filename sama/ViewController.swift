@@ -164,7 +164,12 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if isFirstLoad {
-            calendar.contentOffset = CGPoint(x: cellSize.width * CGFloat(currentDayIndex), y: vOffset + cellSize.height * (17 + 1) - calendar.bounds.height / 2)
+            let hr = CGFloat(ceil(Date().timeIntervalSince(Calendar.current.startOfDay(for: Date())) / 3600))
+            let y = vOffset + cellSize.height * (hr + 1) - calendar.bounds.height / 2
+            calendar.contentOffset = CGPoint(
+                x: cellSize.width * CGFloat(currentDayIndex),
+                y: y
+            )
         }
         isFirstLoad = false
     }
