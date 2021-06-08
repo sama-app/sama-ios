@@ -8,6 +8,52 @@
 import UIKit
 import AuthenticationServices
 
+struct CalendarBlocks: Decodable {
+    let blocks: [CalendarBlock]
+}
+
+struct CalendarBlock: Decodable {
+    let title: String
+    let startDateTime: String
+    let endDateTime: String
+}
+
+final class CalendarSession {
+
+    private let token: AuthToken
+
+    init(token: AuthToken) {
+        self.token = token
+    }
+
+    func loadInitial() {
+        let start = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
+        let end = Calendar.current.date(byAdding: .day, value: 5, to: Date())!
+        let dateF = DateFormatter()
+        dateF.dateFormat = "YYYY-MM-dd"
+        var urlComps = URLComponents(string: "https://app.yoursama.com/api/calendar/blocks")!
+        urlComps.queryItems = [
+            URLQueryItem(name: "startDate", value: dateF.string(from: start)),
+            URLQueryItem(name: "endDate", value: dateF.string(from: end)),
+            URLQueryItem(name: "timezone", value: "UTC")
+        ]
+        var req = URLRequest(url: urlComps.url!)
+        req.httpMethod = "get"
+        req.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: req) { (data, resp, err) in
+            print("/calendar/blocks HTTP status code: \((resp as? HTTPURLResponse)?.statusCode ?? -1)")
+            if err == nil, let data = data, let model = try? JSONDecoder().decode(CalendarBlocks.self, from: data) {
+//                model.blocks
+                print("OK")
+            }
+        }.resume()
+    }
+
+    private func fetchCalendar() {
+
+    }
+}
+
 final class CalendarLayout: UICollectionViewLayout {
 
     let size: CGSize
@@ -53,18 +99,6 @@ final class CalendarLayout: UICollectionViewLayout {
 
 class ViewController: UIViewController, ASWebAuthenticationPresentationContextProviding, UICollectionViewDelegate, UICollectionViewDataSource {
 
-//    @IBOutlet private var connectButton: UIButton!
-//    @IBOutlet private var disconnectButton: UIButton!
-//    @IBOutlet private var fetchCalendarButton: UIButton!
-
-    private var isLoggedIn = false {
-        didSet {
-//            connectButton.isHidden = isLoggedIn
-//            disconnectButton.isHidden = !isLoggedIn
-//            fetchCalendarButton.isHidden = !isLoggedIn
-        }
-    }
-
     private var calendar: UICollectionView!
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
@@ -73,14 +107,25 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     private var vOffset: CGFloat = 0
     private var isFirstLoad: Bool = true
 
+    private var session: CalendarSession!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        isLoggedIn = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN") != nil
 
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
         self.setupViews()
+
+        if
+            let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
+            let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
+        {
+            session = CalendarSession(token: token)
+            session.loadInitial()
+        } else {
+            connectCalendar()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -225,7 +270,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         return cell
     }
 
-    @IBAction func onConnectCalendar(_ sender: Any) {
+    private func connectCalendar() {
         var req = URLRequest(url: URL(string: "https://app.yoursama.com/api/auth/google-authorize")!)
         req.httpMethod = "post"
         URLSession.shared.dataTask(with: req) { (data, resp, err) in
@@ -240,20 +285,6 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 
     @IBAction func onDisconnectCalendar(_ sender: Any) {
         UserDefaults.standard.removeObject(forKey: "SAMA_AUTH_TOKEN")
-        isLoggedIn = false
-    }
-
-    @IBAction func onFetchCalendar(_ sender: Any) {
-        guard
-            let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
-            let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
-        else { return }
-        var req = URLRequest(url: URL(string: "https://app.yoursama.com/api/calendar")!)
-        req.httpMethod = "get"
-        req.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
-        URLSession.shared.dataTask(with: req) { (data, resp, err) in
-            print("")
-        }.resume()
     }
 
     private func authenticate(with url: String) {
@@ -271,7 +302,9 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
             let token = AuthToken(accessToken: accessToken, refreshToken: refreshToken)
             UserDefaults.standard.set(try? JSONEncoder().encode(token), forKey: "SAMA_AUTH_TOKEN")
             RemoteNotificationsTokenSync.shared.syncToken()
-            self.isLoggedIn = true
+
+            self.session = CalendarSession(token: token)
+            self.session.loadInitial()
         }
         session.presentationContextProvider = self
         session.start()
