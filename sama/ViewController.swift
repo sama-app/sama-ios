@@ -166,6 +166,18 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
         return topBar
     }
 
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let i = round(scrollView.contentOffset.x / cellSize.width)
+        let dir = targetContentOffset.pointee.x - scrollView.contentOffset.x
+        let j = dir < 0 ? round(targetContentOffset.pointee.x / cellSize.width) : round(targetContentOffset.pointee.x / cellSize.width)
+        if abs(targetContentOffset.pointee.x - scrollView.contentOffset.x) < 2 {
+            targetContentOffset.pointee.x = i * cellSize.width
+        } else {
+            let z = max(min((j - i), 1), -1)
+            targetContentOffset.pointee.x = (i + z) * cellSize.width
+        }
+    }
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         timelineScrollView.contentOffset.y = scrollView.contentOffset.y
         timeline.headerInset = scrollView.contentOffset.y
