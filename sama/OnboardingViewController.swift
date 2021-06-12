@@ -72,15 +72,18 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         view.setNeedsLayout()
         view.layoutIfNeeded()
 
-        leading.constant = 0
+        currentBlock = block
+        currentBlockLeadingConstraint = leading
+    }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        currentBlockLeadingConstraint?.constant = 0
         UIView.animate(withDuration: 0.3, animations: {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         })
-
-        currentBlock = block
-        currentBlockLeadingConstraint = leading
     }
 
     private func startSession(with token: AuthToken) {

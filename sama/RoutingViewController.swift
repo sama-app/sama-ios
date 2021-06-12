@@ -30,10 +30,6 @@ class RoutingViewController: UIViewController {
         UIApplication.shared.windows[0].rootViewController = viewController
     }
 
-    private func disconnectCalendar() {
-        UserDefaults.standard.removeObject(forKey: "SAMA_AUTH_TOKEN")
-    }
-
     private func presentOnboarding() {
         UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
     }
