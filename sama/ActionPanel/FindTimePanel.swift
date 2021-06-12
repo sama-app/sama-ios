@@ -86,7 +86,7 @@ class FindTimePanel: CalendarNavigationBlock {
     private func onAction(_ action: FindTimeAction) {
         switch action {
         case .pickDuration:
-            break
+            navigation?.pushBlock(DurationPickerPanel(), animated: true)
         case .pickTimezone:
             navigation?.pushBlock(TimeZonePickerPanel(), animated: true)
         }

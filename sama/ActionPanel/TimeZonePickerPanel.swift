@@ -30,35 +30,8 @@ class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
     }.sorted { $0.hoursFromGMT < $1.hoursFromGMT }
 
     override func didLoad() {
-        let backBtn = UIButton(type: .system)
-        backBtn.translatesAutoresizingMaskIntoConstraints = false
-        backBtn.tintColor = .primary
-        backBtn.setImage(UIImage(named: "arrow-back")!, for: .normal)
-        backBtn.addTarget(self, action: #selector(onBackButton), for: .touchUpInside)
-        addSubview(backBtn)
-        NSLayoutConstraint.activate([
-            backBtn.widthAnchor.constraint(equalToConstant: 44),
-            backBtn.heightAnchor.constraint(equalToConstant: 44),
-            backBtn.topAnchor.constraint(equalTo: topAnchor, constant: -4),
-            backBtn.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -8)
-        ])
-
-        let contentView = UITableView()
-        contentView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        contentView.dataSource = self
-        contentView.separatorStyle = .none
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.showsVerticalScrollIndicator = false
-        contentView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        contentView.contentOffset = CGPoint(x: 0, y: -8)
-        addSubview(contentView)
-        NSLayoutConstraint.activate([
-            contentView.heightAnchor.constraint(equalToConstant: 376),
-            contentView.topAnchor.constraint(equalTo: topAnchor, constant: -16),
-            contentView.leadingAnchor.constraint(equalTo: backBtn.trailingAnchor),
-            trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-        ])
+        let backBtn = addBackButton(action: #selector(onBackButton))
+        addPanelContentTableView(withLeftView: backBtn, withDelegate: self)
     }
 
     @objc private func onBackButton() {
@@ -93,7 +66,7 @@ class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 38
+        return 45
     }
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
