@@ -14,6 +14,7 @@ class CalendarNavigationBlock: UIView {
 
 final class CalendarNavigationCenter: UIView {
 
+    var onActivePanelHeightChange: ((CGFloat) -> Void)?
     private var stack: [UIView] = []
     private var stackLeadingConstraint: [NSLayoutConstraint] = []
 
@@ -53,6 +54,7 @@ final class CalendarNavigationCenter: UIView {
             leading,
             fullBlock.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+        stack.append(fullBlock)
 
         if animated {
             setNeedsLayout()
@@ -70,7 +72,6 @@ final class CalendarNavigationCenter: UIView {
             })
         }
 
-        stack.append(block)
         stackLeadingConstraint.append(leading)
     }
 
@@ -84,6 +85,11 @@ final class CalendarNavigationCenter: UIView {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }, completion: { _ in currentBlock?.removeFromSuperview() })
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        onActivePanelHeightChange?(stack.last?.frame.height ?? 0)
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

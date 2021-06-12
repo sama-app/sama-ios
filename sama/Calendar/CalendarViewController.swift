@@ -32,6 +32,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
         session.loadInitial()
 
+        navCenter.onActivePanelHeightChange = {
+            self.calendar.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
+        }
         navCenter.pushBlock(FindTimePanel(), animated: false)
     }
 
