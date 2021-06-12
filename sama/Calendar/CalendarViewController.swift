@@ -15,6 +15,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
 
+    private var navCenter = CalendarNavigationCenter()
+
     private var cellSize: CGSize = .zero
     private var vOffset: CGFloat = 0
     private var isFirstLoad: Bool = true
@@ -28,6 +30,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         self.setupViews()
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
         session.loadInitial()
+
+        navCenter.pushBlock(FindTimePanel(), animated: false)
     }
 
     override func viewDidLayoutSubviews() {
@@ -89,6 +93,15 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 //        scrollView.isDirectionalLockEnabled = true
 
         self.drawCalendar(topBar: topBar, cellSize: cellSize, vOffset: contentVPadding)
+
+        navCenter.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(navCenter)
+        NSLayoutConstraint.activate([
+            navCenter.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            navCenter.topAnchor.constraint(equalTo: topBar.bottomAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor),
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
+        ])
     }
 
     func setupTopBar() -> UIView {
