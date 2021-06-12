@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */; };
 		E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */; };
+		E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665C2674F02C00C88EA1 /* MainActionButton.swift */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
@@ -60,6 +61,7 @@
 /* Begin PBXFileReference section */
 		E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationPickerPanel.swift; sourceTree = "<group>"; };
 		E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
+		E70A665C2674F02C00C88EA1 /* MainActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionButton.swift; sourceTree = "<group>"; };
 		E732E958266256A9008A8B82 /* UIColors+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Branded.swift"; sourceTree = "<group>"; };
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				E7F5AD09266FAF4B00138E42 /* fonts */,
 				E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */,
 				E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */,
+				E70A665C2674F02C00C88EA1 /* MainActionButton.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -381,6 +384,7 @@
 				E7F8DD83264EB61D00CD3759 /* CalendarView.swift in Sources */,
 				E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
+				E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */,
 				E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */,
 				E7957949266F6457005B9F39 /* OnboardingViewController.swift in Sources */,
 				E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */,

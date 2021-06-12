@@ -77,14 +77,11 @@ class FindTimePanel: CalendarNavigationBlock {
         text.actionHandler = { [weak self] in self?.onAction($0) }
         text.setup(withParts: parts)
 
-        let actionBtn = UIButton(type: .system)
-        actionBtn.setTitle("Find Time", for: .normal)
-        actionBtn.translatesAutoresizingMaskIntoConstraints = false
-        actionBtn.setTitleColor(.primary, for: .normal)
-        actionBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+        let actionBtn = MainActionButton.make(withTitle: "Find Time")
         actionBtn.addTarget(self, action: #selector(onFindTimeButton), for: .touchUpInside)
         addSubview(actionBtn)
         NSLayoutConstraint.activate([
+            actionBtn.heightAnchor.constraint(equalToConstant: 48),
             actionBtn.topAnchor.constraint(equalTo: text.bottomAnchor, constant: 16),
             actionBtn.leadingAnchor.constraint(equalTo: leadingAnchor),
             trailingAnchor.constraint(equalTo: actionBtn.trailingAnchor),
