@@ -92,14 +92,14 @@ final class CalendarSession {
                     }
                     self.blocksForDayIndex[self.currentDayIndex + i] = result
                 }
+
+                DispatchQueue.main.async {
+                    self.reloadHandler()
+                }
             } else {
                 for idx in blockIndices {
                     self.isBlockBusy[idx] = false
                 }
-            }
-
-            DispatchQueue.main.async {
-                self.reloadHandler()
             }
         }.resume()
     }
