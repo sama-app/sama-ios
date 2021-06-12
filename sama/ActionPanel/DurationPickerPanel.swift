@@ -15,6 +15,8 @@ struct DurationOption {
 
 class DurationPickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITableViewDelegate {
 
+    var optionPickHandler: ((DurationOption) -> Void)?
+
     private let options: [DurationOption] = [
         DurationOption(text: "15 minutes", duration: 15),
         DurationOption(text: "30 minutes", duration: 30),
@@ -44,7 +46,7 @@ class DurationPickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
         case 0:
             cell.textLabel?.text = "Meeting duration"
         default:
-            cell.textLabel?.text = options[indexPath.row - 1].text
+            cell.textLabel?.text = options[itemIndex(from: indexPath)].text
         }
         if indexPath.row > 0 {
             cell.textLabel?.textColor = .primary
@@ -66,7 +68,12 @@ class DurationPickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row > 0 {
-
+            optionPickHandler?(options[itemIndex(from: indexPath)])
+            navigation?.pop()
         }
+    }
+
+    private func itemIndex(from indexPath: IndexPath) -> Int {
+        return indexPath.row - 1
     }
 }

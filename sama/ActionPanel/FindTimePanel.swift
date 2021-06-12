@@ -45,19 +45,27 @@ struct FindTimePart {
 
 class FindTimePanel: CalendarNavigationBlock {
 
-    let parts = FindTimePart.make(from: [
-        ("Find me a time for a ", nil),
-        ("1 hour", .pickDuration),
-        (" meeting with someone in", nil),
-        ("my timezone", .pickTimezone),
-        (" ", nil)
-    ])
+    private var durationOption = DurationOption(text: "1 hour", duration: 60) {
+        didSet {
+            text.setup(withParts: parts)
+        }
+    }
+
+    private var parts: [FindTimePart] {
+        return FindTimePart.make(from: [
+            ("Find me a time for a ", nil),
+            (durationOption.text, .pickDuration),
+            (" meeting with someone in", nil),
+            ("my timezone", .pickTimezone),
+            (" ", nil)
+        ])
+    }
+
+    private var text = FindTimeLabel()
 
     override func didLoad() {
-        let text = FindTimeLabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.isUserInteractionEnabled = true
-        text.setup(withParts: parts)
         text.numberOfLines = 0
         text.lineBreakMode = .byWordWrapping
         addSubview(text)
@@ -67,6 +75,7 @@ class FindTimePanel: CalendarNavigationBlock {
             trailingAnchor.constraint(equalTo: text.trailingAnchor),
         ])
         text.actionHandler = { [weak self] in self?.onAction($0) }
+        text.setup(withParts: parts)
 
         let actionBtn = UIButton(type: .system)
         actionBtn.setTitle("Find Time", for: .normal)
@@ -86,7 +95,11 @@ class FindTimePanel: CalendarNavigationBlock {
     private func onAction(_ action: FindTimeAction) {
         switch action {
         case .pickDuration:
-            navigation?.pushBlock(DurationPickerPanel(), animated: true)
+            let block = DurationPickerPanel()
+            block.optionPickHandler = { [weak self] in
+                self?.durationOption = $0
+            }
+            navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
             navigation?.pushBlock(TimeZonePickerPanel(), animated: true)
         }
