@@ -42,7 +42,7 @@ class ProfileViewController: UITableViewController {
         overrideUserInterfaceStyle = .light
 
         tableView.separatorStyle = .none
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(HighlightableSimpleCell.self, forCellReuseIdentifier: "cell")
 
         let header = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 200))
 

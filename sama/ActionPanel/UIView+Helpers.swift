@@ -32,7 +32,7 @@ extension UIView {
         withDelegate delegate: (UITableViewDataSource & UITableViewDelegate)
     ) -> UITableView {
         let contentView = UITableView()
-        contentView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        contentView.register(HighlightableSimpleCell.self, forCellReuseIdentifier: "cell")
         contentView.dataSource = delegate
         contentView.delegate = delegate
         contentView.separatorStyle = .none
