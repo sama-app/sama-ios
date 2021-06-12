@@ -20,6 +20,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var cellSize: CGSize = .zero
     private var vOffset: CGFloat = 0
     private var isFirstLoad: Bool = true
+    private var isCalendarReady = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,6 +191,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             view.trailingAnchor.constraint(equalTo: calendar.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: calendar.bottomAnchor)
         ])
+
+        calendar.layoutIfNeeded()
+        isCalendarReady = true
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -207,8 +211,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         cell.date = Calendar.current.date(byAdding: .day, value: daysOffset, to: Date())
         cell.setNeedsDisplay()
 
-        session.loadIfAvailableBlock(at: Int(round(Double(daysOffset) / Double(session.blockSize))))
-
+        if isCalendarReady {
+            session.loadIfAvailableBlock(at: Int(round(Double(daysOffset) / Double(session.blockSize))))
+        }
         return cell
     }
 
