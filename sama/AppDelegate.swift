@@ -65,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print(userInfo)
 
         // Change this to your preferred presentation option
-        completionHandler([[.banner, .sound]])
+        completionHandler([.sound])
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
