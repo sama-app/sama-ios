@@ -27,7 +27,7 @@ final class CalendarNavigationCenter: UIView {
         fullBlock.translatesAutoresizingMaskIntoConstraints = false
         addSubview(fullBlock)
 
-        let blockWrapper = UIView()
+        let blockWrapper = CalendarBlockWrapper()
         blockWrapper.backgroundColor = .neutralN
         blockWrapper.layer.cornerRadius = 24
         blockWrapper.translatesAutoresizingMaskIntoConstraints = false
@@ -95,5 +95,37 @@ final class CalendarNavigationCenter: UIView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let block = stack.last else { return nil }
         return block.hitTest(block.convert(point, from: self), with: event)
+    }
+}
+
+private final class CalendarBlockWrapper: UIView {
+    private var isReady = false
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if (!isReady) {
+            isReady = true
+
+            let middle = CGPoint(x: bounds.midX, y: bounds.midY)
+
+            let shadowPath0 = UIBezierPath(roundedRect: bounds, cornerRadius: 24)
+            let layer0 = CALayer()
+            layer0.shadowPath = shadowPath0.cgPath
+            layer0.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            layer0.shadowOpacity = 1
+            layer0.shadowRadius = 2
+            layer0.shadowOffset = CGSize(width: 0, height: 2)
+            layer0.bounds = bounds
+            layer0.position = middle
+            layer.insertSublayer(layer0, at: 0)
+
+            let background = CALayer()
+            background.backgroundColor = UIColor.neutralN.cgColor
+            background.bounds = bounds
+            background.position = middle
+            background.cornerRadius = 24
+            background.masksToBounds = true
+            layer.insertSublayer(background, at: 1)
+        }
     }
 }
