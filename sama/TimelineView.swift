@@ -66,7 +66,7 @@ final class TimelineView: UIView {
                     attributes: defaultAttrs
                 )
             } else {
-                (i + targetTimezoneHoursDiff).hourToTime.draw(
+                (i + targetTimezoneHoursDiff).toHour.hourToTime.draw(
                     inRect: cellRect,
                     yInset: baseInset - textBoxH / 2,
                     withFontHeight: textBoxH,
@@ -107,6 +107,10 @@ final class TimelineView: UIView {
 }
 
 private extension Int {
+    var toHour: Int {
+        let hr = self % 24
+        return hr < 0 ? (24 + hr) : hr
+    }
     var hourToTime: String {
         let leading = (self >= 10) ? 0 : 1
         let prefix = (0 ..< leading).map { _ in " " }.joined()
