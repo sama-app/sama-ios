@@ -164,16 +164,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         timelineScrollView.contentOffset.y = scrollView.contentOffset.y
         timeline.headerInset = scrollView.contentOffset.y
-//        calendar.headerInset = scrollView.contentOffset.y
         for cell in calendar.visibleCells {
-            (cell as! CalendarView).headerInset = scrollView.contentOffset.y
+            (cell as! CalendarDayCell).headerInset = scrollView.contentOffset.y
         }
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
         let layout = CalendarLayout(size: CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset))
-//        let layout = UICollectionViewFlowLayout()
-//        layout.itemSize = CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset)
         calendar = UICollectionView(frame: .zero, collectionViewLayout: layout)
         calendar.isDirectionalLockEnabled = true
         calendar.dataSource = self
@@ -182,10 +179,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         calendar.decelerationRate = .fast
         calendar.showsHorizontalScrollIndicator = false
         calendar.showsVerticalScrollIndicator = false
-//        calendar = CalendarView(frame: .zero)
-//        calendar.cellSize = cellSize
-//        calendar.vOffset = vOffset
-        calendar.register(CalendarView.self, forCellWithReuseIdentifier: "dayCell")
+        calendar.register(CalendarDayCell.self, forCellWithReuseIdentifier: "dayCell")
         calendar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(calendar)
         NSLayoutConstraint.activate([
@@ -204,7 +198,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dayCell", for: indexPath) as! CalendarView
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dayCell", for: indexPath) as! CalendarDayCell
         cell.headerInset = collectionView.contentOffset.y
         cell.cellSize = cellSize
         cell.vOffset = vOffset

@@ -1,5 +1,5 @@
 //
-//  CalendarView.swift
+//  CalendarDayCell.swift
 //  sama
 //
 //  Created by Viktoras Laukevičius on 5/14/21.
@@ -14,7 +14,7 @@ struct CalendarBlockedTime {
     var depth: Int
 }
 
-final class CalendarView: UICollectionViewCell {
+final class CalendarDayCell: UICollectionViewCell {
 
     var cellSize: CGSize = .zero
     var vOffset: CGFloat = 0

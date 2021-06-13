@@ -18,9 +18,12 @@ final class TimelineView: UIView {
         }
     }
 
+    private var isHeaderSetup = false
     private var header: UIView?
 
     override func draw(_ rect: CGRect) {
+        setupHeaderIfNeeded()
+
         UIColor.base.setFill()
         UIRectFill(rect)
 
@@ -53,14 +56,19 @@ final class TimelineView: UIView {
 
         UIColor.calendarGrid.setFill()
         UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
+    }
+
+    private func setupHeaderIfNeeded() {
+        guard !isHeaderSetup else { return }
+        isHeaderSetup = true
 
         let cellHeight: CGFloat = 48
-        let v = UIView(frame: CGRect(x: 0, y: headerInset, width: rect.width, height: cellHeight))
+        let v = UIView(frame: CGRect(x: 0, y: headerInset, width: bounds.width, height: cellHeight))
         v.backgroundColor = .base
 
-        let sepBtm = UIView(frame: CGRect(x: 0, y: cellHeight - 1, width: rect.width, height: 1))
+        let sepBtm = UIView(frame: CGRect(x: 0, y: cellHeight - 1, width: bounds.width, height: 1))
         sepBtm.backgroundColor = .calendarGrid
-        let sepRht = UIView(frame: CGRect(x: rect.width - 1, y: 0, width: 1, height: cellHeight))
+        let sepRht = UIView(frame: CGRect(x: bounds.width - 1, y: 0, width: 1, height: cellHeight))
         sepRht.backgroundColor = .calendarGrid
         v.addSubview(sepBtm)
         v.addSubview(sepRht)
