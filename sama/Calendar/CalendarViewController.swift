@@ -35,7 +35,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         navCenter.onActivePanelHeightChange = {
             self.calendar.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
         }
-        navCenter.pushBlock(FindTimePanel(), animated: false)
+        let panel = FindTimePanel()
+        panel.targetTimezoneChangeHandler = { [weak self] in
+            self?.timeline.targetTimezoneHoursDiff = ($0 - 3)
+        }
+        navCenter.pushBlock(panel, animated: false)
     }
 
     override func viewDidLayoutSubviews() {

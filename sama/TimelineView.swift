@@ -11,6 +11,12 @@ final class TimelineView: UIView {
 
     var cellSize: CGSize = .zero
     var vOffset: CGFloat = 0
+    var targetTimezoneHoursDiff: Int = 0 {
+        didSet {
+            setNeedsDisplay()
+            layoutIfNeeded()
+        }
+    }
 
     var headerInset: CGFloat = 0 {
         didSet {
@@ -36,22 +42,43 @@ final class TimelineView: UIView {
         let font=UIFont.systemFont(ofSize: 15)
         let text_style=NSMutableParagraphStyle()
         text_style.alignment=NSTextAlignment.center
-        let text_color = UIColor.neutral2
-        let attributes: [NSAttributedString.Key : Any] = [
+        let defaultAttrs: [NSAttributedString.Key : Any] = [
             .font: font,
             .paragraphStyle: text_style,
-            .foregroundColor: text_color
+            .foregroundColor: UIColor.neutral2
+        ]
+        let currentZoneAttrs: [NSAttributedString.Key : Any] = [
+            .font: font,
+            .paragraphStyle: text_style,
+            .foregroundColor: UIColor.black.withAlphaComponent(0.4)
         ]
 
-        //vertically center (depending on font)
-        let text_h=font.lineHeight
+        let textBoxH: CGFloat = 24
+        let baseInset = max((textBoxH - font.lineHeight) / 2, 0)
 
         for i in (0 ... 23) {
-            let text_y = vOffset + (CGFloat(i) * cellSize.height) + (cellSize.height-text_h)/2
-            let text_rect=CGRect(x: 10, y: text_y, width: rect.width - 10, height: text_h)
-            let leading = (i >= 10) ? 0 : 1
-            let prefix = (0 ..< leading).map { _ in " " }.joined()
-            "\(prefix)\(i):00".draw(in: text_rect.integral, withAttributes: attributes)
+            let cellRect = CGRect(x: 0, y: vOffset + (CGFloat(i) * cellSize.height), width: bounds.width, height: cellSize.height)
+            if targetTimezoneHoursDiff == 0 {
+                i.hourToTime.draw(
+                    inRect: cellRect,
+                    yInset: baseInset,
+                    withFontHeight: textBoxH,
+                    attributes: defaultAttrs
+                )
+            } else {
+                (i + targetTimezoneHoursDiff).hourToTime.draw(
+                    inRect: cellRect,
+                    yInset: baseInset - textBoxH / 2,
+                    withFontHeight: textBoxH,
+                    attributes: defaultAttrs
+                )
+                i.hourToTime.draw(
+                    inRect: cellRect,
+                    yInset: baseInset + textBoxH / 2,
+                    withFontHeight: textBoxH,
+                    attributes: currentZoneAttrs
+                )
+            }
         }
 
         UIColor.calendarGrid.setFill()
@@ -76,5 +103,21 @@ final class TimelineView: UIView {
         addSubview(v)
 
         header = v
+    }
+}
+
+private extension Int {
+    var hourToTime: String {
+        let leading = (self >= 10) ? 0 : 1
+        let prefix = (0 ..< leading).map { _ in " " }.joined()
+        return "\(prefix)\(self):00"
+    }
+}
+
+private extension String {
+    func draw(inRect rect: CGRect, yInset: CGFloat, withFontHeight fontHeight: CGFloat, attributes: [NSAttributedString.Key : Any]) {
+        let textY = rect.minY + (rect.height - fontHeight) / 2 + yInset
+        let textRect = CGRect(x: 0, y: textY, width: rect.width, height: fontHeight)
+        draw(in: textRect.integral, withAttributes: attributes)
     }
 }

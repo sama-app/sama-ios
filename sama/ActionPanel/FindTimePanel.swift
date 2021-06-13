@@ -45,6 +45,8 @@ struct FindTimePart {
 
 class FindTimePanel: CalendarNavigationBlock {
 
+    var targetTimezoneChangeHandler: ((Int) -> Void)?
+
     private var durationOption = DurationOption(text: "1 hour", duration: 60) {
         didSet {
             text.setup(withParts: parts)
@@ -53,6 +55,7 @@ class FindTimePanel: CalendarNavigationBlock {
     private var timezoneOption = TimeZoneOption.from(timeZone: .current, usersTimezone: .current) {
         didSet {
             text.setup(withParts: parts)
+            targetTimezoneChangeHandler?(timezoneOption.hoursFromGMT)
         }
     }
 
