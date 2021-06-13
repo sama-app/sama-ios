@@ -11,6 +11,7 @@ struct CalendarBlockedTime {
     let title: String
     let start: Decimal
     let duration: Decimal
+    var depth: Int
 }
 
 final class CalendarView: UICollectionViewCell {
@@ -71,18 +72,17 @@ final class CalendarView: UICollectionViewCell {
 
         let padding: CGFloat = 8
 
-        let x: CGFloat = 0
-
         for block in blockedTimes {
             let lengthHour = CGFloat(truncating: block.duration as NSNumber)
 
+            let x: CGFloat = CGFloat(block.depth) * 8
             let y = vOffset + CGFloat(truncating: block.start as NSNumber) * cellSize.height + 1
             UIColor.eventBackground.setFill()
             UIBezierPath(
                 roundedRect: CGRect(
                     x: x,
                     y: y,
-                    width: cellSize.width - 3,
+                    width: cellSize.width - 3 - x,
                     height: cellSize.height * CGFloat(lengthHour) - 2
                 ),
                 byRoundingCorners: .allCorners,
