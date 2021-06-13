@@ -10,23 +10,27 @@ import UIKit
 struct TimeZoneOption {
     let title: String
     let hoursFromGMT: Int
+    let isUsersTimezone: Bool
 
-    fileprivate static func from(timeZone: TimeZone) -> TimeZoneOption {
+    static func from(timeZone: TimeZone, usersTimezone: TimeZone) -> TimeZoneOption {
         let id = timeZone.identifier
         let hoursFromGMT = Int(round(Double(TimeZone(identifier: id)!.secondsFromGMT()) / 3600))
         let sign = hoursFromGMT >= 0 ? "+" : ""
         return TimeZoneOption(
             title: "\(id) \(sign)\(hoursFromGMT)",
-            hoursFromGMT: hoursFromGMT
+            hoursFromGMT: hoursFromGMT,
+            isUsersTimezone: timeZone.secondsFromGMT() == usersTimezone.secondsFromGMT()
         )
     }
 }
 
 class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITableViewDelegate {
 
-    private let myTimezone = TimeZoneOption.from(timeZone: .current)
+    var optionPickHandler: ((TimeZoneOption) -> Void)?
+
+    private let myTimezone = TimeZoneOption.from(timeZone: .current, usersTimezone: .current)
     private let allTimezones: [TimeZoneOption] = TimeZone.knownTimeZoneIdentifiers.map {
-        TimeZoneOption.from(timeZone: TimeZone(identifier: $0)!)
+        TimeZoneOption.from(timeZone: TimeZone(identifier: $0)!, usersTimezone: .current)
     }.sorted { $0.hoursFromGMT < $1.hoursFromGMT }
 
     override func didLoad() {
@@ -52,7 +56,7 @@ class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
         case 2:
             cell.textLabel?.text = "Recipient Timezone"
         default:
-            cell.textLabel?.text = allTimezones[indexPath.row - 3].title
+            cell.textLabel?.text = timezoneFromAll(forRow: indexPath.row).title
         }
 
         if indexPath.row == 0 || indexPath.row == 2 {
@@ -75,9 +79,14 @@ class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 1 {
-
+            optionPickHandler?(myTimezone)
         } else if indexPath.row > 2 {
-
+            optionPickHandler?(timezoneFromAll(forRow: indexPath.row))
         }
+        navigation?.pop()
+    }
+
+    private func timezoneFromAll(forRow row: Int) -> TimeZoneOption {
+        return allTimezones[row - 3]
     }
 }

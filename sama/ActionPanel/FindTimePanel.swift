@@ -50,13 +50,18 @@ class FindTimePanel: CalendarNavigationBlock {
             text.setup(withParts: parts)
         }
     }
+    private var timezoneOption = TimeZoneOption.from(timeZone: .current, usersTimezone: .current) {
+        didSet {
+            text.setup(withParts: parts)
+        }
+    }
 
     private var parts: [FindTimePart] {
         return FindTimePart.make(from: [
             ("Find me a time for a ", nil),
             (durationOption.text, .pickDuration),
             (" meeting with someone in", nil),
-            ("my timezone", .pickTimezone),
+            (timezoneOption.isUsersTimezone ? "my timezone" : timezoneOption.title, .pickTimezone),
             (" ", nil)
         ])
     }
@@ -98,7 +103,11 @@ class FindTimePanel: CalendarNavigationBlock {
             }
             navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
-            navigation?.pushBlock(TimeZonePickerPanel(), animated: true)
+            let block = TimeZonePickerPanel()
+            block.optionPickHandler = { [weak self] in
+                self?.timezoneOption = $0
+            }
+            navigation?.pushBlock(block, animated: true)
         }
     }
 
