@@ -38,7 +38,7 @@ extension UIView {
         contentView.separatorStyle = .none
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.showsVerticalScrollIndicator = false
-        contentView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        contentView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
         contentView.contentOffset = CGPoint(x: 0, y: -12)
         addSubview(contentView)
         NSLayoutConstraint.activate([
@@ -46,7 +46,7 @@ extension UIView {
             contentView.topAnchor.constraint(equalTo: topAnchor, constant: -16),
             contentView.leadingAnchor.constraint(equalTo: leftView.trailingAnchor),
             trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
         return contentView
     }
