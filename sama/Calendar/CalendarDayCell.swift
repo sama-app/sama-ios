@@ -14,6 +14,8 @@ struct CalendarBlockedTime {
     var depth: Int
 }
 
+let eventRightBottomInset = CGPoint(x: 3, y: 2)
+
 final class CalendarDayCell: UICollectionViewCell {
 
     var cellSize: CGSize = .zero
@@ -82,8 +84,8 @@ final class CalendarDayCell: UICollectionViewCell {
                 roundedRect: CGRect(
                     x: x,
                     y: y,
-                    width: cellSize.width - 3 - x,
-                    height: cellSize.height * CGFloat(lengthHour) - 2
+                    width: cellSize.width - eventRightBottomInset.x - x,
+                    height: cellSize.height * CGFloat(lengthHour) - eventRightBottomInset.y
                 ),
                 byRoundingCorners: .allCorners,
                 cornerRadii: CGSize(width: 4, height: 4)

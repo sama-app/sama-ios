@@ -14,6 +14,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var calendar: UICollectionView!
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
+    private var slotPickerContainer: UIView!
 
     private var navCenter = CalendarNavigationCenter()
 
@@ -21,6 +22,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var vOffset: CGFloat = 0
     private var isFirstLoad: Bool = true
     private var isCalendarReady = false
+
+    private var eventView: UIView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +41,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let panel = FindTimePanel()
         panel.targetTimezoneChangeHandler = { [weak self] in
             self?.timeline.targetTimezoneHoursDiff = ($0 - 3)
+        }
+        panel.onEventDatesEvent = {
+            switch $0 {
+            case .reset:
+                self.resetEventViews()
+            case .show:
+                self.setupEventViews()
+            }
         }
         navCenter.pushBlock(panel, animated: false)
     }
@@ -102,6 +113,18 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         self.drawCalendar(topBar: topBar, cellSize: cellSize, vOffset: contentVPadding)
 
+        slotPickerContainer = ChildrenInteractiveView()
+        slotPickerContainer.layer.masksToBounds = true
+        slotPickerContainer.backgroundColor = .clear
+        slotPickerContainer.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(slotPickerContainer)
+        NSLayoutConstraint.activate([
+            slotPickerContainer.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
+            slotPickerContainer.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: 48),
+            view.trailingAnchor.constraint(equalTo: slotPickerContainer.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: slotPickerContainer.bottomAnchor)
+        ])
+
         navCenter.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(navCenter)
         NSLayoutConstraint.activate([
@@ -152,6 +175,30 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return topBar
     }
 
+    private func setupEventViews() {
+        let event1 = EventView()
+        event1.isUserInteractionEnabled = true
+        slotPickerContainer.addSubview(event1)
+        eventView = event1
+        repositionEventView()
+    }
+
+    private func repositionEventView() {
+        let start: Decimal = 16
+        let duration: Decimal = 1
+        let daysFromToday = 0
+        eventView?.frame = CGRect(
+            x: CGFloat(session.currentDayIndex + daysFromToday) * cellSize.width - calendar.contentOffset.x,
+            y: CGFloat(truncating: start as NSNumber) * cellSize.height + 1 - calendar.contentOffset.y,
+            width: cellSize.width,
+            height: CGFloat(truncating: duration as NSNumber) * cellSize.height
+        )
+    }
+
+    private func resetEventViews() {
+        eventView?.removeFromSuperview()
+    }
+
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let i = round(scrollView.contentOffset.x / cellSize.width)
         let dir = targetContentOffset.pointee.x - scrollView.contentOffset.x
@@ -171,6 +218,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         for cell in calendar.visibleCells {
             (cell as! CalendarDayCell).headerInset = scrollView.contentOffset.y
         }
+        repositionEventView()
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
@@ -220,5 +268,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     @objc private func onProfileButton() {
         present(ProfileViewController(), animated: true, completion: nil)
+    }
+}
+
+private class ChildrenInteractiveView: UIView {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let target = super.hitTest(point, with: event)
+        return target != self ? target : nil
     }
 }
