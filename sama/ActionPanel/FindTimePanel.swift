@@ -117,6 +117,10 @@ class FindTimePanel: CalendarNavigationBlock {
 
     @objc private func onFindTimeButton() {
         let block = EventDatesPanel()
+        block.options = EventSearchOptions(
+            timezone: timezoneOption,
+            duration: durationOption
+        )
         block.onEvent = onEventDatesEvent
         navigation?.pushBlock(block, animated: true)
     }

@@ -23,7 +23,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var isFirstLoad: Bool = true
     private var isCalendarReady = false
 
-    private var eventView: UIView?
+    private var eventProperties: [EventProperties] = []
+    private var eventViews: [UIView] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +47,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             switch $0 {
             case .reset:
                 self.resetEventViews()
-            case .show:
-                self.setupEventViews()
+            case let .show(props):
+                self.setupEventViews(props)
             }
         }
         navCenter.pushBlock(panel, animated: false)
@@ -175,28 +176,41 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return topBar
     }
 
-    private func setupEventViews() {
-        let event1 = EventView()
-        event1.isUserInteractionEnabled = true
-        slotPickerContainer.addSubview(event1)
-        eventView = event1
-        repositionEventView()
+    private func setupEventViews(_ props: [EventProperties]) {
+        eventViews = props.map { _ in
+            let eventView = EventView()
+            eventView.isUserInteractionEnabled = true
+            slotPickerContainer.addSubview(eventView)
+            return eventView
+        }
+        eventProperties = props
+
+        repositionEventViews()
     }
 
-    private func repositionEventView() {
-        let start: Decimal = 16
-        let duration: Decimal = 1
-        let daysFromToday = 0
-        eventView?.frame = CGRect(
-            x: CGFloat(session.currentDayIndex + daysFromToday) * cellSize.width - calendar.contentOffset.x,
-            y: CGFloat(truncating: start as NSNumber) * cellSize.height + 1 - calendar.contentOffset.y,
-            width: cellSize.width,
-            height: CGFloat(truncating: duration as NSNumber) * cellSize.height
-        )
+    private func repositionEventViews() {
+        let count = eventProperties.count
+        for i in (0 ..< count) {
+            let eventProps = eventProperties[i]
+            let eventView = eventViews[i]
+
+            let start = eventProps.start
+            let duration = eventProps.duration
+            eventView.frame = CGRect(
+                x: CGFloat(session.currentDayIndex + eventProps.daysOffset) * cellSize.width - calendar.contentOffset.x,
+                y: CGFloat(truncating: start as NSNumber) * cellSize.height + 1 - calendar.contentOffset.y,
+                width: cellSize.width,
+                height: CGFloat(truncating: duration as NSNumber) * cellSize.height
+            )
+        }
     }
 
     private func resetEventViews() {
-        eventView?.removeFromSuperview()
+        for v in eventViews {
+            v.removeFromSuperview()
+        }
+        eventViews = []
+        eventProperties = []
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -218,7 +232,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         for cell in calendar.visibleCells {
             (cell as! CalendarDayCell).headerInset = scrollView.contentOffset.y
         }
-        repositionEventView()
+        repositionEventViews()
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
