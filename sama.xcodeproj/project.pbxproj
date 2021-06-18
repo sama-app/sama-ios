@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E7036FD2267D083D00EFFE4E /* ScrollLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7036FD1267D083D00EFFE4E /* ScrollLock.swift */; };
 		E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */; };
 		E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */; };
 		E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665C2674F02C00C88EA1 /* MainActionButton.swift */; };
@@ -62,6 +63,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E7036FD1267D083D00EFFE4E /* ScrollLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLock.swift; sourceTree = "<group>"; };
 		E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationPickerPanel.swift; sourceTree = "<group>"; };
 		E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
 		E70A665C2674F02C00C88EA1 /* MainActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionButton.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				E7F8DD82264EB61D00CD3759 /* CalendarDayCell.swift */,
 				E7F5AD14266FBFD900138E42 /* CalendarNavigationCenter.swift */,
 				E79B09D72677A34A00ADD43D /* EventView.swift */,
+				E7036FD1267D083D00EFFE4E /* ScrollLock.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -391,6 +394,7 @@
 				E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */,
 				E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */,
 				E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */,
+				E7036FD2267D083D00EFFE4E /* ScrollLock.swift in Sources */,
 				E7F8DD83264EB61D00CD3759 /* CalendarDayCell.swift in Sources */,
 				E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
