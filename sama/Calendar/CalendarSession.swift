@@ -15,7 +15,7 @@ final class CalendarSession {
 
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
-    private let token: AuthToken
+    let token: AuthToken
     private let refDate = Date()
     private let calendar = Calendar.current
 

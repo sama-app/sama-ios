@@ -45,6 +45,7 @@ struct FindTimePart {
 
 class FindTimePanel: CalendarNavigationBlock {
 
+    var token: AuthToken!
     var targetTimezoneChangeHandler: ((Int) -> Void)?
     var onEventDatesEvent: ((EventDatesEvent) -> Void)?
 
@@ -121,6 +122,7 @@ class FindTimePanel: CalendarNavigationBlock {
             timezone: timezoneOption,
             duration: durationOption
         )
+        block.token = token
         block.onEvent = onEventDatesEvent
         navigation?.pushBlock(block, animated: true)
     }

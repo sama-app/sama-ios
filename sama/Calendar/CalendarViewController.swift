@@ -42,6 +42,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.calendar.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
         }
         let panel = FindTimePanel()
+        panel.token = session.token
         panel.targetTimezoneChangeHandler = { [weak self] in
             self?.timeline.targetTimezoneHoursDiff = ($0 - 3)
         }
