@@ -36,20 +36,44 @@ class EventDatesPanel: CalendarNavigationBlock {
     var token: AuthToken!
     var onEvent: ((EventDatesEvent) -> Void)?
 
+    private var actionButton: MainActionButton!
+    private let titleLabel = UILabel()
     private let loader = UIActivityIndicatorView()
+    private let content = UIStackView()
 
     override func didLoad() {
         let backBtn = addBackButton(action: #selector(onBackButton))
-        let content = UIView()
-        content.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(content)
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = .neutral1
+        titleLabel.font = .brandedFont(ofSize: 20, weight: .regular)
+        titleLabel.text = "Finding best slots..."
+        addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            content.leadingAnchor.constraint(equalTo: leadingAnchor),
-            content.topAnchor.constraint(equalTo: backBtn.bottomAnchor),
-            trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            bottomAnchor.constraint(equalTo: content.bottomAnchor),
-            content.heightAnchor.constraint(equalToConstant: 180)
+            titleLabel.centerYAnchor.constraint(equalTo: backBtn.centerYAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: backBtn.trailingAnchor, constant: 4)
         ])
+
+        let wrapper = UIView()
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(wrapper)
+
+        content.translatesAutoresizingMaskIntoConstraints = false
+        content.axis = .vertical
+        wrapper.addSubview(content)
+
+        NSLayoutConstraint.activate([
+            wrapper.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -8),
+            wrapper.topAnchor.constraint(equalTo: backBtn.bottomAnchor),
+            trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+            wrapper.heightAnchor.constraint(equalToConstant: 180),
+            content.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+            content.topAnchor.constraint(equalTo: wrapper.topAnchor),
+            wrapper.trailingAnchor.constraint(equalTo: content.trailingAnchor),
+        ])
+
+        actionButton = addMainActionButton(title: "Copy Suggestions", action: #selector(onCopySuggestions), topAnchor: wrapper.bottomAnchor)
+        actionButton.isHidden = true
 
         loader.translatesAutoresizingMaskIntoConstraints = false
         addSubview(loader)
@@ -90,6 +114,12 @@ class EventDatesPanel: CalendarNavigationBlock {
                     EventProperties(start: 18.25, duration: duration, daysOffset: 1)
                 ]
                 DispatchQueue.main.async {
+                    self.content.addArrangedSubview(EventListItemView(frame: .zero))
+                    self.content.addArrangedSubview(EventListItemView(frame: .zero))
+                    self.content.addArrangedSubview(EventListItemView(frame: .zero))
+
+                    self.actionButton.isHidden = false
+                    self.titleLabel.text = "Here are your best slots:"
                     self.loader.stopAnimating()
                     self.loader.isHidden = true
                     self.onEvent?(.show(props))
@@ -105,5 +135,9 @@ class EventDatesPanel: CalendarNavigationBlock {
     @objc private func onBackButton() {
         onEvent?(.reset)
         navigation?.pop()
+    }
+
+    @objc private func onCopySuggestions() {
+
     }
 }

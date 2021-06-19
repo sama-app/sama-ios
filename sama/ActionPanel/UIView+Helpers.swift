@@ -27,6 +27,21 @@ extension UIView {
     }
 
     @discardableResult
+    func addMainActionButton(title: String, action: Selector, topAnchor: NSLayoutYAxisAnchor) -> MainActionButton {
+        let actionBtn = MainActionButton.make(withTitle: title)
+        actionBtn.addTarget(self, action: action, for: .touchUpInside)
+        addSubview(actionBtn)
+        NSLayoutConstraint.activate([
+            actionBtn.heightAnchor.constraint(equalToConstant: 48),
+            actionBtn.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            actionBtn.leadingAnchor.constraint(equalTo: leadingAnchor),
+            trailingAnchor.constraint(equalTo: actionBtn.trailingAnchor),
+            bottomAnchor.constraint(equalTo: actionBtn.bottomAnchor)
+        ])
+        return actionBtn
+    }
+
+    @discardableResult
     func addPanelContentTableView(
         withLeftView leftView: UIView,
         withDelegate delegate: (UITableViewDataSource & UITableViewDelegate)

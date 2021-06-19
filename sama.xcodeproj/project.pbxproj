@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E7036FD2267D083D00EFFE4E /* ScrollLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7036FD1267D083D00EFFE4E /* ScrollLock.swift */; };
+		E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7036FD3267DF1B300EFFE4E /* EventListItemView.swift */; };
 		E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */; };
 		E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */; };
 		E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665C2674F02C00C88EA1 /* MainActionButton.swift */; };
@@ -64,6 +65,7 @@
 
 /* Begin PBXFileReference section */
 		E7036FD1267D083D00EFFE4E /* ScrollLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLock.swift; sourceTree = "<group>"; };
+		E7036FD3267DF1B300EFFE4E /* EventListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListItemView.swift; sourceTree = "<group>"; };
 		E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationPickerPanel.swift; sourceTree = "<group>"; };
 		E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
 		E70A665C2674F02C00C88EA1 /* MainActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionButton.swift; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */,
 				E79B09D52677A05300ADD43D /* EventDatesPanel.swift */,
 				E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */,
+				E7036FD3267DF1B300EFFE4E /* EventListItemView.swift */,
 			);
 			path = ActionPanel;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 			files = (
 				E7957947266F629B005B9F39 /* CalendarViewController.swift in Sources */,
 				E7F5AD182670A57900138E42 /* FindTimePanel.swift in Sources */,
+				E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */,
 				E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */,
