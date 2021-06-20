@@ -11,8 +11,8 @@ class EventListItemView: UIView {
 
     var handleRemove: (() -> Void)?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(props: EventProperties) {
+        super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
 
         let removalButton = UIButton(type: .system)
@@ -32,20 +32,40 @@ class EventListItemView: UIView {
             trailingAnchor.constraint(equalTo: textsStack.trailingAnchor),
         ])
 
+        let refDate = Calendar.current.startOfDay(for: Date())
+
+        let timeF = DateFormatter()
+        timeF.dateStyle = .none
+        timeF.timeStyle = .short
+
+        let dateF = DateFormatter()
+        dateF.setLocalizedDateFormatFromTemplate("ddMMM")
+
         let titleLabel = UILabel()
-        titleLabel.text = "Friday 10:00 to 11:00"
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .neutral1
         titleLabel.font = .brandedFont(ofSize: 20, weight: .regular)
-
-        let subtitleLabel = UILabel()
-        subtitleLabel.text = "Saturday 23:00 in your timezone"
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subtitleLabel.textColor = .secondary
-        subtitleLabel.font = .systemFont(ofSize: 12)
-
         textsStack.addArrangedSubview(titleLabel)
-        textsStack.addArrangedSubview(subtitleLabel)
+
+        let startDay = Calendar.current.date(byAdding: .day, value: props.daysOffset, to: refDate)!
+        let startDate = startDay.addingTimeInterval(3600 * (props.start as NSDecimalNumber).doubleValue)
+
+        if props.timezoneOffset != 0 {
+            let startDateTargetTimezone = startDate.addingTimeInterval(3600 * Double(props.timezoneOffset))
+            let endDateTargetTimezone = startDateTargetTimezone.addingTimeInterval(3600 * (props.duration as NSDecimalNumber).doubleValue)
+
+            titleLabel.text = "\(dateF.string(from: startDateTargetTimezone)) \(timeF.string(from: startDateTargetTimezone)) to \(timeF.string(from: endDateTargetTimezone))"
+
+            let subtitleLabel = UILabel()
+            subtitleLabel.text = "\(dateF.string(from: startDate)) \(timeF.string(from: startDate)) in your timezone"
+            subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+            subtitleLabel.textColor = .secondary
+            subtitleLabel.font = .systemFont(ofSize: 12)
+            textsStack.addArrangedSubview(subtitleLabel)
+        } else {
+            let endDate = startDate.addingTimeInterval(3600 * (props.duration as NSDecimalNumber).doubleValue)
+            titleLabel.text = "\(dateF.string(from: startDay)) \(timeF.string(from: startDate)) to \(timeF.string(from: endDate))"
+        }
 
         heightAnchor.constraint(equalToConstant: 60).isActive = true
 

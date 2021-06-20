@@ -110,6 +110,7 @@ class FindTimePanel: CalendarNavigationBlock {
     @objc private func onFindTimeButton() {
         let block = EventDatesPanel()
         block.options = EventSearchOptions(
+            usersTimezoneHoursFromGMT: Int(round(Double(TimeZone.current.secondsFromGMT()) / 3600)),
             timezone: timezoneOption,
             duration: durationOption
         )

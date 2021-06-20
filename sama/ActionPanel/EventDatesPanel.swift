@@ -11,6 +11,7 @@ struct EventProperties {
     let start: Decimal
     let duration: Decimal
     let daysOffset: Int
+    let timezoneOffset: Int
 }
 
 enum EventDatesEvent {
@@ -19,6 +20,7 @@ enum EventDatesEvent {
 }
 
 struct EventSearchOptions {
+    let usersTimezoneHoursFromGMT: Int
     let timezone: TimeZoneOption
     let duration: DurationOption
 }
@@ -108,15 +110,16 @@ class EventDatesPanel: CalendarNavigationBlock {
 
             if err == nil && (resp as? HTTPURLResponse)?.statusCode == 200 {
                 let duration = NSDecimalNumber(value: self.options.duration.duration).dividing(by: NSDecimalNumber(value: 60)).decimalValue
+                let timezoneOffset = self.options.timezone.hoursFromGMT - self.options.usersTimezoneHoursFromGMT
                 let props = [
-                    EventProperties(start: 16, duration: duration, daysOffset: 0),
-                    EventProperties(start: 12.75, duration: duration, daysOffset: 1),
-                    EventProperties(start: 18.25, duration: duration, daysOffset: 1)
+                    EventProperties(start: 16, duration: duration, daysOffset: 0, timezoneOffset: timezoneOffset),
+                    EventProperties(start: 12.75, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset),
+                    EventProperties(start: 18.25, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset)
                 ]
                 DispatchQueue.main.async {
-                    self.content.addArrangedSubview(EventListItemView(frame: .zero))
-                    self.content.addArrangedSubview(EventListItemView(frame: .zero))
-                    self.content.addArrangedSubview(EventListItemView(frame: .zero))
+                    for properties in props {
+                        self.content.addArrangedSubview(EventListItemView(props: properties))
+                    }
 
                     self.actionButton.isHidden = false
                     self.titleLabel.text = "Here are your best slots:"
