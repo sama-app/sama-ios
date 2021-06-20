@@ -11,7 +11,7 @@ class EventListItemView: UIView {
 
     var handleRemove: (() -> Void)?
 
-    init(props: EventProperties) {
+    init(props: EventProperties, isRemovable: Bool) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -20,6 +20,7 @@ class EventListItemView: UIView {
         removalButton.translatesAutoresizingMaskIntoConstraints = false
         removalButton.tintColor = .primary
         removalButton.setImage(UIImage(named: "cross")!, for: .normal)
+        removalButton.isHidden = !isRemovable
         addSubview(removalButton)
 
         let textsStack = UIStackView()

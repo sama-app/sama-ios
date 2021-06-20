@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct EventProperties {
+struct EventProperties: Equatable {
     let start: Decimal
     let duration: Decimal
     let daysOffset: Int
@@ -42,6 +42,8 @@ class EventDatesPanel: CalendarNavigationBlock {
     private let titleLabel = UILabel()
     private let loader = UIActivityIndicatorView()
     private let content = UIStackView()
+
+    private var events: [EventProperties] = []
 
     override func didLoad() {
         let backBtn = addBackButton(action: #selector(onBackButton))
@@ -117,10 +119,7 @@ class EventDatesPanel: CalendarNavigationBlock {
                     EventProperties(start: 18.25, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset)
                 ]
                 DispatchQueue.main.async {
-                    for properties in props {
-                        self.content.addArrangedSubview(EventListItemView(props: properties))
-                    }
-
+                    self.displayEventsList(props)
                     self.actionButton.isHidden = false
                     self.titleLabel.text = "Here are your best slots:"
                     self.loader.stopAnimating()
@@ -133,6 +132,27 @@ class EventDatesPanel: CalendarNavigationBlock {
                 }
             }
         }.resume()
+    }
+
+    private func displayEventsList(_ events: [EventProperties]) {
+        self.events = events
+
+        for subview in content.subviews {
+            subview.removeFromSuperview()
+        }
+        let isRemovable = events.count > 1
+        for props in events {
+            let itemView = EventListItemView(props: props, isRemovable: isRemovable)
+            itemView.handleRemove = { [weak self] in
+                guard let self = self else { return }
+                var newList = self.events
+                if let idx = newList.firstIndex(of: props) {
+                    newList.remove(at: idx)
+                }
+                self.displayEventsList(newList)
+            }
+            self.content.addArrangedSubview(itemView)
+        }
     }
 
     @objc private func onBackButton() {
