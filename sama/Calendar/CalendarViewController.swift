@@ -25,8 +25,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private var scrollLock = ScrollLock(origin: .zero)
 
-    private var eventProperties: [EventProperties] = []
-    private var eventViews: [UIView] = []
+    private var eventsCoordinator: EventsCoordinator!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +34,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         overrideUserInterfaceStyle = .light
 
         self.setupViews()
+        eventsCoordinator = EventsCoordinator(
+            currentDayIndex: session.currentDayIndex,
+            cellSize: cellSize,
+            calendar: calendar,
+            container: slotPickerContainer
+        )
+
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
         session.loadInitial()
 
@@ -42,17 +48,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.calendar.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
         }
         let panel = FindTimePanel()
+        panel.coordinator = eventsCoordinator
         panel.token = session.token
         panel.targetTimezoneChangeHandler = { [weak self] in
             self?.timeline.targetTimezoneHoursDiff = ($0 - 3)
-        }
-        panel.onEventDatesEvent = {
-            switch $0 {
-            case .reset:
-                self.resetEventViews()
-            case let .show(props):
-                self.setupEventViews(props)
-            }
         }
         navCenter.pushBlock(panel, animated: false)
     }
@@ -179,43 +178,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return topBar
     }
 
-    private func setupEventViews(_ props: [EventProperties]) {
-        eventViews = props.map { _ in
-            let eventView = EventView()
-            eventView.isUserInteractionEnabled = true
-            slotPickerContainer.addSubview(eventView)
-            return eventView
-        }
-        eventProperties = props
-
-        repositionEventViews()
-    }
-
-    private func repositionEventViews() {
-        let count = eventProperties.count
-        for i in (0 ..< count) {
-            let eventProps = eventProperties[i]
-            let eventView = eventViews[i]
-
-            let start = eventProps.start
-            let duration = eventProps.duration
-            eventView.frame = CGRect(
-                x: CGFloat(session.currentDayIndex + eventProps.daysOffset) * cellSize.width - calendar.contentOffset.x,
-                y: CGFloat(truncating: start as NSNumber) * cellSize.height + 1 - calendar.contentOffset.y,
-                width: cellSize.width,
-                height: CGFloat(truncating: duration as NSNumber) * cellSize.height
-            )
-        }
-    }
-
-    private func resetEventViews() {
-        for v in eventViews {
-            v.removeFromSuperview()
-        }
-        eventViews = []
-        eventProperties = []
-    }
-
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let i = round(scrollView.contentOffset.x / cellSize.width)
         let dir = targetContentOffset.pointee.x - scrollView.contentOffset.x
@@ -241,7 +203,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         for cell in calendar.visibleCells {
             (cell as! CalendarDayCell).headerInset = scrollView.contentOffset.y
         }
-        repositionEventViews()
+        eventsCoordinator.repositionEventViews()
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {

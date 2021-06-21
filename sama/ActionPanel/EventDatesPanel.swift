@@ -36,7 +36,7 @@ class EventDatesPanel: CalendarNavigationBlock {
 
     var options: EventSearchOptions!
     var token: AuthToken!
-    var onEvent: ((EventDatesEvent) -> Void)?
+    var coordinator: EventsCoordinator!
 
     private var actionButton: MainActionButton!
     private let titleLabel = UILabel()
@@ -124,7 +124,7 @@ class EventDatesPanel: CalendarNavigationBlock {
                     self.titleLabel.text = "Here are your best slots:"
                     self.loader.stopAnimating()
                     self.loader.isHidden = true
-                    self.onEvent?(.show(props))
+                    self.coordinator.setupEventViews(props)
                 }
             } else {
                 DispatchQueue.main.async {
@@ -145,18 +145,15 @@ class EventDatesPanel: CalendarNavigationBlock {
             let itemView = EventListItemView(props: props, isRemovable: isRemovable)
             itemView.handleRemove = { [weak self] in
                 guard let self = self else { return }
-                var newList = self.events
-                if let idx = newList.firstIndex(of: props) {
-                    newList.remove(at: idx)
-                }
-                self.displayEventsList(newList)
+                self.coordinator.remove(props)
+                self.displayEventsList(self.coordinator.eventProperties)
             }
             self.content.addArrangedSubview(itemView)
         }
     }
 
     @objc private func onBackButton() {
-        onEvent?(.reset)
+        coordinator.resetEventViews()
         navigation?.pop()
     }
 

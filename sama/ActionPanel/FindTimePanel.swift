@@ -46,8 +46,8 @@ struct FindTimePart {
 class FindTimePanel: CalendarNavigationBlock {
 
     var token: AuthToken!
+    var coordinator: EventsCoordinator!
     var targetTimezoneChangeHandler: ((Int) -> Void)?
-    var onEventDatesEvent: ((EventDatesEvent) -> Void)?
 
     private var durationOption = DurationOption(text: "1 hour", duration: 60) {
         didSet {
@@ -109,13 +109,13 @@ class FindTimePanel: CalendarNavigationBlock {
 
     @objc private func onFindTimeButton() {
         let block = EventDatesPanel()
+        block.coordinator = coordinator
         block.options = EventSearchOptions(
             usersTimezoneHoursFromGMT: Int(round(Double(TimeZone.current.secondsFromGMT()) / 3600)),
             timezone: timezoneOption,
             duration: durationOption
         )
         block.token = token
-        block.onEvent = onEventDatesEvent
         navigation?.pushBlock(block, animated: true)
     }
 }

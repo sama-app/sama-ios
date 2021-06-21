@@ -19,6 +19,7 @@
 		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
 		E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */; };
 		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
+		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
 		E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */; };
 		E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957940266F5F62005B9F39 /* CalendarSession.swift */; };
 		E7957943266F5F7B005B9F39 /* CalendarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957942266F5F7B005B9F39 /* CalendarLayout.swift */; };
@@ -76,6 +77,7 @@
 		E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
 		E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTokenSync.swift; sourceTree = "<group>"; };
+		E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCoordinator.swift; sourceTree = "<group>"; };
 		E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBlocks.swift; sourceTree = "<group>"; };
 		E7957940266F5F62005B9F39 /* CalendarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSession.swift; sourceTree = "<group>"; };
 		E7957942266F5F7B005B9F39 /* CalendarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLayout.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				E7F5AD14266FBFD900138E42 /* CalendarNavigationCenter.swift */,
 				E79B09D72677A34A00ADD43D /* EventView.swift */,
 				E7036FD1267D083D00EFFE4E /* ScrollLock.swift */,
+				E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				E7036FD2267D083D00EFFE4E /* ScrollLock.swift in Sources */,
 				E7F8DD83264EB61D00CD3759 /* CalendarDayCell.swift in Sources */,
 				E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */,
+				E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
 				E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */,
 				E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */,
