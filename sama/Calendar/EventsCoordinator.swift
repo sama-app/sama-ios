@@ -8,7 +8,14 @@
 import UIKit
 
 class EventsCoordinator {
-    private(set) var eventProperties: [EventProperties] = []
+
+    var onChanges: (() -> Void)?
+
+    private(set) var eventProperties: [EventProperties] = [] {
+        didSet {
+            onChanges?()
+        }
+    }
     private var eventViews: [UIView] = []
 
     private let currentDayIndex: Int

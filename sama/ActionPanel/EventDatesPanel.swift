@@ -43,8 +43,6 @@ class EventDatesPanel: CalendarNavigationBlock {
     private let loader = UIActivityIndicatorView()
     private let content = UIStackView()
 
-    private var events: [EventProperties] = []
-
     override func didLoad() {
         let backBtn = addBackButton(action: #selector(onBackButton))
 
@@ -87,6 +85,9 @@ class EventDatesPanel: CalendarNavigationBlock {
         ])
         loader.startAnimating()
 
+        coordinator.onChanges = { [weak self] in
+            self?.reloadEventsList()
+        }
         searchSlots()
     }
 
@@ -119,7 +120,6 @@ class EventDatesPanel: CalendarNavigationBlock {
                     EventProperties(start: 18.25, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset)
                 ]
                 DispatchQueue.main.async {
-                    self.displayEventsList(props)
                     self.actionButton.isHidden = false
                     self.titleLabel.text = "Here are your best slots:"
                     self.loader.stopAnimating()
@@ -134,9 +134,8 @@ class EventDatesPanel: CalendarNavigationBlock {
         }.resume()
     }
 
-    private func displayEventsList(_ events: [EventProperties]) {
-        self.events = events
-
+    private func reloadEventsList() {
+        let events = coordinator.eventProperties
         for subview in content.subviews {
             subview.removeFromSuperview()
         }
@@ -144,9 +143,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         for props in events {
             let itemView = EventListItemView(props: props, isRemovable: isRemovable)
             itemView.handleRemove = { [weak self] in
-                guard let self = self else { return }
-                self.coordinator.remove(props)
-                self.displayEventsList(self.coordinator.eventProperties)
+                self?.coordinator.remove(props)
             }
             self.content.addArrangedSubview(itemView)
         }
