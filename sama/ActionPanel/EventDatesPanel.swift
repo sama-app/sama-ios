@@ -8,9 +8,9 @@
 import UIKit
 
 struct EventProperties: Equatable {
-    let start: Decimal
-    let duration: Decimal
-    let daysOffset: Int
+    var start: Decimal
+    var duration: Decimal
+    var daysOffset: Int
     let timezoneOffset: Int
 }
 
