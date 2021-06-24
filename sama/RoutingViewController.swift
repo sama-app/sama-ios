@@ -14,11 +14,7 @@ class RoutingViewController: UIViewController {
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
-        if
-            let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
-            let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
-        {
-            let auth = AuthContainer(token: token)
+        if let auth = AuthContainer.makeFromStorage() {
             startSession(with: auth)
         } else {
             presentOnboarding()

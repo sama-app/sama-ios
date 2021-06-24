@@ -92,7 +92,7 @@ class ProfileViewController: UITableViewController {
         let item = sections[indexPath.section][indexPath.row]
         switch item {
         case .logout:
-            UserDefaults.standard.removeObject(forKey: "SAMA_AUTH_TOKEN")
+            AuthContainer.clear()
             dismiss(animated: true, completion: {
                 UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
             })

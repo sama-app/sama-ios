@@ -7,14 +7,6 @@
 
 import Foundation
 
-class AuthContainer {
-    private(set) var token: AuthToken
-
-    init(token: AuthToken) {
-        self.token = token
-    }
-}
-
 enum HttpMethod: String {
     case get
     case post
@@ -68,6 +60,14 @@ class Api {
     }
 
     func request<T>(for request: T, completion: @escaping (Result<T.U, ApiError>) -> Void) where T: ApiRequest {
+        self.request(for: request, isRefreshHandled: false, completion: completion)
+    }
+
+    private func request<T>(
+        for request: T,
+        isRefreshHandled: Bool,
+        completion: @escaping (Result<T.U, ApiError>) -> Void
+    ) where T: ApiRequest {
         var urlComps = URLComponents(string: "\(baseUri)\(request.uri)")!
         urlComps.queryItems = request.query
 
@@ -106,8 +106,22 @@ class Api {
             print("[API] RESPONSE \(request.uri): {\(msg.joined(separator: ", "))}")
             #endif
 
-            DispatchQueue.main.async {
-                completion(result)
+            if let token = self.getRefreshTokenIfNeeded(with: result), !isRefreshHandled {
+                self.refreshToken(with: token) {
+                    switch $0 {
+                    case let .success(updatedToken):
+                        self.auth?.update(token: updatedToken)
+                        self.request(for: request, isRefreshHandled: true, completion: completion)
+                    case .failure:
+                        DispatchQueue.main.async {
+                            completion(result)
+                        }
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completion(result)
+                }
             }
         }.resume()
     }
@@ -128,11 +142,31 @@ class Api {
             } catch {
                 return .failure(.http(httpResp.statusCode))
             }
-        case 403:
-            // refresh token
-            return .failure(.http(httpResp.statusCode))
         default:
             return .failure(.http(httpResp.statusCode))
         }
+    }
+
+    private func getRefreshTokenIfNeeded<T>(with result: Result<T, ApiError>) -> String? {
+        if case let .failure(err) = result {
+            if case let .http(status) = err,status == 403 {
+                return auth?.token.refreshToken
+            }
+        }
+        return nil
+    }
+
+    private func refreshToken(with token: String, completion: @escaping (Result<AuthToken, ApiError>) -> Void) {
+        let urlComps = URLComponents(string: "\(baseUri)/auth/refresh-token")!
+        var req = URLRequest(url: urlComps.url!)
+        req.httpMethod = HttpMethod.post.rawValue
+        for (field, value) in defaultHeaders {
+            req.setValue(value, forHTTPHeaderField: field)
+        }
+        req.httpBody = try? encoder.encode(["refreshToken": token])
+
+        session.dataTask(with: req) { (data, resp, err) in
+            completion(self.getResultFrom(data, resp: resp, err: err))
+        }.resume()
     }
 }

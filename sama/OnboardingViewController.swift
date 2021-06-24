@@ -86,8 +86,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         })
     }
 
-    private func startSession(with token: AuthToken) {
-        let api = Sama.makeApi(with: AuthContainer(token: token))
+    private func startSession(with auth: AuthContainer) {
+        let api = Sama.makeApi(with: auth)
 
         let viewController = CalendarViewController()
         viewController.session = CalendarSession(api: api, currentDayIndex: 5000)
@@ -175,10 +175,10 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             else { return }
 
             let token = AuthToken(accessToken: accessToken, refreshToken: refreshToken)
-            UserDefaults.standard.set(try? JSONEncoder().encode(token), forKey: "SAMA_AUTH_TOKEN")
+            let auth = AuthContainer.makeAndStore(with: token)
             RemoteNotificationsTokenSync.shared.syncToken()
 
-            self.startSession(with: token)
+            self.startSession(with: auth)
         }
         session.presentationContextProvider = self
         session.start()
