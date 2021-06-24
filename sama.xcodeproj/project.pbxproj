@@ -31,6 +31,8 @@
 		E79C90C12684C37A00398E41 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C02684C37A00398E41 /* Api.swift */; };
 		E79C90C32684C7A100398E41 /* Sama.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C22684C7A100398E41 /* Sama.swift */; };
 		E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C42684D58600398E41 /* AuthContainer.swift */; };
+		E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
+		E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C09226413340009CAB88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
@@ -92,6 +94,8 @@
 		E79C90C02684C37A00398E41 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		E79C90C22684C7A100398E41 /* Sama.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sama.swift; sourceTree = "<group>"; };
 		E79C90C42684D58600398E41 /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
+		E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
+		E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiDateTimeFormatter.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7D3C08C26413340009CAB88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -215,6 +219,8 @@
 				E70A665C2674F02C00C88EA1 /* MainActionButton.swift */,
 				E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */,
 				E79C90C22684C7A100398E41 /* Sama.swift */,
+				E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */,
+				E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -411,6 +417,7 @@
 				E7F5AD182670A57900138E42 /* FindTimePanel.swift in Sources */,
 				E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */,
 				E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */,
+				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */,
 				E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */,
@@ -424,6 +431,7 @@
 				E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */,
 				E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
+				E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */,
 				E79C90C32684C7A100398E41 /* Sama.swift in Sources */,
 				E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */,
 				E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */,

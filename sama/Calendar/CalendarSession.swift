@@ -35,11 +35,7 @@ final class CalendarSession {
         return f
     }()
 
-    private lazy var utcDateF: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "YYYY-MM-dd'T'HH:mm:ss"
-        return f
-    }()
+    private let apiDateF = ApiDateTimeFormatter()
 
     init(api: Api, currentDayIndex: Int) {
         self.api = api
@@ -94,9 +90,9 @@ final class CalendarSession {
 
     private func filterAndTransform(blocks: [CalendarBlock], for date: Date) -> [CalendarBlockedTime] {
         return blocks.compactMap { block in
-            let start = self.utcDateF.date(from: String(block.startDateTime.dropLast(6)))!
+            let start = self.apiDateF.date(from: block.startDateTime)
             if self.calendar.isDate(date, inSameDayAs: start) {
-                let end = self.utcDateF.date(from: String(block.endDateTime.dropLast(6)))!
+                let end = self.apiDateF.date(from: block.endDateTime)
                 let duration = end.timeIntervalSince(start)
                 return CalendarBlockedTime(
                     title: block.title,

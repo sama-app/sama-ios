@@ -95,6 +95,7 @@ class Api {
 
             #if DEBUG
             var msg: [String] = []
+            var errBody: String = ""
             if case .success = result {
                 msg.append("isSuccess: true")
             } else {
@@ -102,8 +103,14 @@ class Api {
             }
             if let httpResp = resp as? HTTPURLResponse {
                 msg.append("httpStatusCode: \(httpResp.statusCode)")
+                if !(200 ..< 300).contains(httpResp.statusCode) {
+                    errBody = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+                }
             }
-            print("[API] RESPONSE \(request.uri): {\(msg.joined(separator: ", "))}")
+            print([
+                "[API] RESPONSE \(request.uri): {\(msg.joined(separator: ", "))}",
+                errBody
+            ].filter { !$0.isEmpty }.joined(separator: "\n"))
             #endif
 
             if let token = self.getRefreshTokenIfNeeded(with: result), !isRefreshHandled {

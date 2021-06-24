@@ -32,9 +32,19 @@ struct EventSearchRequestData: Encodable {
     let suggestionDayCount: Int
 }
 
+struct MeetingSuggestedSlot: Decodable {
+    let startDateTime: String
+    let endDateTime: String
+}
+
+struct MeetingInitiationResult: Decodable {
+    let durationMinutes: Int
+    let suggestedSlots: [MeetingSuggestedSlot]
+}
+
 struct MeetingInitiationRequest: ApiRequest {
     typealias T = EventSearchRequestData
-    typealias U = EmptyBody
+    typealias U = MeetingInitiationResult
     let uri = "/meeting/initiate"
     let method: HttpMethod = .post
     var body: EventSearchRequestData
@@ -45,6 +55,10 @@ class EventDatesPanel: CalendarNavigationBlock {
     var options: EventSearchOptions!
     var api: Api!
     var coordinator: EventsCoordinator!
+
+    private let apiDateF = ApiDateTimeFormatter()
+    private let refDate = Date()
+    private let calendar = Calendar.current
 
     private var actionButton: MainActionButton!
     private let titleLabel = UILabel()
@@ -100,22 +114,37 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     private func searchSlots() {
+        let timezoneOffset = self.options.timezone.hoursFromGMT - self.options.usersTimezoneHoursFromGMT
+
         let data = EventSearchRequestData(
             durationMinutes: options.duration.duration,
             timeZone: options.timezone.id,
             suggestionSlotCount: 3,
             suggestionDayCount: 4
         )
+        let refStart = self.calendar.startOfDay(for: refDate)
         api.request(for: MeetingInitiationRequest(body: data)) {
             switch $0 {
-            case .success:
-                let duration = NSDecimalNumber(value: self.options.duration.duration).dividing(by: NSDecimalNumber(value: 60)).decimalValue
-                let timezoneOffset = self.options.timezone.hoursFromGMT - self.options.usersTimezoneHoursFromGMT
-                let props = [
-                    EventProperties(start: 16, duration: duration, daysOffset: 0, timezoneOffset: timezoneOffset),
-                    EventProperties(start: 12.75, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset),
-                    EventProperties(start: 18.25, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset)
-                ]
+            case let .success(result):
+                let props = result.suggestedSlots.map { slot -> EventProperties in
+                    let startDate = self.apiDateF.date(from: slot.startDateTime)
+                    let endDate = self.apiDateF.date(from: slot.endDateTime)
+                    let startComps = self.calendar.dateComponents([.day, .second], from: refStart, to: startDate)
+                    let endComps = self.calendar.dateComponents([.day, .second], from: refStart, to: endDate)
+                    let durationSecs = endComps.second! - startComps.second!
+                    let duration = NSDecimalNumber(value: durationSecs).dividing(by: NSDecimalNumber(value: 3600))
+                    return EventProperties(
+                        start: 16,
+                        duration: duration.decimalValue,
+                        daysOffset: startComps.day!,
+                        timezoneOffset: timezoneOffset
+                    )
+                }
+//                let props = [
+//                    EventProperties(start: 16, duration: duration, daysOffset: 0, timezoneOffset: timezoneOffset),
+//                    EventProperties(start: 12.75, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset),
+//                    EventProperties(start: 18.25, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset)
+//                ]
                 DispatchQueue.main.async {
                     self.actionButton.isHidden = false
                     self.titleLabel.text = "Here are your best slots:"
