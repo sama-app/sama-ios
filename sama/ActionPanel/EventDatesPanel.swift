@@ -32,10 +32,18 @@ struct EventSearchRequestData: Encodable {
     let suggestionDayCount: Int
 }
 
+struct MeetingInitiationRequest: ApiRequest {
+    typealias T = EventSearchRequestData
+    typealias U = EmptyBody
+    let uri = "/meeting/initiate"
+    let method: HttpMethod = .post
+    var body: EventSearchRequestData
+}
+
 class EventDatesPanel: CalendarNavigationBlock {
 
     var options: EventSearchOptions!
-    var token: AuthToken!
+    var api: Api!
     var coordinator: EventsCoordinator!
 
     private var actionButton: MainActionButton!
@@ -98,20 +106,9 @@ class EventDatesPanel: CalendarNavigationBlock {
             suggestionSlotCount: 3,
             suggestionDayCount: 4
         )
-
-        let urlComps = URLComponents(string: "https://app.yoursama.com/api/meeting/initiate")!
-        var req = URLRequest(url: urlComps.url!)
-        req.httpMethod = "post"
-        req.allHTTPHeaderFields = [
-            "Content-Type": "application/json"
-        ]
-        req.httpBody = try? JSONEncoder().encode(data)
-        req.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
-
-        URLSession.shared.dataTask(with: req) { (data, resp, err) in
-            print("/meeting/initiate HTTP status code: \((resp as? HTTPURLResponse)?.statusCode ?? -1)")
-
-            if err == nil && (resp as? HTTPURLResponse)?.statusCode == 200 {
+        api.request(for: MeetingInitiationRequest(body: data)) {
+            switch $0 {
+            case .success:
                 let duration = NSDecimalNumber(value: self.options.duration.duration).dividing(by: NSDecimalNumber(value: 60)).decimalValue
                 let timezoneOffset = self.options.timezone.hoursFromGMT - self.options.usersTimezoneHoursFromGMT
                 let props = [
@@ -126,12 +123,10 @@ class EventDatesPanel: CalendarNavigationBlock {
                     self.loader.isHidden = true
                     self.coordinator.setupEventViews(props)
                 }
-            } else {
-                DispatchQueue.main.async {
-                    self.onBackButton()
-                }
+            case .failure:
+                self.onBackButton()
             }
-        }.resume()
+        }
     }
 
     private func reloadEventsList() {

@@ -18,15 +18,16 @@ class RoutingViewController: UIViewController {
             let tokenData = UserDefaults.standard.data(forKey: "SAMA_AUTH_TOKEN"),
             let token = try? JSONDecoder().decode(AuthToken.self, from: tokenData)
         {
-            startSession(with: token)
+            let auth = AuthContainer(token: token)
+            startSession(with: auth)
         } else {
             presentOnboarding()
         }
     }
 
-    private func startSession(with token: AuthToken) {
+    private func startSession(with auth: AuthContainer) {
         let viewController = CalendarViewController()
-        viewController.session = CalendarSession(token: token, currentDayIndex: 5000)
+        viewController.session = CalendarSession(api: Sama.makeApi(with: auth), currentDayIndex: 5000)
         UIApplication.shared.windows[0].rootViewController = viewController
     }
 

@@ -28,6 +28,8 @@
 		E7957949266F6457005B9F39 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957948266F6457005B9F39 /* OnboardingViewController.swift */; };
 		E79B09D62677A05300ADD43D /* EventDatesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79B09D52677A05300ADD43D /* EventDatesPanel.swift */; };
 		E79B09D82677A34A00ADD43D /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79B09D72677A34A00ADD43D /* EventView.swift */; };
+		E79C90C12684C37A00398E41 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C02684C37A00398E41 /* Api.swift */; };
+		E79C90C32684C7A100398E41 /* Sama.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C22684C7A100398E41 /* Sama.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C09226413340009CAB88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
@@ -86,6 +88,8 @@
 		E7957948266F6457005B9F39 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		E79B09D52677A05300ADD43D /* EventDatesPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDatesPanel.swift; sourceTree = "<group>"; };
 		E79B09D72677A34A00ADD43D /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		E79C90C02684C37A00398E41 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
+		E79C90C22684C7A100398E41 /* Sama.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sama.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7D3C08C26413340009CAB88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -153,6 +157,14 @@
 			path = Calendar;
 			sourceTree = "<group>";
 		};
+		E79C90BF2684C37200398E41 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				E79C90C02684C37A00398E41 /* Api.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
 		E7D3C07E26413340009CAB88 = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +188,7 @@
 		E7D3C08926413340009CAB88 /* sama */ = {
 			isa = PBXGroup;
 			children = (
+				E79C90BF2684C37200398E41 /* Api */,
 				E7F5AD162670A56D00138E42 /* ActionPanel */,
 				E795793D266F5F40005B9F39 /* Calendar */,
 				E76E85EE264D1E4F00FAC1DF /* sama.entitlements */,
@@ -198,6 +211,7 @@
 				E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */,
 				E70A665C2674F02C00C88EA1 /* MainActionButton.swift */,
 				E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */,
+				E79C90C22684C7A100398E41 /* Sama.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -406,8 +420,10 @@
 				E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */,
 				E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
+				E79C90C32684C7A100398E41 /* Sama.swift in Sources */,
 				E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */,
 				E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */,
+				E79C90C12684C37A00398E41 /* Api.swift in Sources */,
 				E79B09D82677A34A00ADD43D /* EventView.swift in Sources */,
 				E7957949266F6457005B9F39 /* OnboardingViewController.swift in Sources */,
 				E79B09D62677A05300ADD43D /* EventDatesPanel.swift in Sources */,

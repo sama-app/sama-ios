@@ -7,6 +7,14 @@
 
 import Foundation
 
+struct CalendarBlocksRequest: ApiRequest {
+    typealias T = EmptyBody
+    typealias U = CalendarBlocks
+    let uri = "/calendar/blocks"
+    let method: HttpMethod = .get
+    let query: [URLQueryItem]
+}
+
 final class CalendarSession {
 
     var reloadHandler: () -> Void = {}
@@ -15,7 +23,7 @@ final class CalendarSession {
 
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
-    let token: AuthToken
+    let api: Api
     private let refDate = Date()
     private let calendar = Calendar.current
 
@@ -33,8 +41,8 @@ final class CalendarSession {
         return f
     }()
 
-    init(token: AuthToken, currentDayIndex: Int) {
-        self.token = token
+    init(api: Api, currentDayIndex: Int) {
+        self.api = api
         self.currentDayIndex = currentDayIndex
     }
 
@@ -59,20 +67,14 @@ final class CalendarSession {
         let start = calendar.date(byAdding: .day, value: daysBack, to: refDate)!
         let end = calendar.date(byAdding: .day, value: daysForward, to: start)!
 
-        var urlComps = URLComponents(string: "https://app.yoursama.com/api/calendar/blocks")!
-        urlComps.queryItems = [
+        let req = CalendarBlocksRequest(query: [
             URLQueryItem(name: "startDate", value: dateF.string(from: start)),
             URLQueryItem(name: "endDate", value: dateF.string(from: end)),
             URLQueryItem(name: "timezone", value: "UTC")
-        ]
-        var req = URLRequest(url: urlComps.url!)
-        req.httpMethod = "get"
-        req.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
-
-        URLSession.shared.dataTask(with: req) { (data, resp, err) in
-            print("/calendar/blocks HTTP status code: \((resp as? HTTPURLResponse)?.statusCode ?? -1)")
-            if err == nil, let data = data, let model = try? JSONDecoder().decode(CalendarBlocks.self, from: data) {
-
+        ])
+        api.request(for: req) {
+            switch $0 {
+            case let .success(model):
                 for i in (daysBack ... (daysBack + daysForward)) {
                     let date = self.calendar.date(byAdding: .day, value: i, to: self.refDate)!
                     let result = self.filterAndTransform(blocks: model.blocks, for: date).insetOverlapping()
@@ -82,12 +84,12 @@ final class CalendarSession {
                 DispatchQueue.main.async {
                     self.reloadHandler()
                 }
-            } else {
+            case .failure:
                 for idx in blockIndices {
                     self.isBlockBusy[idx] = false
                 }
             }
-        }.resume()
+        }
     }
 
     private func filterAndTransform(blocks: [CalendarBlock], for date: Date) -> [CalendarBlockedTime] {

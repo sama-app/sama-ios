@@ -87,8 +87,10 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     private func startSession(with token: AuthToken) {
+        let api = Sama.makeApi(with: AuthContainer(token: token))
+
         let viewController = CalendarViewController()
-        viewController.session = CalendarSession(token: token, currentDayIndex: 5000)
+        viewController.session = CalendarSession(api: api, currentDayIndex: 5000)
         UIApplication.shared.windows[0].rootViewController = viewController
     }
 
@@ -148,7 +150,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     @objc private func onConnectCalendar() {
-        var req = URLRequest(url: URL(string: "https://app.yoursama.com/api/auth/google-authorize")!)
+        var req = URLRequest(url: URL(string: "\(Sama.baseUri)/auth/google-authorize")!)
         req.httpMethod = "post"
         URLSession.shared.dataTask(with: req) { (data, resp, err) in
             if let data = data, let directions = try? JSONDecoder().decode(AuthDirections.self, from: data) {
