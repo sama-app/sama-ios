@@ -10,7 +10,8 @@ import Foundation
 class Sama {
     private init() {}
 
-    static let baseUri = "https://app.yoursama.com/api"
+//    static let baseUri = "https://app.yoursama.com/api"
+    static let baseUri = "https://meetsama.com.smtest.it/api"
 
     static func makeApi(with auth: AuthContainer) -> Api {
         return Api(
