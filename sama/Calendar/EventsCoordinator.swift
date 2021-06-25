@@ -198,9 +198,9 @@ class EventsCoordinator {
         // vertical
         let bottomThreshold = (container.frame.height - (container.safeAreaInsets.bottom + calendar.contentInset.bottom) - hotEdge)
         if loc.y < hotEdge {
-            return .vertical(-max(2 * log(hotEdge - loc.y), 0))
+            return .vertical(-2 * log(max(hotEdge - loc.y, 1)))
         } else if loc.y > bottomThreshold {
-            return .vertical(min(2 * log(loc.y - bottomThreshold), hotEdge))
+            return .vertical(2 * log(max(loc.y - bottomThreshold, 1)))
         }
 
         return nil
