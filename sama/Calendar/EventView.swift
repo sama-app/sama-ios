@@ -56,6 +56,8 @@ class EventView: UIView {
         let width = dots * 8
         let x = (innerFrameSize.width - width) / 2
         dotsView.frame = CGRect(x: x, y: 6, width: width, height: 16)
+
+        dotsView.isHidden = (innerFrameSize.height < 28)
     }
 
     private func setupLayers() {
