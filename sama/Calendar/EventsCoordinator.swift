@@ -23,6 +23,8 @@ class EventsCoordinator {
     private let calendar: UIScrollView
     private let container: UIView
 
+    private var feedback = UIImpactFeedbackGenerator(style: .heavy)
+
     // pin to 15 mins
     private let hourSplit = 4
     private let hotEdge: CGFloat = 40
@@ -135,13 +137,19 @@ class EventsCoordinator {
     }
 
     @objc private func handleEventDurationDrag(_ recognizer: UIGestureRecognizer) {
-        print("duration")
+        switch recognizer.state {
+        case .began:
+            feedback.impactOccurred()
+        default:
+            break
+        }
     }
 
     @objc private func handleEventDrag(_ recognizer: UIGestureRecognizer) {
         switch recognizer.state {
         case .began:
             guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
+            feedback.impactOccurred()
 
             dragState = .start(
                 origin: recognizer.location(in: recognizer.view),
