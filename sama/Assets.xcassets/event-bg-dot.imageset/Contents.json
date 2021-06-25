@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "event-bg-dot.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
