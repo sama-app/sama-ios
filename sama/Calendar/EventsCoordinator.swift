@@ -46,8 +46,11 @@ class EventsCoordinator {
             let eventView = EventView()
             eventView.isUserInteractionEnabled = true
 
-            let dragRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleEventDrag(_:)))
+            let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDrag(_:)))
             eventView.addGestureRecognizer(dragRecognizer)
+
+            let handleRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDurationDrag(_:)))
+            eventView.handle.addGestureRecognizer(handleRecognizer)
 
             self.container.addSubview(eventView)
             return eventView
@@ -79,7 +82,7 @@ class EventsCoordinator {
                 x: xForDaysOffset(eventProps.daysOffset),
                 y: yForTimestampInDay(start),
                 width: cellSize.width,
-                height: CGFloat(truncating: duration as NSNumber) * cellSize.height
+                height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
         }
     }
@@ -131,6 +134,10 @@ class EventsCoordinator {
         }
     }
 
+    @objc private func handleEventDurationDrag(_ recognizer: UIGestureRecognizer) {
+        print("duration")
+    }
+
     @objc private func handleEventDrag(_ recognizer: UIGestureRecognizer) {
         switch recognizer.state {
         case .began:
@@ -148,21 +155,22 @@ class EventsCoordinator {
             resetDragState()
             repositionEventViews()
         case .ended:
+            guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
+
             let loc = recognizer.location(in: container)
 
             let totalDaysOffset = Int(round(calendar.contentOffset.x + loc.x) / cellSize.width)
             let daysOffset = totalDaysOffset - currentDayIndex
 
             let calcYOffset = calendar.contentOffset.y + loc.y - dragState.origin.y
-            let maxYOffset = CGFloat(24) * cellSize.height - recognizer.view!.frame.height
+            let eventHeight = CGFloat(truncating: eventProperties[idx].duration as NSNumber) * cellSize.height
+            let maxYOffset = CGFloat(24) * cellSize.height - eventHeight
             let yOffset = min(max((calcYOffset), 0), maxYOffset)
             let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
                 .multiplying(by: NSDecimalNumber(value: hourSplit))
                 .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
                 .rounding(accordingToBehavior: nil)
                 .dividing(by: NSDecimalNumber(value: hourSplit))
-
-            guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
 
             var event = eventProperties[idx]
             event.daysOffset = daysOffset
