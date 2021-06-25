@@ -38,7 +38,10 @@ final class CalendarLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        return attrs
+        let start = Int(floor(rect.origin.x / size.width))
+        let length = Int(ceil(rect.width / size.width))
+        let end = start + length
+        return Array(attrs[start ..< end])
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
