@@ -234,9 +234,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return 10000
     }
 
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as! CalendarDayCell).headerInset = collectionView.contentOffset.y
+    }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dayCell", for: indexPath) as! CalendarDayCell
-        cell.headerInset = collectionView.contentOffset.y
         cell.cellSize = cellSize
         cell.vOffset = vOffset
         cell.blockedTimes = session.blocksForDayIndex[indexPath.item] ?? []

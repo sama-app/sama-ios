@@ -31,8 +31,10 @@ final class CalendarDayCell: UICollectionViewCell {
 
     var headerInset: CGFloat = 0 {
         didSet {
-            for v in headerViews {
-                v.frame.origin.y = headerInset
+            CALayer.performWithoutImplicitAnimations {
+                for v in headerViews {
+                    v.frame.origin.y = headerInset
+                }
             }
         }
     }

@@ -13,6 +13,7 @@
 		E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */; };
 		E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665C2674F02C00C88EA1 /* MainActionButton.swift */; };
 		E70A665F267536A400C88EA1 /* HighlightableSimpleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */; };
+		E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
@@ -76,6 +77,7 @@
 		E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
 		E70A665C2674F02C00C88EA1 /* MainActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionButton.swift; sourceTree = "<group>"; };
 		E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightableSimpleCell.swift; sourceTree = "<group>"; };
+		E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Helpers.swift"; sourceTree = "<group>"; };
 		E732E958266256A9008A8B82 /* UIColors+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Branded.swift"; sourceTree = "<group>"; };
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				E79C90C22684C7A100398E41 /* Sama.swift */,
 				E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */,
 				E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */,
+				E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -415,6 +418,7 @@
 			files = (
 				E7957947266F629B005B9F39 /* CalendarViewController.swift in Sources */,
 				E7F5AD182670A57900138E42 /* FindTimePanel.swift in Sources */,
+				E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */,
 				E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */,
 				E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
