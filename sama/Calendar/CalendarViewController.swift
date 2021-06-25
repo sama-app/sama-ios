@@ -23,7 +23,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var isFirstLoad: Bool = true
     private var isCalendarReady = false
 
-    private var scrollLock = ScrollLock(origin: .zero)
+    private var scrollLock: ScrollLock?
 
     private var eventsCoordinator: EventsCoordinator!
 
@@ -189,6 +189,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             let isChangedY = abs(velocity.y) > 0.1
             targetContentOffset.pointee = CGPoint(x: (i + z) * cellSize.width, y: isChangedY ? targetContentOffset.pointee.y : scrollView.contentOffset.y)
         }
+
+        scrollLock = nil
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -196,7 +198,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollView.contentOffset = scrollLock.lockIfUnlockedAndAdjust(offset: scrollView.contentOffset)
+        if let contentOffset = scrollLock?.lockIfUnlockedAndAdjust(offset: scrollView.contentOffset) {
+            scrollView.contentOffset = contentOffset
+        }
 
         timelineScrollView.contentOffset.y = scrollView.contentOffset.y
         timeline.headerInset = scrollView.contentOffset.y
