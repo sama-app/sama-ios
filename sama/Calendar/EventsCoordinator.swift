@@ -104,7 +104,8 @@ class EventsCoordinator {
         guard let recognizer = dragUi?.recognizer else { return }
 
         let loc = recognizer.location(in: container)
-        recognizer.view?.frame.origin = CGPoint(
+        let eventView = recognizer.view!
+        eventView.frame.origin = CGPoint(
             x: loc.x - dragState.origin.x,
             y: loc.y - dragState.origin.y
         )
@@ -120,7 +121,12 @@ class EventsCoordinator {
                     self.dragState.isAllowed = true
                 })
             case let .vertical(points):
-                self.calendar.contentOffset.y += points
+                let y = calendar.contentOffset.y + points
+                let minY = CGFloat(0)
+                let maxY = calendar.contentSize.height - calendar.contentInset.bottom
+                if (y >= minY && y <= maxY) {
+                    self.calendar.contentOffset.y = y
+                }
             }
         }
     }
