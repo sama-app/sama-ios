@@ -23,9 +23,16 @@ class EventsCoordinator {
     private let calendar: UIScrollView
     private let container: UIView
 
-    private var draggableOrigin: CGPoint = .zero
     // pin to 15 mins
     private let hourSplit = 4
+    private let hotEdge: CGFloat = 40
+
+    private var dragState: DragState = .makeClear()
+    private var dragUi: DragUI? {
+        didSet {
+            oldValue?.repositionLink.invalidate()
+        }
+    }
 
     init(currentDayIndex: Int, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
         self.currentDayIndex = currentDayIndex
@@ -61,6 +68,8 @@ class EventsCoordinator {
     func repositionEventViews() {
         let count = eventProperties.count
         for i in (0 ..< count) {
+            guard i != dragState.eventIndex else { continue }
+
             let eventProps = eventProperties[i]
             let eventView = eventViews[i]
 
@@ -91,11 +100,46 @@ class EventsCoordinator {
         return CGFloat(truncating: timestamp as NSNumber) * cellSize.height + 1 - calendar.contentOffset.y
     }
 
+    @objc private func changeEventPos() {
+        guard let recognizer = dragUi?.recognizer else { return }
+
+        let loc = recognizer.location(in: container)
+        recognizer.view?.frame.origin = CGPoint(
+            x: loc.x - dragState.origin.x,
+            y: loc.y - dragState.origin.y
+        )
+
+        if let change = contentOffsetChange(from: loc) {
+            switch change {
+            case let .horizontal(step):
+                dragState.isAllowed = false
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.calendar.contentOffset.x += CGFloat(step) * self.cellSize.width
+                    self.calendar.layoutIfNeeded()
+                }, completion: { _ in
+                    self.dragState.isAllowed = true
+                })
+            case let .vertical(points):
+                self.calendar.contentOffset.y += points
+            }
+        }
+    }
+
     @objc private func handleEventDrag(_ recognizer: UIGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            draggableOrigin = recognizer.location(in: recognizer.view)
+            guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
+
+            dragState = .start(
+                origin: recognizer.location(in: recognizer.view),
+                eventIndex: idx
+            )
+
+            let repositionLink = CADisplayLink(target: self, selector: #selector(changeEventPos))
+            repositionLink.add(to: RunLoop.current, forMode: .common)
+            dragUi = DragUI(repositionLink: repositionLink, recognizer: recognizer)
         case .cancelled:
+            resetDragState()
             repositionEventViews()
         case .ended:
             let loc = recognizer.location(in: container)
@@ -103,7 +147,7 @@ class EventsCoordinator {
             let totalDaysOffset = Int(round(calendar.contentOffset.x + loc.x) / cellSize.width)
             let daysOffset = totalDaysOffset - currentDayIndex
 
-            let calcYOffset = calendar.contentOffset.y + loc.y - draggableOrigin.y
+            let calcYOffset = calendar.contentOffset.y + loc.y - dragState.origin.y
             let maxYOffset = CGFloat(24) * cellSize.height - recognizer.view!.frame.height
             let yOffset = min(max((calcYOffset), 0), maxYOffset)
             let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
@@ -125,14 +169,63 @@ class EventsCoordinator {
                     y: self.yForTimestampInDay(totalMinsOffset.decimalValue)
                 )
             }
+
+            resetDragState()
         case .changed:
-            let loc = recognizer.location(in: container)
-            recognizer.view?.frame.origin = CGPoint(
-                x: loc.x - draggableOrigin.x,
-                y: loc.y - draggableOrigin.y
-            )
-        default:
+            // display link handles changes
             break
+        default:
+            resetDragState()
         }
     }
+
+    private func contentOffsetChange(from loc: CGPoint) -> CalendarAutoScroll? {
+        guard dragState.isAllowed else { return nil }
+
+        // horizontal scrolling takes precedence
+        if loc.x < hotEdge {
+            return .horizontal(-1)
+        } else if loc.x > container.frame.width - hotEdge {
+            return .horizontal(1)
+        }
+
+        // vertical
+        let bottomThreshold = (container.frame.height - (container.safeAreaInsets.bottom + calendar.contentInset.bottom) - hotEdge)
+        if loc.y < hotEdge {
+            return .vertical(-max(2 * log(hotEdge - loc.y), 0))
+        } else if loc.y > bottomThreshold {
+            return .vertical(min(2 * log(loc.y - bottomThreshold), hotEdge))
+        }
+
+        return nil
+    }
+
+    private func resetDragState() {
+        dragUi = nil
+        dragState = .makeClear()
+    }
+}
+
+private enum CalendarAutoScroll {
+    case horizontal(Int)
+    case vertical(CGFloat)
+}
+
+private struct DragState {
+    static func makeClear() -> DragState {
+        return DragState(origin: .zero, eventIndex: -1, isAllowed: true)
+    }
+
+    static func start(origin: CGPoint, eventIndex: Int) -> DragState {
+        return DragState(origin: origin, eventIndex: eventIndex, isAllowed: true)
+    }
+
+    let origin: CGPoint
+    let eventIndex: Int
+    var isAllowed: Bool
+}
+
+private struct DragUI {
+    let repositionLink: CADisplayLink
+    let recognizer: UIGestureRecognizer
 }
