@@ -164,6 +164,7 @@ class EventDatesPanel: CalendarNavigationBlock {
             subview.removeFromSuperview()
         }
         let isRemovable = events.count > 1
+        let isButtonVisible = events.count < 3
         for props in events {
             let itemView = EventListItemView(props: props, isRemovable: isRemovable)
             itemView.handleRemove = { [weak self] in
@@ -171,11 +172,31 @@ class EventDatesPanel: CalendarNavigationBlock {
             }
             self.content.addArrangedSubview(itemView)
         }
+        if isButtonVisible {
+            let actionBtn = UIButton(type: .system)
+            actionBtn.translatesAutoresizingMaskIntoConstraints = false
+            actionBtn.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            actionBtn.setTitle("Add another slot", for: .normal)
+            actionBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+            actionBtn.setImage(UIImage(named: "plus")!, for: .normal)
+            actionBtn.tintColor = .primary
+            actionBtn.contentHorizontalAlignment = .leading
+            actionBtn.contentVerticalAlignment = .center
+            actionBtn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
+            actionBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+            actionBtn.addTarget(self, action: #selector(onAddNewSuggestion), for: .touchUpInside)
+
+            self.content.addArrangedSubview(actionBtn)
+        }
     }
 
     @objc private func onBackButton() {
         coordinator.resetEventViews()
         navigation?.pop()
+    }
+
+    @objc private func onAddNewSuggestion() {
+
     }
 
     @objc private func onCopySuggestions() {
