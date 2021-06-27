@@ -110,6 +110,7 @@ class EventsCoordinator {
 
         let loc = recognizer.location(in: container)
         let eventView = recognizer.view!
+        let idx = eventViews.firstIndex(of: eventView)!
         eventView.frame.origin = CGPoint(
             x: loc.x - dragState.origin.x,
             y: loc.y - dragState.origin.y
@@ -134,6 +135,45 @@ class EventsCoordinator {
                 }
             }
         }
+
+        dragState.target = validTarget(from: target(from: loc, for: idx), for: idx)
+    }
+
+    private func target(from loc: CGPoint, for idx: Int) -> RescheduleTarget {
+        let totalDaysOffset = Int(round(calendar.contentOffset.x + loc.x) / cellSize.width)
+        let daysOffset = totalDaysOffset - currentDayIndex
+
+        let calcYOffset = calendar.contentOffset.y + loc.y - dragState.origin.y
+        let eventHeight = CGFloat(truncating: eventProperties[idx].duration as NSNumber) * cellSize.height
+        let maxYOffset = CGFloat(24) * cellSize.height - eventHeight
+        let yOffset = min(max((calcYOffset), 0), maxYOffset)
+        let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
+            .multiplying(by: NSDecimalNumber(value: hourSplit))
+            .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
+            .rounding(accordingToBehavior: nil)
+            .dividing(by: NSDecimalNumber(value: hourSplit))
+        return RescheduleTarget(daysOffset: daysOffset, start: totalMinsOffset.decimalValue)
+    }
+
+    private func validTarget(from target: RescheduleTarget, for index: Int) -> RescheduleTarget {
+        let duration = eventProperties[index].duration
+        let targetEnd = NSDecimalNumber(decimal: target.start).adding(NSDecimalNumber(decimal: duration)).decimalValue
+        let sameDayEvents = eventProperties
+            .enumerated().filter { $0.offset != index && $0.element.daysOffset == target.daysOffset }
+            .map { $0.element }
+
+        var isValid = true
+        for ev in sameDayEvents {
+            let evEnd = NSDecimalNumber(decimal: ev.start).adding(NSDecimalNumber(decimal: ev.duration)).decimalValue
+            let startInEvent = target.start >= ev.start && target.start < evEnd
+            let endInEvent = targetEnd > ev.start && targetEnd <= evEnd
+            let surroundsEvent = target.start < ev.start && targetEnd > evEnd
+            if startInEvent || endInEvent || surroundsEvent {
+                isValid = false
+                break
+            }
+        }
+        return isValid ? target : dragState.target
     }
 
     @objc private func changeEventDuration() {
@@ -190,6 +230,7 @@ class EventsCoordinator {
             dragState = .start(
                 origin: recognizer.location(in: eventView),
                 eventIndex: idx,
+                target: .none,
                 maxDuration: getMaxDuration(for: eventProperties[idx])
             )
 
@@ -231,9 +272,11 @@ class EventsCoordinator {
             guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
             feedback.impactOccurred()
 
+            let props = eventProperties[idx]
             dragState = .start(
                 origin: recognizer.location(in: recognizer.view),
                 eventIndex: idx,
+                target: RescheduleTarget(daysOffset: props.daysOffset, start: props.start),
                 maxDuration: eventProperties[idx].duration
             )
 
@@ -246,30 +289,15 @@ class EventsCoordinator {
         case .ended:
             guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
 
-            let loc = recognizer.location(in: container)
-
-            let totalDaysOffset = Int(round(calendar.contentOffset.x + loc.x) / cellSize.width)
-            let daysOffset = totalDaysOffset - currentDayIndex
-
-            let calcYOffset = calendar.contentOffset.y + loc.y - dragState.origin.y
-            let eventHeight = CGFloat(truncating: eventProperties[idx].duration as NSNumber) * cellSize.height
-            let maxYOffset = CGFloat(24) * cellSize.height - eventHeight
-            let yOffset = min(max((calcYOffset), 0), maxYOffset)
-            let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
-                .multiplying(by: NSDecimalNumber(value: hourSplit))
-                .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
-                .rounding(accordingToBehavior: nil)
-                .dividing(by: NSDecimalNumber(value: hourSplit))
-
             var event = eventProperties[idx]
-            event.daysOffset = daysOffset
-            event.start = totalMinsOffset.decimalValue
+            event.daysOffset = dragState.target.daysOffset
+            event.start = dragState.target.start
             eventProperties[idx] = event
 
             UIView.animate(withDuration: 0.1) {
                 recognizer.view?.frame.origin = CGPoint(
-                    x: self.xForDaysOffset(daysOffset),
-                    y: self.yForTimestampInDay(totalMinsOffset.decimalValue)
+                    x: self.xForDaysOffset(event.daysOffset),
+                    y: self.yForTimestampInDay(event.start)
                 )
             }
 
@@ -316,15 +344,16 @@ private enum CalendarAutoScroll {
 
 private struct DragState {
     static func makeClear() -> DragState {
-        return DragState(origin: .zero, eventIndex: -1, maxDuration: 1, isAllowed: true)
+        return DragState(origin: .zero, eventIndex: -1, target: .none, maxDuration: 1, isAllowed: true)
     }
 
-    static func start(origin: CGPoint, eventIndex: Int, maxDuration: Decimal) -> DragState {
-        return DragState(origin: origin, eventIndex: eventIndex, maxDuration: maxDuration, isAllowed: true)
+    static func start(origin: CGPoint, eventIndex: Int, target: RescheduleTarget, maxDuration: Decimal) -> DragState {
+        return DragState(origin: origin, eventIndex: eventIndex, target: target, maxDuration: maxDuration, isAllowed: true)
     }
 
     let origin: CGPoint
     let eventIndex: Int
+    var target: RescheduleTarget
     let maxDuration: Decimal
     var isAllowed: Bool
 }
@@ -332,4 +361,13 @@ private struct DragState {
 private struct DragUI {
     let repositionLink: CADisplayLink
     let recognizer: UIGestureRecognizer
+}
+
+private struct RescheduleTarget {
+    static var none: RescheduleTarget {
+        return RescheduleTarget(daysOffset: 0, start: 0)
+    }
+
+    let daysOffset: Int
+    let start: Decimal
 }
