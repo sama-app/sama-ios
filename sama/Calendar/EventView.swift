@@ -17,6 +17,8 @@ class EventView: UIView {
     private var backgroundLayer: CALayer?
 
     private let dotsView = UIView()
+    private let shadow = CALayer()
+    private let background = CAGradientLayer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,6 +50,13 @@ class EventView: UIView {
             setupLayers()
         }
         reframeDotsView()
+
+        let innerFrame = CGRect(origin: .zero, size: innerFrameSize)
+        CALayer.performWithoutImplicitAnimations {
+            self.background.bounds = innerFrame
+            self.shadow.bounds = innerFrame
+            self.shadow.shadowPath = UIBezierPath(roundedRect: innerFrame, cornerRadius: 8).cgPath
+        }
     }
 
     private func reframeDotsView() {
@@ -61,20 +70,15 @@ class EventView: UIView {
     }
 
     private func setupLayers() {
-        let innerFrame = CGRect(origin: .zero, size: innerFrameSize)
-        let shadow = CALayer()
-        shadow.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 8).cgPath
         shadow.shadowColor = UIColor(red: 0.467, green: 0.134, blue: 0.056, alpha: 0.15).cgColor
         shadow.shadowOpacity = 1
         shadow.shadowRadius = 12
         shadow.shadowOffset = CGSize(width: 0, height: 4)
-        shadow.bounds = innerFrame
         shadow.anchorPoint = .zero
         layer.insertSublayer(shadow, at: 0)
 
-        let background = CAGradientLayer()
+
         background.colors = [UIColor.primary.cgColor, UIColor.primaryDarker.cgColor]
-        background.bounds = innerFrame
         background.anchorPoint = .zero
         background.cornerRadius = 4
         background.masksToBounds = true

@@ -136,12 +136,78 @@ class EventsCoordinator {
         }
     }
 
+    @objc private func changeEventDuration() {
+        guard let recognizer = dragUi?.recognizer else { return }
+
+        let eventView = (recognizer.view!.superview as! EventView)
+        let loc = recognizer.location(in: eventView)
+
+        guard let idx = eventViews.firstIndex(of: eventView) else { return }
+        let originalHeight = CGFloat(truncating: eventProperties[idx].duration as NSNumber) * cellSize.height + eventHandleExtraSpace
+
+        let extra = loc.y - dragState.origin.y
+        let eventHeight = originalHeight + extra
+
+        let minHeight = CGFloat(0.25) * cellSize.height + eventHandleExtraSpace
+        let safeEvHeight = max(eventHeight, minHeight)
+
+        eventView.frame.size.height = safeEvHeight
+
+        let locInContainer = recognizer.location(in: container)
+        let bottomThreshold = (container.frame.height - (container.safeAreaInsets.bottom + calendar.contentInset.bottom) - hotEdge)
+
+        if (locInContainer.y < hotEdge) {
+            let extra = -2 * log(max(hotEdge - locInContainer.y, 1))
+            calendar.contentOffset.y += extra
+            eventView.frame.origin.y -= extra
+        } else if (locInContainer.y > bottomThreshold) {
+            let extra = 2 * log(max(locInContainer.y - bottomThreshold, 1))
+            calendar.contentOffset.y += extra
+            eventView.frame.origin.y -= extra
+        }
+    }
+
     @objc private func handleEventDurationDrag(_ recognizer: UIGestureRecognizer) {
         switch recognizer.state {
         case .began:
+            let eventView = (recognizer.view!.superview as! EventView)
+            guard let idx = eventViews.firstIndex(of: eventView) else { return }
             feedback.impactOccurred()
-        default:
+
+            dragState = .start(
+                origin: recognizer.location(in: eventView),
+                eventIndex: idx
+            )
+
+            let repositionLink = CADisplayLink(target: self, selector: #selector(changeEventDuration))
+            repositionLink.add(to: RunLoop.current, forMode: .common)
+            dragUi = DragUI(repositionLink: repositionLink, recognizer: recognizer)
+        case .cancelled:
+            resetDragState()
+            repositionEventViews()
+        case .ended:
+            let eventView = (recognizer.view!.superview as! EventView)
+
+            let totalMinsOffset = NSDecimalNumber(value: Double(eventView.frame.height))
+                .multiplying(by: NSDecimalNumber(value: hourSplit))
+                .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
+                .rounding(accordingToBehavior: nil)
+                .dividing(by: NSDecimalNumber(value: hourSplit))
+
+            var event = eventProperties[dragState.eventIndex]
+            event.duration = totalMinsOffset.decimalValue
+            eventProperties[dragState.eventIndex] = event
+
+            let evHeight = CGFloat(truncating: event.duration as NSNumber) * cellSize.height
+            eventView.frame.size.height = evHeight
+
+            resetDragState()
+            repositionEventViews()
+        case .changed:
+            // display link handles changes
             break
+        default:
+            resetDragState()
         }
     }
 
