@@ -149,7 +149,8 @@ class EventsCoordinator {
         let eventHeight = originalHeight + extra
 
         let minHeight = CGFloat(0.25) * cellSize.height + eventHandleExtraSpace
-        let safeEvHeight = max(eventHeight, minHeight)
+        let maxHeight = CGFloat(truncating: dragState.maxDuration as NSNumber) * cellSize.height + eventHandleExtraSpace
+        let safeEvHeight = min(max(eventHeight, minHeight), maxHeight)
 
         eventView.frame.size.height = safeEvHeight
 
@@ -159,11 +160,23 @@ class EventsCoordinator {
         if (locInContainer.y < hotEdge) {
             let extra = -2 * log(max(hotEdge - locInContainer.y, 1))
             calendar.contentOffset.y += extra
-            eventView.frame.origin.y -= extra
         } else if (locInContainer.y > bottomThreshold) {
             let extra = 2 * log(max(locInContainer.y - bottomThreshold, 1))
             calendar.contentOffset.y += extra
-            eventView.frame.origin.y -= extra
+        }
+        eventView.frame.origin.y = yForTimestampInDay(eventProperties[idx].start)
+    }
+
+    private func getMaxDuration(for props: EventProperties) -> Decimal {
+        let sameDayEvents = eventProperties
+            .filter { $0.daysOffset == props.daysOffset }
+            .sorted { $0.start < $1.start }
+        let idx = sameDayEvents.firstIndex(where: { $0.start == props.start })!
+        if idx < (sameDayEvents.count - 1) {
+            let next = sameDayEvents[idx + 1]
+            return NSDecimalNumber(decimal: next.start).subtracting(NSDecimalNumber(decimal: props.start)).decimalValue
+        } else {
+            return NSDecimalNumber(value: 24).subtracting(NSDecimalNumber(decimal: props.start)).decimalValue
         }
     }
 
@@ -176,7 +189,8 @@ class EventsCoordinator {
 
             dragState = .start(
                 origin: recognizer.location(in: eventView),
-                eventIndex: idx
+                eventIndex: idx,
+                maxDuration: getMaxDuration(for: eventProperties[idx])
             )
 
             let repositionLink = CADisplayLink(target: self, selector: #selector(changeEventDuration))
@@ -219,7 +233,8 @@ class EventsCoordinator {
 
             dragState = .start(
                 origin: recognizer.location(in: recognizer.view),
-                eventIndex: idx
+                eventIndex: idx,
+                maxDuration: eventProperties[idx].duration
             )
 
             let repositionLink = CADisplayLink(target: self, selector: #selector(changeEventPos))
@@ -301,15 +316,16 @@ private enum CalendarAutoScroll {
 
 private struct DragState {
     static func makeClear() -> DragState {
-        return DragState(origin: .zero, eventIndex: -1, isAllowed: true)
+        return DragState(origin: .zero, eventIndex: -1, maxDuration: 1, isAllowed: true)
     }
 
-    static func start(origin: CGPoint, eventIndex: Int) -> DragState {
-        return DragState(origin: origin, eventIndex: eventIndex, isAllowed: true)
+    static func start(origin: CGPoint, eventIndex: Int, maxDuration: Decimal) -> DragState {
+        return DragState(origin: origin, eventIndex: eventIndex, maxDuration: maxDuration, isAllowed: true)
     }
 
     let origin: CGPoint
     let eventIndex: Int
+    let maxDuration: Decimal
     var isAllowed: Bool
 }
 
