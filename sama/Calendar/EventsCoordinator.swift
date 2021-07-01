@@ -188,9 +188,11 @@ class EventsCoordinator {
         eventView.isUserInteractionEnabled = true
 
         let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDrag(_:)))
+        dragRecognizer.minimumPressDuration = 0.01
         eventView.addGestureRecognizer(dragRecognizer)
 
         let handleRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDurationDrag(_:)))
+        handleRecognizer.minimumPressDuration = 0.01
         eventView.handle.addGestureRecognizer(handleRecognizer)
 
         self.container.addSubview(eventView)
