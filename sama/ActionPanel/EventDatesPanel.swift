@@ -200,6 +200,6 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     @objc private func onCopySuggestions() {
-
+        navigation?.showToast(withMessage: "Copied suggested meeting slots to your clipboard.")
     }
 }

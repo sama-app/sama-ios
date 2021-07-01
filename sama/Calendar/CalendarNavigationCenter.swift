@@ -18,6 +18,8 @@ final class CalendarNavigationCenter: UIView {
     private var stack: [UIView] = []
     private var stackLeadingConstraint: [NSLayoutConstraint] = []
 
+    private var toastDismissJob: DispatchWorkItem?
+
     func pushBlock(_ block: CalendarNavigationBlock, animated: Bool) {
         block.translatesAutoresizingMaskIntoConstraints = false
         block.navigation = self
@@ -78,6 +80,8 @@ final class CalendarNavigationCenter: UIView {
     func pop() {
         guard stack.count >= 2 else { return }
 
+        toastDismissJob?.perform()
+
         let currentBlock = stack.popLast()
         stackLeadingConstraint.popLast()?.constant = bounds.width
         stackLeadingConstraint.last?.constant = 0
@@ -87,14 +91,94 @@ final class CalendarNavigationCenter: UIView {
         }, completion: { _ in currentBlock?.removeFromSuperview() })
     }
 
+    func showToast(withMessage message: String) {
+        toastDismissJob?.perform()
+
+        guard let currentBlock = stack.last?.subviews.first else { return }
+
+        let toastView = UIView()
+        toastView.translatesAutoresizingMaskIntoConstraints = false
+        toastView.layer.cornerRadius = 24
+        toastView.layer.masksToBounds = true
+        toastView.backgroundColor = .neutral3
+        toastView.alpha = 0
+
+        let content = UIStackView()
+        content.translatesAutoresizingMaskIntoConstraints = false
+        content.axis = .horizontal
+
+        toastView.addSubview(content)
+
+        NSLayoutConstraint.activate([
+            content.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 20),
+            content.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 20),
+            toastView.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: 12),
+            toastView.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: 20)
+        ])
+
+        let label = UILabel()
+        label.textColor = .base
+        label.font = .brandedFont(ofSize: 20, weight: .regular)
+        label.text = message
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+
+        let removalButton = UIButton(type: .system)
+        removalButton.addTarget(self, action: #selector(onToastDismiss), for: .touchUpInside)
+        removalButton.translatesAutoresizingMaskIntoConstraints = false
+        removalButton.tintColor = .primary
+        removalButton.setImage(UIImage(named: "cross")!, for: .normal)
+        NSLayoutConstraint.activate([
+            removalButton.widthAnchor.constraint(equalToConstant: 44)
+        ])
+
+        content.addArrangedSubview(label)
+        content.addArrangedSubview(removalButton)
+
+        addSubview(toastView)
+
+        NSLayoutConstraint.activate([
+            toastView.widthAnchor.constraint(equalTo: currentBlock.widthAnchor),
+            toastView.centerXAnchor.constraint(equalTo: currentBlock.centerXAnchor),
+            toastView.heightAnchor.constraint(equalToConstant: 96),
+            currentBlock.topAnchor.constraint(equalTo: toastView.bottomAnchor, constant: 16)
+        ])
+
+        UIView.animate(withDuration: 0.3, animations: {
+            toastView.alpha = 1
+        }, completion: { _ in
+            self.queueToastDismiss(with: toastView)
+        })
+    }
+
+    private func queueToastDismiss(with view: UIView) {
+        toastDismissJob = DispatchWorkItem {
+            self.toastDismissJob = nil
+            UIView.animate(withDuration: 0.3, animations: {
+                view.alpha = 0
+            }, completion: { _ in
+                view.removeFromSuperview()
+            })
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: toastDismissJob!)
+    }
+
+    @objc private func onToastDismiss() {
+        toastDismissJob?.perform()
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         onActivePanelHeightChange?(stack.last?.frame.height ?? 0)
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard let block = stack.last else { return nil }
-        return block.hitTest(block.convert(point, from: self), with: event)
+        for v in subviews {
+            if let target = v.hitTest(v.convert(point, from: self), with: event) {
+                return target
+            }
+        }
+        return nil
     }
 }
 
