@@ -635,7 +635,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yoursama.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Sama App Development";
 				SWIFT_VERSION = 5.0;
@@ -657,7 +657,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yoursama.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = appstore;
 				SWIFT_VERSION = 5.0;
@@ -677,7 +677,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.yoursama.samaTests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.meetsama.samaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -697,7 +697,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.yoursama.samaTests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.meetsama.samaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -716,7 +716,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.yoursama.samaUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.meetsama.samaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -735,7 +735,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.yoursama.samaUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.meetsama.samaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -7,15 +7,21 @@
 
 import Foundation
 
-class Sama {
-    private init() {}
+struct Environment {
+    let productId = "meetsama"
+//    let baseUri = "https://app.meetsama.com/api"
+    let baseUri = "https://app.meetsama.com.smtest.it/api"
+}
 
-//    static let baseUri = "https://app.yoursama.com/api"
-    static let baseUri = "https://meetsama.com.smtest.it/api"
+class Sama {
+
+    static let env = Environment()
+
+    private init() {}
 
     static func makeApi(with auth: AuthContainer) -> Api {
         return Api(
-            baseUri: baseUri,
+            baseUri: env.baseUri,
             defaultHeaders: [
                 "Content-Type": "application/json"
             ],

@@ -22,10 +22,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>app.yoursama.sama</string>
+			<string>app.meetsama.sama</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>yoursama</string>
+				<string>meetsama</string>
 			</array>
 		</dict>
 	</array>

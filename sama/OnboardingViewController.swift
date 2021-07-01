@@ -150,7 +150,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     @objc private func onConnectCalendar() {
-        var req = URLRequest(url: URL(string: "\(Sama.baseUri)/auth/google-authorize")!)
+        var req = URLRequest(url: URL(string: "\(Sama.env.baseUri)/auth/google-authorize")!)
         req.httpMethod = "post"
         URLSession.shared.dataTask(with: req) { (data, resp, err) in
             if let data = data, let directions = try? JSONDecoder().decode(AuthDirections.self, from: data) {
@@ -163,10 +163,10 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     private func authenticate(with url: String) {
-        let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: "yoursama") { (callbackUrl, err) in
+        let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
             guard
                 let url = callbackUrl,
-                url.scheme == "yoursama",
+                url.scheme == Sama.env.productId,
                 url.host == "auth",
                 url.path == "/success",
                 let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
