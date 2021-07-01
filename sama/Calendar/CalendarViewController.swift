@@ -36,6 +36,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         self.setupViews()
         eventsCoordinator = EventsCoordinator(
             currentDayIndex: session.currentDayIndex,
+            context: session,
             cellSize: cellSize,
             calendar: calendar,
             container: slotPickerContainer

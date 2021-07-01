@@ -18,6 +18,7 @@ class EventsCoordinator {
     }
     private var eventViews: [UIView] = []
 
+    private let context: CalendarContextProvider
     private let currentDayIndex: Int
     private let cellSize: CGSize
     private let calendar: UIScrollView
@@ -36,27 +37,16 @@ class EventsCoordinator {
         }
     }
 
-    init(currentDayIndex: Int, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
+    init(currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
         self.currentDayIndex = currentDayIndex
+        self.context = context
         self.cellSize = cellSize
         self.calendar = calendar
         self.container = container
     }
 
     func setupEventViews(_ props: [EventProperties]) {
-        eventViews = props.map { _ in
-            let eventView = EventView()
-            eventView.isUserInteractionEnabled = true
-
-            let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDrag(_:)))
-            eventView.addGestureRecognizer(dragRecognizer)
-
-            let handleRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDurationDrag(_:)))
-            eventView.handle.addGestureRecognizer(handleRecognizer)
-
-            self.container.addSubview(eventView)
-            return eventView
-        }
+        eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
 
         repositionEventViews()
@@ -95,6 +85,116 @@ class EventsCoordinator {
         }
         eventViews = []
         eventProperties = []
+    }
+
+    func isSlotPossible(dayIndex: Int, start: Decimal, duration: Decimal) -> Bool {
+        let end = start + duration
+
+        for props in (eventProperties.filter { $0.daysOffset == dayIndex}) {
+            if start >= props.start && start < (props.start + props.duration) {
+                return false
+            }
+            if end > props.start && end <= (props.start + props.duration) {
+                return false
+            }
+        }
+
+        for block in (context.blocksForDayIndex[currentDayIndex + dayIndex] ?? []) {
+            if start >= block.start && start < (block.start + block.duration) {
+                return false
+            }
+            if end > block.start && end <= (block.start + block.duration) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    func addClosestToCenter() {
+        let xCenter = calendar.contentOffset.x + (calendar.frame.width) / 2
+        let totalDaysOffset = Int(round(xCenter - (cellSize.width / 2)) / cellSize.width)
+        let baseDaysOffset = totalDaysOffset - currentDayIndex
+
+        let yCenter = calendar.contentOffset.y + (calendar.bounds.height - calendar.contentInset.bottom - 48) / 2
+        let yOffset = yCenter - cellSize.height
+        let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
+            .multiplying(by: NSDecimalNumber(value: hourSplit))
+            .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
+            .rounding(accordingToBehavior: nil)
+            .dividing(by: NSDecimalNumber(value: hourSplit))
+
+        let duration = eventProperties.first!.duration
+        let maxMinsOffset = NSDecimalNumber(value: 24).subtracting(NSDecimalNumber(decimal: duration)).decimalValue
+
+        let baseStart = max(0, min(maxMinsOffset, totalMinsOffset.decimalValue))
+
+        var possibleSlots: [(Int, Decimal)] = []
+        for i in (baseDaysOffset - 1 ..< baseDaysOffset + 3) {
+            // exact and down
+            var start = baseStart
+            while start < maxMinsOffset {
+                if isSlotPossible(dayIndex: i, start: start, duration: duration) {
+                    possibleSlots.append((i, start))
+                    break
+                }
+                start += 0.25
+            }
+
+            // exact and up
+            start = baseStart
+            while start > 0 {
+                if isSlotPossible(dayIndex: i, start: start, duration: duration) {
+                    possibleSlots.append((i, start))
+                    break
+                }
+                start -= 0.25
+            }
+        }
+
+        guard !possibleSlots.isEmpty else { return }
+
+        var idx = 0
+        var minD: CGFloat = 10000
+        for (i, slot) in possibleSlots.enumerated() {
+            let rect = CGRect(
+                x: xForDaysOffset(slot.0) + calendar.contentOffset.x,
+                y: yForTimestampInDay(slot.1) + calendar.contentOffset.y,
+                width: cellSize.width,
+                height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
+            )
+            let xd = xCenter - rect.midX
+            let yd = yCenter - rect.midY
+            let d = sqrt(xd*xd + yd*yd)
+            if d < minD {
+                idx = i
+                minD = d
+            }
+        }
+
+        eventViews.append(makeEventView())
+        eventProperties.append(EventProperties(
+            start: possibleSlots[idx].1,
+            duration: duration,
+            daysOffset: possibleSlots[idx].0,
+            timezoneOffset: eventProperties.first!.timezoneOffset
+        ))
+
+        repositionEventViews()
+    }
+
+    private func makeEventView() -> EventView {
+        let eventView = EventView()
+        eventView.isUserInteractionEnabled = true
+
+        let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDrag(_:)))
+        eventView.addGestureRecognizer(dragRecognizer)
+
+        let handleRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDurationDrag(_:)))
+        eventView.handle.addGestureRecognizer(handleRecognizer)
+
+        self.container.addSubview(eventView)
+        return eventView
     }
 
     private func xForDaysOffset(_ daysOffset: Int) -> CGFloat {

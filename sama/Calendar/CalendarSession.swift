@@ -15,7 +15,11 @@ struct CalendarBlocksRequest: ApiRequest {
     let query: [URLQueryItem]
 }
 
-final class CalendarSession {
+protocol CalendarContextProvider {
+    var blocksForDayIndex: [Int: [CalendarBlockedTime]] { get }
+}
+
+final class CalendarSession: CalendarContextProvider {
 
     var reloadHandler: () -> Void = {}
     let currentDayIndex: Int
