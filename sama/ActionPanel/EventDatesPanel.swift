@@ -132,9 +132,10 @@ class EventDatesPanel: CalendarNavigationBlock {
                     let startComps = self.calendar.dateComponents([.day, .second], from: refStart, to: startDate)
                     let endComps = self.calendar.dateComponents([.day, .second], from: refStart, to: endDate)
                     let durationSecs = endComps.second! - startComps.second!
+                    let start = NSDecimalNumber(value: startComps.second!).dividing(by: NSDecimalNumber(value: 3600))
                     let duration = NSDecimalNumber(value: durationSecs).dividing(by: NSDecimalNumber(value: 3600))
                     return EventProperties(
-                        start: 16,
+                        start: start.decimalValue,
                         duration: duration.decimalValue,
                         daysOffset: startComps.day!,
                         timezoneOffset: timezoneOffset

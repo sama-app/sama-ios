@@ -8,12 +8,12 @@
 import Foundation
 
 struct ApiDateTimeFormatter {
-    private let formatter = DateFormatter.with(format: "YYYY-MM-dd'T'HH:mm:ss")
+    private let formatter = DateFormatter.with(format: "YYYY-MM-dd'T'HH:mm:ss'Z'")
 
     /// transforms dropping last 6 chars and parses
     ///
     /// i.e 2021-06-25T12:30:00+03:00 becomes 2021-06-25T12:30:00
     func date(from value: String) -> Date {
-        return formatter.date(from: String(value.dropLast(6)))!
+        return formatter.date(from: value)!
     }
 }
