@@ -94,9 +94,11 @@ final class CalendarSession: CalendarContextProvider {
 
     private func filterAndTransform(blocks: [CalendarBlock], for date: Date) -> [CalendarBlockedTime] {
         return blocks.compactMap { block in
-            let start = self.apiDateF.date(from: block.startDateTime)
+            let parsedStart = self.apiDateF.date(from: block.startDateTime)
+            let start = self.calendar.toTimeZone(date: parsedStart)
             if self.calendar.isDate(date, inSameDayAs: start) {
-                let end = self.apiDateF.date(from: block.endDateTime)
+                let parsedEnd = self.apiDateF.date(from: block.endDateTime)
+                let end = self.calendar.toTimeZone(date: parsedEnd)
                 let duration = end.timeIntervalSince(start)
                 return CalendarBlockedTime(
                     title: block.title,

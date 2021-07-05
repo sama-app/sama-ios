@@ -127,8 +127,10 @@ class EventDatesPanel: CalendarNavigationBlock {
             switch $0 {
             case let .success(result):
                 let props = result.suggestedSlots.map { slot -> EventProperties in
-                    let startDate = self.apiDateF.date(from: slot.startDateTime)
-                    let endDate = self.apiDateF.date(from: slot.endDateTime)
+                    let parsedStart = self.apiDateF.date(from: slot.startDateTime)
+                    let startDate = self.calendar.toTimeZone(date: parsedStart)
+                    let parsedEnd = self.apiDateF.date(from: slot.endDateTime)
+                    let endDate = self.calendar.toTimeZone(date: parsedEnd)
                     let startComps = self.calendar.dateComponents([.day, .second], from: refStart, to: startDate)
                     let endComps = self.calendar.dateComponents([.day, .second], from: refStart, to: endDate)
                     let durationSecs = endComps.second! - startComps.second!

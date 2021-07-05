@@ -8,8 +8,9 @@
 import Foundation
 
 extension DateFormatter {
-    static func with(format: String) -> DateFormatter {
+    static func with(format: String, timeZone: TimeZone = .current) -> DateFormatter {
         let f = DateFormatter()
+        f.timeZone = timeZone
         f.dateFormat = format
         return f
     }

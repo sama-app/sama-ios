@@ -16,6 +16,7 @@
 		E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
+		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
 		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
 		E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */; };
@@ -80,6 +81,7 @@
 		E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Helpers.swift"; sourceTree = "<group>"; };
 		E732E958266256A9008A8B82 /* UIColors+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Branded.swift"; sourceTree = "<group>"; };
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
+		E7480392269390A600573DE2 /* Calendar+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Convenience.swift"; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
 		E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */,
 				E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */,
 				E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */,
+				E7480392269390A600573DE2 /* Calendar+Convenience.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */,
 				E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */,
 				E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */,
+				E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */,
 				E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */,
 				E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */,
 				E7957943266F5F7B005B9F39 /* CalendarLayout.swift in Sources */,

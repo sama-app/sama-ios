@@ -160,11 +160,6 @@ final class CalendarDayCell: UICollectionViewCell {
     }
 
     private func setInfo() {
-//        var calendar = Calendar(identifier: .gregorian)
-//        calendar.timeZone = TimeZone(abbreviation: "GMT")!
-//        calendar.firstWeekday = 2
-//        let dt = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date))!
-
         let dayF = DateFormatter()
         dayF.dateFormat = "d"
         let wkF = DateFormatter()

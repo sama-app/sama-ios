@@ -8,7 +8,7 @@
 import Foundation
 
 struct ApiDateTimeFormatter {
-    private let formatter = DateFormatter.with(format: "YYYY-MM-dd'T'HH:mm:ss'Z'")
+    private let formatter = DateFormatter.with(format: "YYYY-MM-dd'T'HH:mm:ss'Z'", timeZone: TimeZone(identifier: "GMT")!)
 
     /// transforms dropping last 6 chars and parses
     ///
