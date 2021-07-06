@@ -115,53 +115,49 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     private func searchSlots() {
-        let timezoneOffset = self.options.timezone.hoursFromGMT - self.options.usersTimezoneHoursFromGMT
-
         let data = EventSearchRequestData(
             durationMinutes: options.duration.duration,
             timeZone: options.timezone.id,
             suggestionSlotCount: 3,
             suggestionDayCount: 4
         )
-        let refStart = self.calendar.startOfDay(for: refDate)
         api.request(for: MeetingInitiationRequest(body: data)) {
             switch $0 {
             case let .success(result):
-                self.coordinator.intentId = result.meetingIntentId
-
-                let props = result.suggestedSlots.map { slot -> EventProperties in
-                    let parsedStart = self.apiDateF.date(from: slot.startDateTime)
-                    let startDate = self.calendar.toTimeZone(date: parsedStart)
-                    let parsedEnd = self.apiDateF.date(from: slot.endDateTime)
-                    let endDate = self.calendar.toTimeZone(date: parsedEnd)
-                    let startComps = self.calendar.dateComponents([.day, .second], from: refStart, to: startDate)
-                    let endComps = self.calendar.dateComponents([.day, .second], from: refStart, to: endDate)
-                    let durationSecs = endComps.second! - startComps.second!
-                    let start = NSDecimalNumber(value: startComps.second!).dividing(by: NSDecimalNumber(value: 3600))
-                    let duration = NSDecimalNumber(value: durationSecs).dividing(by: NSDecimalNumber(value: 3600))
-                    return EventProperties(
-                        start: start.decimalValue,
-                        duration: duration.decimalValue,
-                        daysOffset: startComps.day!,
-                        timezoneOffset: timezoneOffset
-                    )
-                }
-//                let props = [
-//                    EventProperties(start: 16, duration: duration, daysOffset: 0, timezoneOffset: timezoneOffset),
-//                    EventProperties(start: 12.75, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset),
-//                    EventProperties(start: 18.25, duration: duration, daysOffset: 1, timezoneOffset: timezoneOffset)
-//                ]
-                DispatchQueue.main.async {
-                    self.actionButton.isHidden = false
-                    self.titleLabel.text = "Here are your best slots:"
-                    self.loader.stopAnimating()
-                    self.loader.isHidden = true
-                    self.coordinator.setupEventViews(props)
-                }
+                self.setupInitiation(with: result)
             case .failure:
                 self.onBackButton()
             }
         }
+    }
+
+    private func setupInitiation(with result: MeetingInitiationResult) {
+        let timezoneOffset = options.timezone.hoursFromGMT - options.usersTimezoneHoursFromGMT
+        let refStart = calendar.startOfDay(for: refDate)
+
+        let props = result.suggestedSlots.map { slot -> EventProperties in
+            let parsedStart = self.apiDateF.date(from: slot.startDateTime)
+            let startDate = self.calendar.toTimeZone(date: parsedStart)
+            let parsedEnd = self.apiDateF.date(from: slot.endDateTime)
+            let endDate = self.calendar.toTimeZone(date: parsedEnd)
+            let startComps = self.calendar.dateComponents([.day, .second], from: refStart, to: startDate)
+            let endComps = self.calendar.dateComponents([.day, .second], from: refStart, to: endDate)
+            let durationSecs = endComps.second! - startComps.second!
+            let start = NSDecimalNumber(value: startComps.second!).dividing(by: NSDecimalNumber(value: 3600))
+            let duration = NSDecimalNumber(value: durationSecs).dividing(by: NSDecimalNumber(value: 3600))
+            return EventProperties(
+                start: start.decimalValue,
+                duration: duration.decimalValue,
+                daysOffset: startComps.day!,
+                timezoneOffset: timezoneOffset
+            )
+        }
+
+        self.actionButton.isHidden = false
+        self.titleLabel.text = "Here are your best slots:"
+        self.loader.stopAnimating()
+        self.loader.isHidden = true
+        self.coordinator.setup(withId: result.meetingIntentId, properties: props)
     }
 
     private func reloadEventsList() {

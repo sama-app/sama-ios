@@ -33,7 +33,7 @@ class EventsCoordinator {
     var onChanges: (() -> Void)?
     var api: Api
 
-    var intentId = 0
+    private var intentId = 0
 
     private(set) var eventProperties: [EventProperties] = [] {
         didSet {
@@ -72,7 +72,8 @@ class EventsCoordinator {
         self.container = container
     }
 
-    func setupEventViews(_ props: [EventProperties]) {
+    func setup(withId id: Int, properties props: [EventProperties]) {
+        intentId = id
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
 
