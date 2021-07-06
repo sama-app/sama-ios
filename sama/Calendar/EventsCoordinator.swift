@@ -224,6 +224,18 @@ class EventsCoordinator {
         return CGFloat(truncating: timestamp as NSNumber) * cellSize.height + 1 - calendar.contentOffset.y
     }
 
+    private func yOffsetNormalized(_ y: CGFloat) -> CGFloat {
+        let minY = CGFloat(0)
+        let maxY = calendar.contentSize.height - calendar.contentInset.bottom
+        if (y < minY) {
+            return minY
+        } else if (y > maxY) {
+            return maxY
+        } else {
+            return y
+        }
+    }
+
     @objc private func changeEventPos() {
         guard let recognizer = dragUi?.recognizer else { return }
 
@@ -246,12 +258,7 @@ class EventsCoordinator {
                     self.dragState.isAllowed = true
                 })
             case let .vertical(points):
-                let y = calendar.contentOffset.y + points
-                let minY = CGFloat(0)
-                let maxY = calendar.contentSize.height - calendar.contentInset.bottom
-                if (y >= minY && y <= maxY) {
-                    self.calendar.contentOffset.y = y
-                }
+                self.calendar.contentOffset.y = yOffsetNormalized(calendar.contentOffset.y + points)
             }
         }
 
@@ -318,10 +325,10 @@ class EventsCoordinator {
 
         if (locInContainer.y < hotEdge) {
             let extra = -2 * log(max(hotEdge - locInContainer.y, 1))
-            calendar.contentOffset.y += extra
+            calendar.contentOffset.y = yOffsetNormalized(calendar.contentOffset.y + extra)
         } else if (locInContainer.y > bottomThreshold) {
             let extra = 2 * log(max(locInContainer.y - bottomThreshold, 1))
-            calendar.contentOffset.y += extra
+            calendar.contentOffset.y = yOffsetNormalized(calendar.contentOffset.y + extra)
         }
         eventView.frame.origin.y = yForTimestampInDay(eventProperties[idx].start)
     }
