@@ -39,11 +39,12 @@ final class CalendarSession: CalendarContextProvider {
         return f
     }()
 
-    private let apiDateF = ApiDateTimeFormatter()
+    private let transformer: BlockedTimesForDaysTransformer
 
     init(api: Api, currentDayIndex: Int) {
         self.api = api
         self.currentDayIndex = currentDayIndex
+        self.transformer = BlockedTimesForDaysTransformer(currentDayIndex: currentDayIndex)
     }
 
     func loadInitial() {
@@ -75,10 +76,9 @@ final class CalendarSession: CalendarContextProvider {
         api.request(for: req) {
             switch $0 {
             case let .success(model):
-                for i in (daysBack ... (daysBack + daysForward)) {
-                    let date = self.calendar.date(byAdding: .day, value: i, to: self.refDate)!
-                    let result = self.filterAndTransform(blocks: model.blocks, for: date).insetOverlapping()
-                    self.blocksForDayIndex[self.currentDayIndex + i] = result
+                let daysRange = (daysBack ... (daysBack + daysForward))
+                for (k, v) in self.transformer.transform(model: model, in: daysRange) {
+                    self.blocksForDayIndex[k] = v
                 }
 
                 DispatchQueue.main.async {
@@ -89,44 +89,6 @@ final class CalendarSession: CalendarContextProvider {
                     self.isBlockBusy[idx] = false
                 }
             }
-        }
-    }
-
-    private func filterAndTransform(blocks: [CalendarBlock], for date: Date) -> [CalendarBlockedTime] {
-        return blocks.compactMap { block in
-            let parsedStart = self.apiDateF.date(from: block.startDateTime)
-            let start = self.calendar.toTimeZone(date: parsedStart)
-            if self.calendar.isDate(date, inSameDayAs: start) {
-                let parsedEnd = self.apiDateF.date(from: block.endDateTime)
-                let end = self.calendar.toTimeZone(date: parsedEnd)
-                let duration = end.timeIntervalSince(start)
-                return CalendarBlockedTime(
-                    title: block.title,
-                    start: Decimal(start.timeIntervalSince(self.calendar.startOfDay(for: start)) / 3600),
-                    duration: Decimal(duration / 3600),
-                    depth: 0
-                )
-            } else {
-                return nil
-            }
-        }.sorted(by: { $0.start < $1.start || ($0.start == $1.start && $0.duration > $1.duration) })
-    }
-}
-
-private extension Collection where Element == CalendarBlockedTime {
-    func insetOverlapping() -> [CalendarBlockedTime] {
-        var prev: [CalendarBlockedTime] = []
-        return map { block in
-            var depth = 0
-            for prevBlock in prev {
-                if block.start >= prevBlock.start && block.start <= (prevBlock.start + prevBlock.duration - 1) {
-                    depth += 1
-                }
-            }
-            var newBlock = block
-            newBlock.depth = depth
-            prev.append(block)
-            return newBlock
         }
     }
 }
