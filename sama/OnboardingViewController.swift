@@ -30,6 +30,11 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         presentWelcomeBlock()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Sama.bi.track(event: "onboarding")
+    }
+
     private func presentWelcomeBlock() {
         let block = UIView()
         block.translatesAutoresizingMaskIntoConstraints = false
@@ -95,6 +100,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     @objc private func onNextBlock() {
+        Sama.bi.track(event: "next")
+
         let block = UIView()
         block.translatesAutoresizingMaskIntoConstraints = false
 
@@ -150,6 +157,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     @objc private func onConnectCalendar() {
+        Sama.bi.track(event: "connectcal")
+
         var req = URLRequest(url: URL(string: "\(Sama.env.baseUri)/auth/google-authorize")!)
         req.httpMethod = "post"
         URLSession.shared.dataTask(with: req) { (data, resp, err) in

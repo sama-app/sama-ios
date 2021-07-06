@@ -19,7 +19,6 @@
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
 		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
-		E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */; };
 		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
 		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
 		E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */; };
@@ -38,7 +37,10 @@
 		E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */; };
 		E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFD2694708D00558BB9 /* SlotFinder.swift */; };
 		E7B470002694821200558BB9 /* SlotFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */; };
+		E7B50CA726949C7400BBEFD9 /* Banalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B50CA626949C7400BBEFD9 /* Banalytics.swift */; };
+		E7B50CAB2694A44B00BBEFD9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */; };
 		E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */; };
+		E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
@@ -87,7 +89,6 @@
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
 		E7480392269390A600573DE2 /* Calendar+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Convenience.swift"; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
-		E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
 		E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTokenSync.swift; sourceTree = "<group>"; };
 		E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCoordinator.swift; sourceTree = "<group>"; };
@@ -107,6 +108,8 @@
 		E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundShadowView.swift; sourceTree = "<group>"; };
 		E7B46FFD2694708D00558BB9 /* SlotFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinder.swift; sourceTree = "<group>"; };
 		E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinderTests.swift; sourceTree = "<group>"; };
+		E7B50CA626949C7400BBEFD9 /* Banalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banalytics.swift; sourceTree = "<group>"; };
+		E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposeCoordinator.swift; sourceTree = "<group>"; };
 		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* Sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */,
+				E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +189,13 @@
 			path = Api;
 			sourceTree = "<group>";
 		};
+		E7BA3DC02694A7EA00FC4F47 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E7D3C07E26413340009CAB88 = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +203,7 @@
 				E7D3C0A026413342009CAB88 /* samaTests */,
 				E7D3C0AB26413342009CAB88 /* samaUITests */,
 				E7D3C08826413340009CAB88 /* Products */,
+				E7BA3DC02694A7EA00FC4F47 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -220,7 +232,6 @@
 				E7D3C09326413342009CAB88 /* Assets.xcassets */,
 				E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */,
 				E7D3C09826413342009CAB88 /* Info.plist */,
-				E76E85E9264D1CB500FAC1DF /* GoogleService-Info.plist */,
 				E7F8DD872651931500CD3759 /* TimelineView.swift */,
 				E732E958266256A9008A8B82 /* UIColors+Branded.swift */,
 				E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */,
@@ -239,6 +250,8 @@
 				E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */,
 				E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */,
 				E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */,
+				E7B50CA626949C7400BBEFD9 /* Banalytics.swift */,
+				E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -310,6 +323,7 @@
 			name = sama;
 			packageProductDependencies = (
 				E76E85E1264D195200FAC1DF /* FirebaseMessaging */,
+				E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */,
 			);
 			productName = sama;
 			productReference = E7D3C08726413340009CAB88 /* Sama.app */;
@@ -402,11 +416,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */,
-				E76E85EA264D1CB500FAC1DF /* GoogleService-Info.plist in Resources */,
 				E7F5AD0D266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf in Resources */,
 				E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */,
 				E7D3C09426413342009CAB88 /* Assets.xcassets in Resources */,
 				E7D3C09226413340009CAB88 /* Main.storyboard in Resources */,
+				E7B50CAB2694A44B00BBEFD9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +468,7 @@
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
 				E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */,
 				E79C90C32684C7A100398E41 /* Sama.swift in Sources */,
+				E7B50CA726949C7400BBEFD9 /* Banalytics.swift in Sources */,
 				E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */,
 				E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */,
 				E79C90C12684C37A00398E41 /* Api.swift in Sources */,
@@ -655,6 +670,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app;
 				PRODUCT_NAME = Sama;
 				PROVISIONING_PROFILE_SPECIFIER = sama_dev;
@@ -677,6 +693,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app;
 				PRODUCT_NAME = Sama;
 				PROVISIONING_PROFILE_SPECIFIER = sama_appstore;
@@ -820,6 +837,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

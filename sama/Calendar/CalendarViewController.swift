@@ -58,6 +58,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         navCenter.pushBlock(panel, animated: false)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Sama.bi.track(event: "home")
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if isFirstLoad {

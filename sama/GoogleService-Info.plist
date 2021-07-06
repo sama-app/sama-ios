@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>690866307711-f8hqss4gti5qa4qsrec2pekfj928fj7m.apps.googleusercontent.com</string>
+	<string>690866307711-n51dsutjicbr41drp9sfqel282o63kqd.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.690866307711-f8hqss4gti5qa4qsrec2pekfj928fj7m</string>
+	<string>com.googleusercontent.apps.690866307711-n51dsutjicbr41drp9sfqel282o63kqd</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCDSmqphq3SlhWxlCOR61Ew0IWUwANGoUg</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.yoursama.app</string>
+	<string>com.meetsama.app</string>
 	<key>PROJECT_ID</key>
 	<string>sama-app-1619869372715</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:690866307711:ios:8b3c69930ec694aadc354a</string>
+	<string>1:690866307711:ios:b3d12a55faaf7a71dc354a</string>
 </dict>
 </plist>

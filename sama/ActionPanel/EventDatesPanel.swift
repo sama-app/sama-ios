@@ -170,6 +170,8 @@ class EventDatesPanel: CalendarNavigationBlock {
         for props in events {
             let itemView = EventListItemView(props: props, isRemovable: isRemovable)
             itemView.handleRemove = { [weak self] in
+                Sama.bi.track(event: "deleteslot")
+
                 self?.coordinator.remove(props)
             }
             self.content.addArrangedSubview(itemView)
@@ -198,10 +200,14 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     @objc private func onAddNewSuggestion() {
+        Sama.bi.track(event: "addslot")
+
         coordinator.addClosestToCenter(withDuration: options.duration.duration)
     }
 
     @objc private func onCopySuggestions() {
+        Sama.bi.track(event: "copy")
+
         actionButton.isEnabled = false
         coordinator.proposeSlots { [weak self] in
             guard let self = self else { return }

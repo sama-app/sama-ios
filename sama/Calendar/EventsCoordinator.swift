@@ -378,7 +378,11 @@ class EventsCoordinator {
 
             var event = eventProperties[dragState.eventIndex]
             event.duration = totalMinsOffset.decimalValue
-            eventProperties[dragState.eventIndex] = event
+            let oldVal = eventProperties[dragState.eventIndex]
+            if oldVal != event {
+                Sama.bi.track(event: "range")
+                eventProperties[dragState.eventIndex] = event
+            }
 
             let evHeight = CGFloat(truncating: event.duration as NSNumber) * cellSize.height
             eventView.frame.size.height = evHeight
@@ -422,7 +426,12 @@ class EventsCoordinator {
             var event = eventProperties[idx]
             event.daysOffset = dragState.target.daysOffset
             event.start = dragState.target.start
-            eventProperties[idx] = event
+
+            let oldVal = eventProperties[idx]
+            if oldVal != event {
+                Sama.bi.track(event: "moveslot")
+                eventProperties[idx] = event
+            }
 
             UIView.animate(withDuration: 0.1) {
                 recognizer.view?.frame.origin = CGPoint(

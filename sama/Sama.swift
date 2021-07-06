@@ -24,6 +24,9 @@ class Sama {
 
     static let env = Environment()
 
+    /// Business insights
+    static let bi = Banalytics()
+
     private init() {}
 
     static func makeApi(with auth: AuthContainer) -> Api {

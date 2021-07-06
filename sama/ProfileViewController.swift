@@ -139,17 +139,22 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let item = sections[indexPath.section][indexPath.row]
         switch item {
         case .feedback:
+            Sama.bi.track(event: "feedback")
             emailCoordinator.compose(with: EmailProperties(toEmail: "hello@meetsama.com", subject: "Re: Sama app feedback"))
         case .support:
+            Sama.bi.track(event: "help")
             emailCoordinator.compose(with: EmailProperties(toEmail: "help@meetsama.com", subject: "Re: Sama app issue"))
         case .logout:
+            Sama.bi.track(event: "logout")
             AuthContainer.clear()
             dismiss(animated: true, completion: {
                 UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
             })
         case .privacy:
+            Sama.bi.track(event: "privacy")
             openBrowser(with: "https://meetsama.com/privacy")
         case .terms:
+            Sama.bi.track(event: "terms")
             openBrowser(with: "https://meetsama.com/terms")
         }
     }

@@ -93,12 +93,16 @@ class FindTimePanel: CalendarNavigationBlock {
     private func onAction(_ action: FindTimeAction) {
         switch action {
         case .pickDuration:
+            Sama.bi.track(event: "duration")
+
             let block = DurationPickerPanel()
             block.optionPickHandler = { [weak self] in
                 self?.durationOption = $0
             }
             navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
+            Sama.bi.track(event: "timezone")
+
             let block = TimeZonePickerPanel()
             block.optionPickHandler = { [weak self] in
                 self?.timezoneOption = $0
@@ -108,6 +112,8 @@ class FindTimePanel: CalendarNavigationBlock {
     }
 
     @objc private func onFindTimeButton() {
+        Sama.bi.track(event: "findtime")
+
         let block = EventDatesPanel()
         block.coordinator = coordinator
         block.options = EventSearchOptions(
