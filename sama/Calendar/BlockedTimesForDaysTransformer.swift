@@ -10,9 +10,8 @@ import Foundation
 struct BlockedTimesForDaysTransformer {
 
     let currentDayIndex: Int
-
-    private let refDate = Date()
-    private let calendar = Calendar.current
+    let refDate: Date
+    let calendar: Calendar
 
     private let apiDateF = ApiDateTimeFormatter()
 

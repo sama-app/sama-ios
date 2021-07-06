@@ -40,6 +40,7 @@
 		E7B50CA726949C7400BBEFD9 /* Banalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B50CA626949C7400BBEFD9 /* Banalytics.swift */; };
 		E7B50CAB2694A44B00BBEFD9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */; };
 		E7B8970C2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */; };
+		E7B8970E2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8970D2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift */; };
 		E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */; };
 		E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
@@ -112,6 +113,7 @@
 		E7B50CA626949C7400BBEFD9 /* Banalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banalytics.swift; sourceTree = "<group>"; };
 		E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTimesForDaysTransformer.swift; sourceTree = "<group>"; };
+		E7B8970D2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTimesForDaysTransformerTests.swift; sourceTree = "<group>"; };
 		E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposeCoordinator.swift; sourceTree = "<group>"; };
 		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* Sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -264,6 +266,7 @@
 			children = (
 				E7D3C0A326413342009CAB88 /* Info.plist */,
 				E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */,
+				E7B8970D2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift */,
 			);
 			path = samaTests;
 			sourceTree = "<group>";
@@ -497,6 +500,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7B8970E2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift in Sources */,
 				E7B470002694821200558BB9 /* SlotFinderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

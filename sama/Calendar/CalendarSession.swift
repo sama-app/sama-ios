@@ -44,7 +44,7 @@ final class CalendarSession: CalendarContextProvider {
     init(api: Api, currentDayIndex: Int) {
         self.api = api
         self.currentDayIndex = currentDayIndex
-        self.transformer = BlockedTimesForDaysTransformer(currentDayIndex: currentDayIndex)
+        self.transformer = BlockedTimesForDaysTransformer(currentDayIndex: currentDayIndex, refDate: refDate, calendar: calendar)
     }
 
     func loadInitial() {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct CalendarBlockedTime {
+struct CalendarBlockedTime: Equatable {
     let title: String
     let start: Decimal
     let duration: Decimal
