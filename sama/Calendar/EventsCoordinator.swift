@@ -395,7 +395,10 @@ class EventsCoordinator {
     @objc private func handleEventDrag(_ recognizer: UIGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
+            let eventView = recognizer.view as! EventView
+            guard let idx = eventViews.firstIndex(of: eventView) else { return }
+            eventView.superview!.bringSubviewToFront(eventView)
+
             feedback.impactOccurred()
 
             let props = eventProperties[idx]
