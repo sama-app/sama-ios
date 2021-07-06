@@ -200,7 +200,7 @@ private class FindTimeLabel: UILabel {
 private extension NSMutableAttributedString {
     static func make(withParts parts: [FindTimePart], activeAction action: FindTimeAction?) -> NSMutableAttributedString {
         let paragraph = NSMutableParagraphStyle()
-        paragraph.minimumLineHeight = 28
+        paragraph.minimumLineHeight = 36
 
         let actionFont = UIFont.brandedFont(ofSize: 20, weight: .semibold)
         let defaultAttrs: [NSAttributedString.Key: Any] = [

@@ -127,7 +127,7 @@ final class CalendarDayCell: UICollectionViewCell {
 
             let l1 = UILabel()
             l1.translatesAutoresizingMaskIntoConstraints = false
-            l1.font = .systemFont(ofSize: 17, weight: .bold)
+            l1.font = .systemFont(ofSize: 15, weight: .bold)
 //            l1.text = o.0
             l1.textAlignment = .center
             l1.layer.cornerRadius = 12
