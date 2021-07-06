@@ -96,45 +96,10 @@ final class CalendarNavigationCenter: UIView {
 
         guard let currentBlock = stack.last?.subviews.first else { return }
 
-        let toastView = UIView()
-        toastView.translatesAutoresizingMaskIntoConstraints = false
-        toastView.layer.cornerRadius = 24
-        toastView.layer.masksToBounds = true
-        toastView.backgroundColor = .neutral3
+        let toastView = ToastMessageView(message: message) { [weak self] in
+            self?.toastDismissJob?.perform()
+        }
         toastView.alpha = 0
-
-        let content = UIStackView()
-        content.translatesAutoresizingMaskIntoConstraints = false
-        content.axis = .horizontal
-
-        toastView.addSubview(content)
-
-        NSLayoutConstraint.activate([
-            content.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 20),
-            content.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 20),
-            toastView.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: 12),
-            toastView.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: 20)
-        ])
-
-        let label = UILabel()
-        label.textColor = .base
-        label.font = .brandedFont(ofSize: 20, weight: .regular)
-        label.text = message
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-
-        let removalButton = UIButton(type: .system)
-        removalButton.addTarget(self, action: #selector(onToastDismiss), for: .touchUpInside)
-        removalButton.translatesAutoresizingMaskIntoConstraints = false
-        removalButton.tintColor = .primary
-        removalButton.setImage(UIImage(named: "cross")!, for: .normal)
-        NSLayoutConstraint.activate([
-            removalButton.widthAnchor.constraint(equalToConstant: 44)
-        ])
-
-        content.addArrangedSubview(label)
-        content.addArrangedSubview(removalButton)
-
         addSubview(toastView)
 
         NSLayoutConstraint.activate([
@@ -161,10 +126,6 @@ final class CalendarNavigationCenter: UIView {
             })
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: toastDismissJob!)
-    }
-
-    @objc private func onToastDismiss() {
-        toastDismissJob?.perform()
     }
 
     override func layoutSubviews() {

@@ -35,6 +35,7 @@
 		E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C42684D58600398E41 /* AuthContainer.swift */; };
 		E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
 		E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
+		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C09226413340009CAB88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
@@ -100,6 +101,7 @@
 		E79C90C42684D58600398E41 /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
 		E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
 		E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiDateTimeFormatter.swift; sourceTree = "<group>"; };
+		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7D3C08C26413340009CAB88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */,
 				E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */,
 				E7480392269390A600573DE2 /* Calendar+Convenience.swift */,
+				E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -444,6 +447,7 @@
 				E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */,
 				E79C90C12684C37A00398E41 /* Api.swift in Sources */,
 				E79B09D82677A34A00ADD43D /* EventView.swift in Sources */,
+				E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */,
 				E7957949266F6457005B9F39 /* OnboardingViewController.swift in Sources */,
 				E79B09D62677A05300ADD43D /* EventDatesPanel.swift in Sources */,
 				E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */,
