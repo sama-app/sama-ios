@@ -60,6 +60,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             view.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
         ])
+        tableView.backgroundColor = .base
         tableView.separatorStyle = .none
         tableView.register(HighlightableSimpleCell.self, forCellReuseIdentifier: "cell")
 
