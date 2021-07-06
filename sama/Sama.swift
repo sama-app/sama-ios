@@ -8,9 +8,15 @@
 import Foundation
 
 struct Environment {
+    struct UI {
+        let calenarHeaderHeight: CGFloat = 48
+    }
+
     let productId = "meetsama"
 //    let baseUri = "https://app.meetsama.com/api"
     let baseUri = "https://app.meetsama.com.smtest.it/api"
+
+    let ui = UI()
 }
 
 class Sama {

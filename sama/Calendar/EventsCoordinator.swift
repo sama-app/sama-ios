@@ -169,7 +169,8 @@ class EventsCoordinator {
         let totalDaysOffset = Int(round(xCenter - (cellSize.width / 2)) / cellSize.width)
         let baseDaysOffset = totalDaysOffset - currentDayIndex
 
-        let yCenter = calendar.contentOffset.y + (calendar.bounds.height - calendar.contentInset.bottom - 48) / 2
+        let visibleCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
+        let yCenter = calendar.contentOffset.y + visibleCalendarHeight / 2
         let yOffset = yCenter - cellSize.height
         let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
             .multiplying(by: NSDecimalNumber(value: hourSplit))

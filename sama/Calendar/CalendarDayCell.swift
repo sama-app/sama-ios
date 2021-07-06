@@ -102,7 +102,7 @@ final class CalendarDayCell: UICollectionViewCell {
         guard !isHeaderSetUp else { return }
         isHeaderSetUp = true
 
-        let cellHeight: CGFloat = 48
+        let cellHeight = Sama.env.ui.calenarHeaderHeight
 
 //        let v: [(String, String)] = (0 ..< days).map {
 //            let date = calendar.date(byAdding: .day, value: $0, to: dt)!

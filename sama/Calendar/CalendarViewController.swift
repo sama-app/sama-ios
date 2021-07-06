@@ -75,10 +75,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let timelineWidth: CGFloat = 56
         cellSize = CGSize(width: (view.frame.width - timelineWidth) / 4, height: 65)
 
-        let contentVPadding: CGFloat = 48
+        let contentVPadding = Sama.env.ui.calenarHeaderHeight
         let contentHeight = cellSize.height * 24 + contentVPadding * 2
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
-        let calendarSize = CGSize(width: cellSize.width * 7, height: contentHeight)
         vOffset = contentVPadding
 
         let topBar = setupTopBar()
@@ -94,27 +93,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             view.bottomAnchor.constraint(equalTo: timelineScrollView.bottomAnchor)
         ])
 
-//        let scrollView = UIScrollView(frame: .zero)
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(scrollView)
-//        NSLayoutConstraint.activate([
-//            scrollView.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
-//            scrollView.topAnchor.constraint(equalTo: topBar.bottomAnchor),
-//            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-//            view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
-//        ])
-
         timeline = TimelineView(frame: CGRect(origin: .zero, size: timelineSize))
         timeline.cellSize = cellSize
         timeline.vOffset = contentVPadding
         timelineScrollView.contentSize = timelineSize
         timelineScrollView.addSubview(timeline)
-
-//        let view = UIView(frame: CGRect(origin: .zero, size: calendarSize))
-//        scrollView.addSubview(view)
-//        scrollView.contentSize = calendarSize
-//        scrollView.delegate = self
-//        scrollView.isDirectionalLockEnabled = true
 
         self.drawCalendar(topBar: topBar, cellSize: cellSize, vOffset: contentVPadding)
 
@@ -125,7 +108,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         view.addSubview(slotPickerContainer)
         NSLayoutConstraint.activate([
             slotPickerContainer.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
-            slotPickerContainer.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: 48),
+            slotPickerContainer.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: Sama.env.ui.calenarHeaderHeight),
             view.trailingAnchor.constraint(equalTo: slotPickerContainer.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: slotPickerContainer.bottomAnchor)
         ])

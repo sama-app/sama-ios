@@ -89,7 +89,7 @@ final class TimelineView: UIView {
         guard !isHeaderSetup else { return }
         isHeaderSetup = true
 
-        let cellHeight: CGFloat = 48
+        let cellHeight = Sama.env.ui.calenarHeaderHeight
         let v = UIView(frame: CGRect(x: 0, y: headerInset, width: bounds.width, height: cellHeight))
         v.backgroundColor = .base
 

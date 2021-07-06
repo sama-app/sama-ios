@@ -27,7 +27,7 @@ enum ProfileItem {
     }
 }
 
-class ProfileViewController: UITableViewController {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
     private let sections: [[ProfileItem]] = [
@@ -35,12 +35,29 @@ class ProfileViewController: UITableViewController {
         [.privacy, .terms, .delete, .logout]
     ]
 
+    private let tableView = UITableView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
+        setupTableView()
+        setupNavigationBar()
+    }
+
+    private func setupTableView() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            view.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+        ])
         tableView.separatorStyle = .none
         tableView.register(HighlightableSimpleCell.self, forCellReuseIdentifier: "cell")
 
@@ -49,7 +66,7 @@ class ProfileViewController: UITableViewController {
         illustration.translatesAutoresizingMaskIntoConstraints = false
         header.addSubview(illustration)
         NSLayoutConstraint.activate([
-            illustration.topAnchor.constraint(equalTo: header.topAnchor, constant: 40),
+            illustration.topAnchor.constraint(equalTo: header.topAnchor, constant: 54),
             illustration.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 24)
         ])
 
@@ -57,23 +74,48 @@ class ProfileViewController: UITableViewController {
         tableView.tableFooterView = UIView()
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    private func setupNavigationBar() {
+        let navigationBar = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(navigationBar)
+        NSLayoutConstraint.activate([
+            navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationBar.topAnchor.constraint(equalTo: view.topAnchor),
+            view.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+            navigationBar.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        let closeBtn = UIButton(type: .system)
+        navigationBar.contentView.addSubview(closeBtn)
+        closeBtn.addTarget(self, action: #selector(onClose), for: .touchUpInside)
+        closeBtn.translatesAutoresizingMaskIntoConstraints = false
+        closeBtn.tintColor = .primary
+        closeBtn.setImage(UIImage(named: "cross")!, for: .normal)
+        NSLayoutConstraint.activate([
+            closeBtn.widthAnchor.constraint(equalToConstant: 44),
+            closeBtn.heightAnchor.constraint(equalToConstant: 44),
+            navigationBar.contentView.trailingAnchor.constraint(equalTo: closeBtn.trailingAnchor, constant: 12),
+            closeBtn.centerYAnchor.constraint(equalTo: navigationBar.contentView.centerYAnchor)
+        ])
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections[section].count
     }
 
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
 
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return section == 0 ? 16 : 0
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = sections[indexPath.section][indexPath.row].text
         cell.textLabel?.textColor = .primary
@@ -84,11 +126,11 @@ class ProfileViewController: UITableViewController {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = sections[indexPath.section][indexPath.row]
         switch item {
         case .logout:
@@ -99,5 +141,9 @@ class ProfileViewController: UITableViewController {
         default:
             break
         }
+    }
+
+    @objc private func onClose() {
+        dismiss(animated: true, completion: nil)
     }
 }
