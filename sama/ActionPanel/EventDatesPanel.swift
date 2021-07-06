@@ -38,6 +38,7 @@ struct MeetingSuggestedSlot: Decodable {
 }
 
 struct MeetingInitiationResult: Decodable {
+    let meetingIntentId: Int
     let durationMinutes: Int
     let suggestedSlots: [MeetingSuggestedSlot]
 }
@@ -126,6 +127,8 @@ class EventDatesPanel: CalendarNavigationBlock {
         api.request(for: MeetingInitiationRequest(body: data)) {
             switch $0 {
             case let .success(result):
+                self.coordinator.intentId = result.meetingIntentId
+
                 let props = result.suggestedSlots.map { slot -> EventProperties in
                     let parsedStart = self.apiDateF.date(from: slot.startDateTime)
                     let startDate = self.calendar.toTimeZone(date: parsedStart)
@@ -203,6 +206,18 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     @objc private func onCopySuggestions() {
-        navigation?.showToast(withMessage: "Copied suggested meeting slots to your clipboard.")
+        actionButton.isEnabled = false
+        coordinator.proposeSlots { [weak self] in
+            guard let self = self else { return }
+            self.actionButton.isEnabled = true
+
+            switch $0 {
+            case let .success(result):
+                UIPasteboard.general.string = result.shareableMessage
+                self.navigation?.showToast(withMessage: "Copied suggested meeting slots to your clipboard.")
+            case .failure:
+                break
+            }
+        }
     }
 }

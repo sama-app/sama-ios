@@ -23,7 +23,12 @@ class MainActionButton: UIButton {
 
     override var isHighlighted: Bool {
         didSet {
-            backgroundLayer?.opacity = isHighlighted ? 0.4 : 1
+            changeBgOpacity()
+        }
+    }
+    override var isEnabled: Bool {
+        didSet {
+            changeBgOpacity()
         }
     }
 
@@ -57,5 +62,9 @@ class MainActionButton: UIButton {
         layer.insertSublayer(background, at: 1)
 
         backgroundLayer = background
+    }
+
+    private func changeBgOpacity() {
+        backgroundLayer?.opacity = (isHighlighted || !isEnabled) ? 0.4 : 1
     }
 }

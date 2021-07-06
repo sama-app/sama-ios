@@ -35,6 +35,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         self.setupViews()
         eventsCoordinator = EventsCoordinator(
+            api: session.api,
             currentDayIndex: session.currentDayIndex,
             context: session,
             cellSize: cellSize,

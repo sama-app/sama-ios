@@ -7,9 +7,33 @@
 
 import UIKit
 
+struct ProposedSlot: Encodable {
+    let startDateTime: String
+    let endDateTime: String
+}
+
+struct MeetingProposalBody: Encodable {
+    let proposedSlots: [ProposedSlot]
+}
+
+struct MeetingProposalResult: Decodable {
+    let shareableMessage: String
+}
+
+struct MeetingProposalRequest: ApiRequest {
+    typealias U = MeetingProposalResult
+    let intentId: Int
+    var uri: String { "/meeting/\(intentId)/propose" }
+    let method: HttpMethod = .post
+    let body: MeetingProposalBody
+}
+
 class EventsCoordinator {
 
     var onChanges: (() -> Void)?
+    var api: Api
+
+    var intentId = 0
 
     private(set) var eventProperties: [EventProperties] = [] {
         didSet {
@@ -37,7 +61,8 @@ class EventsCoordinator {
         }
     }
 
-    init(currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
+    init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
+        self.api = api
         self.currentDayIndex = currentDayIndex
         self.context = context
         self.cellSize = cellSize
@@ -85,6 +110,34 @@ class EventsCoordinator {
         }
         eventViews = []
         eventProperties = []
+    }
+
+    func proposeSlots(with completion: @escaping (Result<MeetingProposalResult, ApiError>) -> Void) {
+        let calendar = Calendar.current
+        let refDate = calendar.startOfDay(for: Date())
+        let formatter = ApiDateTimeFormatter.formatter
+
+        let slots: [ProposedSlot] = eventProperties.map { ev in
+            var comps = DateComponents()
+            comps.day = ev.daysOffset
+            comps.second = NSDecimalNumber(decimal: ev.start).multiplying(by: NSDecimalNumber(value: 3600)).intValue
+
+            let startDate = calendar.date(byAdding: comps, to: refDate)!
+
+            let durationInSecs = NSDecimalNumber(decimal: ev.duration).multiplying(by: NSDecimalNumber(value: 3600)).intValue
+            let endDate = calendar.date(byAdding: .second, value: durationInSecs, to: startDate)!
+
+            return ProposedSlot(
+                startDateTime: formatter.string(from: startDate),
+                endDateTime: formatter.string(from: endDate)
+            )
+        }
+
+        let req = MeetingProposalRequest(
+            intentId: intentId,
+            body: MeetingProposalBody(proposedSlots: slots)
+        )
+        api.request(for: req, completion: completion)
     }
 
     func isSlotPossible(dayIndex: Int, start: Decimal, duration: Decimal) -> Bool {
