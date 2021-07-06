@@ -36,6 +36,7 @@
 		E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
 		E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
 		E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */; };
+		E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
@@ -103,6 +104,7 @@
 		E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
 		E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiDateTimeFormatter.swift; sourceTree = "<group>"; };
 		E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundShadowView.swift; sourceTree = "<group>"; };
+		E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposeCoordinator.swift; sourceTree = "<group>"; };
 		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				E7480392269390A600573DE2 /* Calendar+Convenience.swift */,
 				E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */,
 				E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */,
+				E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -443,6 +446,7 @@
 				E7F8DD83264EB61D00CD3759 /* CalendarDayCell.swift in Sources */,
 				E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */,
 				E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */,
+				E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
 				E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */,
 				E79C90C32684C7A100398E41 /* Sama.swift in Sources */,

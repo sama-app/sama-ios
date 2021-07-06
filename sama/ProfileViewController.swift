@@ -36,12 +36,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     ]
 
     private let tableView = UITableView()
+    private var emailCoordinator: EmailComposeCoordinator!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
+
+        emailCoordinator = EmailComposeCoordinator(presenter: self)
 
         setupTableView()
         setupNavigationBar()
@@ -131,8 +134,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         let item = sections[indexPath.section][indexPath.row]
         switch item {
+        case .feedback:
+            emailCoordinator.compose(with: EmailProperties(toEmail: "hello@meetsama.com", subject: "Re: Sama app feedback"))
+        case .support:
+            emailCoordinator.compose(with: EmailProperties(toEmail: "help@meetsama.com", subject: "Re: Sama app issue"))
         case .logout:
             AuthContainer.clear()
             dismiss(animated: true, completion: {
