@@ -14,4 +14,10 @@ extension DateFormatter {
         f.dateFormat = format
         return f
     }
+    static func withLocalized(format: String, locale: Locale = Locale(identifier: "en-GB")) -> DateFormatter {
+        let f = DateFormatter()
+        f.locale = locale
+        f.setLocalizedDateFormatFromTemplate(format)
+        return f
+    }
 }
