@@ -36,6 +36,8 @@
 		E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
 		E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
 		E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */; };
+		E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFD2694708D00558BB9 /* SlotFinder.swift */; };
+		E7B470002694821200558BB9 /* SlotFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */; };
 		E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
@@ -43,7 +45,6 @@
 		E7D3C09226413340009CAB88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
 		E7D3C09426413342009CAB88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09326413342009CAB88 /* Assets.xcassets */; };
 		E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */; };
-		E7D3C0A226413342009CAB88 /* samaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0A126413342009CAB88 /* samaTests.swift */; };
 		E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0AC26413342009CAB88 /* samaUITests.swift */; };
 		E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
 		E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
@@ -104,6 +105,8 @@
 		E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
 		E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiDateTimeFormatter.swift; sourceTree = "<group>"; };
 		E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundShadowView.swift; sourceTree = "<group>"; };
+		E7B46FFD2694708D00558BB9 /* SlotFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinder.swift; sourceTree = "<group>"; };
+		E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinderTests.swift; sourceTree = "<group>"; };
 		E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposeCoordinator.swift; sourceTree = "<group>"; };
 		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,7 +117,6 @@
 		E7D3C09626413342009CAB88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E7D3C09826413342009CAB88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7D3C09D26413342009CAB88 /* samaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = samaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E7D3C0A126413342009CAB88 /* samaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = samaTests.swift; sourceTree = "<group>"; };
 		E7D3C0A326413342009CAB88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7D3C0A826413342009CAB88 /* samaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = samaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C0AC26413342009CAB88 /* samaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = samaUITests.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				E79B09D72677A34A00ADD43D /* EventView.swift */,
 				E7036FD1267D083D00EFFE4E /* ScrollLock.swift */,
 				E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */,
+				E7B46FFD2694708D00558BB9 /* SlotFinder.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -243,8 +246,8 @@
 		E7D3C0A026413342009CAB88 /* samaTests */ = {
 			isa = PBXGroup;
 			children = (
-				E7D3C0A126413342009CAB88 /* samaTests.swift */,
 				E7D3C0A326413342009CAB88 /* Info.plist */,
+				E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */,
 			);
 			path = samaTests;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */,
 				E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */,
 				E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */,
+				E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */,
@@ -474,7 +478,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7D3C0A226413342009CAB88 /* samaTests.swift in Sources */,
+				E7B470002694821200558BB9 /* SlotFinderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

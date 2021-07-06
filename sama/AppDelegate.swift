@@ -12,6 +12,10 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else {
+            return true
+        }
+
         FirebaseApp.configure()
         Messaging.messaging().isAutoInitEnabled = false
         Messaging.messaging().delegate = self

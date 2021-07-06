@@ -61,6 +61,8 @@ class EventsCoordinator {
         }
     }
 
+    private let finder = SlotFinder()
+
     init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
         self.api = api
         self.currentDayIndex = currentDayIndex
@@ -140,34 +142,9 @@ class EventsCoordinator {
         api.request(for: req, completion: completion)
     }
 
-    func isSlotPossible(dayIndex: Int, start: Decimal, duration: Decimal) -> Bool {
-        let end = start + duration
-
-        for props in (eventProperties.filter { $0.daysOffset == dayIndex}) {
-            if start >= props.start && start < (props.start + props.duration) {
-                return false
-            }
-            if end > props.start && end <= (props.start + props.duration) {
-                return false
-            }
-        }
-
-        for block in (context.blocksForDayIndex[currentDayIndex + dayIndex] ?? []) {
-            if start >= block.start && start < (block.start + block.duration) {
-                return false
-            }
-            if end > block.start && end <= (block.start + block.duration) {
-                return false
-            }
-        }
-
-        return true
-    }
-
-    func addClosestToCenter() {
+    func addClosestToCenter(withDuration durationMins: Int) {
         let xCenter = calendar.contentOffset.x + (calendar.frame.width) / 2
         let totalDaysOffset = Int(round(xCenter - (cellSize.width / 2)) / cellSize.width)
-        let baseDaysOffset = totalDaysOffset - currentDayIndex
 
         let visibleCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
         let yCenter = calendar.contentOffset.y + visibleCalendarHeight / 2
@@ -178,33 +155,19 @@ class EventsCoordinator {
             .rounding(accordingToBehavior: nil)
             .dividing(by: NSDecimalNumber(value: hourSplit))
 
-        let duration = eventProperties.first!.duration
+        let duration = NSDecimalNumber(value: durationMins).dividing(by: NSDecimalNumber(value: 60)).decimalValue
         let maxMinsOffset = NSDecimalNumber(value: 24).subtracting(NSDecimalNumber(decimal: duration)).decimalValue
 
-        let baseStart = max(0, min(maxMinsOffset, totalMinsOffset.decimalValue))
-
-        var possibleSlots: [(Int, Decimal)] = []
-        for i in (baseDaysOffset - 1 ..< baseDaysOffset + 3) {
-            // exact and down
-            var start = baseStart
-            while start < maxMinsOffset {
-                if isSlotPossible(dayIndex: i, start: start, duration: duration) {
-                    possibleSlots.append((i, start))
-                    break
-                }
-                start += 0.25
-            }
-
-            // exact and up
-            start = baseStart
-            while start > 0 {
-                if isSlotPossible(dayIndex: i, start: start, duration: duration) {
-                    possibleSlots.append((i, start))
-                    break
-                }
-                start -= 0.25
-            }
-        }
+        let possibleSlots = finder.getPossibleSlots(
+            with: SlotFinder.Context(
+                eventProperties: eventProperties,
+                blocksForDayIndex: context.blocksForDayIndex,
+                totalDaysOffset: totalDaysOffset,
+                currentDayIndex: currentDayIndex,
+                baseStart: max(0, min(maxMinsOffset, totalMinsOffset.decimalValue)),
+                duration: duration
+            )
+        )
 
         guard !possibleSlots.isEmpty else { return }
 
@@ -212,8 +175,8 @@ class EventsCoordinator {
         var minD: CGFloat = 10000
         for (i, slot) in possibleSlots.enumerated() {
             let rect = CGRect(
-                x: xForDaysOffset(slot.0) + calendar.contentOffset.x,
-                y: yForTimestampInDay(slot.1) + calendar.contentOffset.y,
+                x: xForDaysOffset(slot.daysOffset) + calendar.contentOffset.x,
+                y: yForTimestampInDay(slot.start) + calendar.contentOffset.y,
                 width: cellSize.width,
                 height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
@@ -228,9 +191,9 @@ class EventsCoordinator {
 
         eventViews.append(makeEventView())
         eventProperties.append(EventProperties(
-            start: possibleSlots[idx].1,
+            start: possibleSlots[idx].start,
             duration: duration,
-            daysOffset: possibleSlots[idx].0,
+            daysOffset: possibleSlots[idx].daysOffset,
             timezoneOffset: eventProperties.first!.timezoneOffset
         ))
 

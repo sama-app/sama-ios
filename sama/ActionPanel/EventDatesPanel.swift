@@ -202,7 +202,7 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     @objc private func onAddNewSuggestion() {
-        coordinator.addClosestToCenter()
+        coordinator.addClosestToCenter(withDuration: options.duration.duration)
     }
 
     @objc private func onCopySuggestions() {
