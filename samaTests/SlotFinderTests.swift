@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import sama
+@testable import Sama
 
 class SlotFinderTests: XCTestCase {
 
