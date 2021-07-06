@@ -16,9 +16,16 @@ class ToastMessageView: UIView {
         super.init(frame: .zero)
 
         translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 24
-        layer.masksToBounds = true
-        backgroundColor = .neutral3
+
+        let shadow = BackgroundShadowView(frame: .zero)
+        shadow.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(shadow)
+        NSLayoutConstraint.activate([
+            shadow.leadingAnchor.constraint(equalTo: leadingAnchor),
+            shadow.topAnchor.constraint(equalTo: topAnchor),
+            trailingAnchor.constraint(equalTo: shadow.trailingAnchor),
+            bottomAnchor.constraint(equalTo: shadow.bottomAnchor)
+        ])
 
         let content = UIStackView()
         content.translatesAutoresizingMaskIntoConstraints = false
