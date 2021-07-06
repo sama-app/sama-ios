@@ -6,13 +6,13 @@
 //
 
 import UIKit
+import SafariServices
 
 enum ProfileItem {
     case feedback
     case support
     case privacy
     case terms
-    case delete
     case logout
 
     var text: String {
@@ -21,7 +21,6 @@ enum ProfileItem {
         case .support: return "Support"
         case .privacy: return "Privacy"
         case .terms: return "Terms"
-        case .delete: return "Delete Account"
         case .logout: return "Logout"
         }
     }
@@ -32,7 +31,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
     private let sections: [[ProfileItem]] = [
         [.feedback, .support],
-        [.privacy, .terms, .delete, .logout]
+        [.privacy, .terms, .logout]
     ]
 
     private let tableView = UITableView()
@@ -147,9 +146,16 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             dismiss(animated: true, completion: {
                 UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
             })
-        default:
-            break
+        case .privacy:
+            openBrowser(with: "https://meetsama.com/privacy")
+        case .terms:
+            openBrowser(with: "https://meetsama.com/terms")
         }
+    }
+
+    private func openBrowser(with url: String) {
+        let controller = SFSafariViewController(url: URL(string: url)!)
+        present(controller, animated: true, completion: nil)
     }
 
     @objc private func onClose() {
