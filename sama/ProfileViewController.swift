@@ -13,6 +13,7 @@ enum ProfileItem {
     case support
     case privacy
     case terms
+    case acknowledgements
     case logout
 
     var text: String {
@@ -21,6 +22,7 @@ enum ProfileItem {
         case .support: return "Support"
         case .privacy: return "Privacy"
         case .terms: return "Terms"
+        case .acknowledgements: return "Acknowledgements"
         case .logout: return "Logout"
         }
     }
@@ -31,7 +33,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
     private let sections: [[ProfileItem]] = [
         [.feedback, .support],
-        [.privacy, .terms, .logout]
+        [.privacy, .terms, .acknowledgements, .logout]
     ]
 
     private let tableView = UITableView()
@@ -156,6 +158,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         case .terms:
             Sama.bi.track(event: "terms")
             openBrowser(with: "https://meetsama.com/terms")
+        case .acknowledgements:
+            let controller = AcknowledgementsViewController()
+            present(controller, animated: true, completion: nil)
         }
     }
 

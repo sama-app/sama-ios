@@ -18,6 +18,8 @@
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
+		E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */; };
+		E763A6DB2697383B00082BCE /* firebase in Resources */ = {isa = PBXBuildFile; fileRef = E763A6DA2697383B00082BCE /* firebase */; };
 		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
 		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
 		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
@@ -91,6 +93,8 @@
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
 		E7480392269390A600573DE2 /* Calendar+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Convenience.swift"; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
+		E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsViewController.swift; sourceTree = "<group>"; };
+		E763A6DA2697383B00082BCE /* firebase */ = {isa = PBXFileReference; lastKnownFileType = text; path = firebase; sourceTree = "<group>"; };
 		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
 		E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTokenSync.swift; sourceTree = "<group>"; };
 		E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCoordinator.swift; sourceTree = "<group>"; };
@@ -167,6 +171,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E763A6D8269737F900082BCE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E763A6D92697380600082BCE /* Licenses */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E763A6D92697380600082BCE /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				E763A6DA2697383B00082BCE /* firebase */,
+			);
+			path = Licenses;
+			sourceTree = "<group>";
+		};
 		E795793D266F5F40005B9F39 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,6 +245,7 @@
 		E7D3C08926413340009CAB88 /* sama */ = {
 			isa = PBXGroup;
 			children = (
+				E763A6D8269737F900082BCE /* Resources */,
 				E79C90BF2684C37200398E41 /* Api */,
 				E7F5AD162670A56D00138E42 /* ActionPanel */,
 				E795793D266F5F40005B9F39 /* Calendar */,
@@ -257,6 +278,7 @@
 				E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */,
 				E7B50CA626949C7400BBEFD9 /* Banalytics.swift */,
 				E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */,
+				E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -424,6 +446,7 @@
 				E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */,
 				E7F5AD0D266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf in Resources */,
 				E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */,
+				E763A6DB2697383B00082BCE /* firebase in Resources */,
 				E7D3C09426413342009CAB88 /* Assets.xcassets in Resources */,
 				E7D3C09226413340009CAB88 /* Main.storyboard in Resources */,
 				E7B50CAB2694A44B00BBEFD9 /* GoogleService-Info.plist in Resources */,
@@ -459,6 +482,7 @@
 				E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
+				E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */,
 				E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */,
 				E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */,
 				E7F5AD15266FBFD900138E42 /* CalendarNavigationCenter.swift in Sources */,
