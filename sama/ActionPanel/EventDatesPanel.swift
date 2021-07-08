@@ -215,7 +215,7 @@ class EventDatesPanel: CalendarNavigationBlock {
             switch $0 {
             case let .success(result):
                 UIPasteboard.general.string = result.shareableMessage
-                self.navigation?.showToast(withMessage: "Copied suggested meeting slots to your clipboard.")
+                self.navigation?.showToast(withMessage: "Copied to clipboard.")
             case .failure:
                 break
             }

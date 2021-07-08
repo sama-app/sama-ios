@@ -142,10 +142,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch item {
         case .feedback:
             Sama.bi.track(event: "feedback")
-            emailCoordinator.compose(with: EmailProperties(toEmail: "hello@meetsama.com", subject: "Re: Sama app feedback"))
+            emailCoordinator.compose(with: EmailProperties(toEmail: "hello@meetsama.com", subject: "Sama app feedback"))
         case .support:
             Sama.bi.track(event: "help")
-            emailCoordinator.compose(with: EmailProperties(toEmail: "help@meetsama.com", subject: "Re: Sama app issue"))
+            emailCoordinator.compose(with: EmailProperties(toEmail: "help@meetsama.com", subject: "Sama app issue"))
         case .logout:
             Sama.bi.track(event: "logout")
             AuthContainer.clear()
