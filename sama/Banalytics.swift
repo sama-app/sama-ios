@@ -14,6 +14,6 @@ struct Banalytics {
         print("[Sama BI] \(event)")
         #endif
 
-        Analytics.logEvent(event, parameters: nil, parameters: parameters)
+        Analytics.logEvent(event, parameters: parameters)
     }
 }
