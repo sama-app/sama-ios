@@ -9,11 +9,11 @@ import Foundation
 import FirebaseAnalytics
 
 struct Banalytics {
-    func track(event: String) {
+    func track(event: String, parameters: [String: Any] = [:]) {
         #if DEBUG
         print("[Sama BI] \(event)")
         #endif
 
-        Analytics.logEvent(event, parameters: nil)
+        Analytics.logEvent(event, parameters: nil, parameters: parameters)
     }
 }

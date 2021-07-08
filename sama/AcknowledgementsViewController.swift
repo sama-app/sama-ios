@@ -40,11 +40,6 @@ class AcknowledgementsViewController: UIViewController {
         loadContent()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        Sama.bi.track(event: "acknowledgements")
-    }
-
     private func setupNavigationBar() {
         let navigationBar = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         navigationBar.translatesAutoresizingMaskIntoConstraints = false

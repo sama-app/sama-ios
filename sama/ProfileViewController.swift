@@ -159,6 +159,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             Sama.bi.track(event: "terms")
             openBrowser(with: "https://meetsama.com/terms")
         case .acknowledgements:
+            Sama.bi.track(event: "acknowledgements")
             let controller = AcknowledgementsViewController()
             present(controller, animated: true, completion: nil)
         }
