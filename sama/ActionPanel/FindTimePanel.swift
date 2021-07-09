@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseCrashlytics
 
 enum FindTimeAction: Equatable {
     case pickDuration

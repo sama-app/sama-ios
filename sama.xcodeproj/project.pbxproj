@@ -14,6 +14,7 @@
 		E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665C2674F02C00C88EA1 /* MainActionButton.swift */; };
 		E70A665F267536A400C88EA1 /* HighlightableSimpleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */; };
 		E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */; };
+		E71755102698AAEE003B5A32 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = E717550F2698AAEE003B5A32 /* FirebaseCrashlytics */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
@@ -149,6 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E71755102698AAEE003B5A32 /* FirebaseCrashlytics in Frameworks */,
 				E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */,
 				E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
@@ -343,6 +345,7 @@
 				E7D3C08326413340009CAB88 /* Sources */,
 				E7D3C08426413340009CAB88 /* Frameworks */,
 				E7D3C08526413340009CAB88 /* Resources */,
+				E71755082698A38E003B5A32 /* Crashlytics dSYM */,
 			);
 			buildRules = (
 			);
@@ -352,6 +355,7 @@
 			packageProductDependencies = (
 				E76E85E1264D195200FAC1DF /* FirebaseMessaging */,
 				E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				E717550F2698AAEE003B5A32 /* FirebaseCrashlytics */,
 			);
 			productName = sama;
 			productReference = E7D3C08726413340009CAB88 /* Sama.app */;
@@ -468,6 +472,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E71755082698A38E003B5A32 /* Crashlytics dSYM */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Crashlytics dSYM";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E7D3C08326413340009CAB88 /* Sources */ = {
@@ -865,6 +892,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E717550F2698AAEE003B5A32 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
 		E76E85E1264D195200FAC1DF /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
