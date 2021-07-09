@@ -18,7 +18,7 @@ enum ProfileItem {
 
     var text: String {
         switch self {
-        case .feedback: return "Give us Feedback"
+        case .feedback: return "Give us feedback"
         case .support: return "Support"
         case .privacy: return "Privacy"
         case .terms: return "Terms"
