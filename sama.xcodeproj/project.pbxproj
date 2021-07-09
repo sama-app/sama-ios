@@ -703,9 +703,9 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app.dev;
 				PRODUCT_NAME = Sama;
-				PROVISIONING_PROFILE_SPECIFIER = sama_dev;
+				PROVISIONING_PROFILE_SPECIFIER = sama_dev_dev;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -726,9 +726,9 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app.dev;
 				PRODUCT_NAME = Sama;
-				PROVISIONING_PROFILE_SPECIFIER = sama_appstore;
+				PROVISIONING_PROFILE_SPECIFIER = sama_dev_appstore;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
