@@ -18,9 +18,6 @@ class MainActionButton: UIButton {
         return btn
     }
 
-    private var isReady = false
-    private var backgroundLayer: CALayer?
-
     override var isHighlighted: Bool {
         didSet {
             changeBgOpacity()
@@ -32,39 +29,41 @@ class MainActionButton: UIButton {
         }
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if !isReady {
-            isReady = true
-            setupLayers()
-        }
+    private let shadow = CALayer()
+    private let background = CAGradientLayer()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.insertSublayer(shadow, at: 0)
+        layer.insertSublayer(background, at: 1)
     }
 
-    private func setupLayers() {
-        let middle = CGPoint(x: bounds.midX, y: bounds.midY)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-        let shadow = CALayer()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        redrawLayers()
+    }
+
+    private func redrawLayers() {
         shadow.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 8).cgPath
         shadow.shadowColor = UIColor(red: 0.467, green: 0.134, blue: 0.056, alpha: 0.15).cgColor
         shadow.shadowOpacity = 1
         shadow.shadowRadius = 12
         shadow.shadowOffset = CGSize(width: 0, height: 4)
         shadow.bounds = bounds
-        shadow.position = middle
-        layer.insertSublayer(shadow, at: 0)
+        shadow.anchorPoint = .zero
 
-        let background = CAGradientLayer()
         background.colors = [UIColor.primary.cgColor, UIColor.primaryDarker.cgColor]
         background.bounds = bounds
-        background.position = middle
+        background.anchorPoint = .zero
         background.cornerRadius = 8
         background.masksToBounds = true
-        layer.insertSublayer(background, at: 1)
-
-        backgroundLayer = background
     }
 
     private func changeBgOpacity() {
-        backgroundLayer?.opacity = (isHighlighted || !isEnabled) ? 0.4 : 1
+        background.opacity = (isHighlighted || !isEnabled) ? 0.4 : 1
     }
 }

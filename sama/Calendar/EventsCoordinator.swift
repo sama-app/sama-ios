@@ -212,7 +212,7 @@ class EventsCoordinator {
 
         let handleRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDurationDrag(_:)))
         handleRecognizer.minimumPressDuration = 0.01
-        eventView.handle.addGestureRecognizer(handleRecognizer)
+        eventView.handleView.addGestureRecognizer(handleRecognizer)
 
         self.container.addSubview(eventView)
         return eventView

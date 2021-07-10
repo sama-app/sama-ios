@@ -11,14 +11,14 @@ let eventHandleExtraSpace: CGFloat = 4
 
 class EventView: UIView {
 
-    let handle = UIView()
-
-    private var isReady = false
-    private var backgroundLayer: CALayer?
+    let handleView = UIView()
 
     private let dotsView = UIView()
     private let shadow = CALayer()
     private let background = CAGradientLayer()
+
+    private let handle = CALayer()
+    private let handleMiddle = CALayer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,8 +26,13 @@ class EventView: UIView {
         dotsView.backgroundColor = UIColor(patternImage: UIImage(named: "event-bg-dot")!)
         addSubview(dotsView)
 
-        handle.frame.size = CGSize(width: 0, height: eventHandleExtraSpace * 2 + eventRightBottomInset.y * 2)
-        addSubview(handle)
+        handleView.frame.size = CGSize(width: 0, height: eventHandleExtraSpace * 2 + eventRightBottomInset.y * 2)
+        addSubview(handleView)
+
+        layer.insertSublayer(shadow, at: 0)
+        layer.insertSublayer(background, at: 1)
+        self.handleView.layer.addSublayer(handle)
+        self.handleView.layer.addSublayer(handleMiddle)
     }
 
     required init?(coder: NSCoder) {
@@ -43,12 +48,9 @@ class EventView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        handle.frame.origin.y = frame.height - handle.frame.height
-        handle.frame.size.width = innerFrameSize.width
-        if !isReady {
-            isReady = true
-            setupLayers()
-        }
+        handleView.frame.origin.y = frame.height - handleView.frame.height
+        handleView.frame.size.width = innerFrameSize.width
+        redrawLayers()
         reframeDotsView()
 
         let innerFrame = CGRect(origin: .zero, size: innerFrameSize)
@@ -69,14 +71,12 @@ class EventView: UIView {
         dotsView.isHidden = (innerFrameSize.height < 28)
     }
 
-    private func setupLayers() {
+    private func redrawLayers() {
         shadow.shadowColor = UIColor(red: 0.467, green: 0.134, blue: 0.056, alpha: 0.15).cgColor
         shadow.shadowOpacity = 1
         shadow.shadowRadius = 12
         shadow.shadowOffset = CGSize(width: 0, height: 4)
         shadow.anchorPoint = .zero
-        layer.insertSublayer(shadow, at: 0)
-
 
         background.colors = [UIColor.primary.cgColor, UIColor.primaryDarker.cgColor]
         background.anchorPoint = .zero
@@ -84,22 +84,16 @@ class EventView: UIView {
         background.masksToBounds = true
         layer.insertSublayer(background, at: 1)
 
-        backgroundLayer = background
-
-        let handle = CALayer()
         handle.backgroundColor = UIColor.primary.cgColor
         handle.bounds = CGRect(x: 0, y: 0, width: 36, height: 8)
         handle.cornerRadius = 4
-        handle.position = CGPoint(x: self.handle.bounds.midX, y: self.handle.bounds.midY)
+        handle.position = CGPoint(x: handleView.bounds.midX, y: handleView.bounds.midY)
         handle.masksToBounds = true
-        self.handle.layer.addSublayer(handle)
 
-        let handleMiddle = CALayer()
         handleMiddle.backgroundColor = UIColor.base.cgColor
         handleMiddle.bounds = CGRect(x: 0, y: 0, width: 32, height: 4)
         handleMiddle.cornerRadius = 2
-        handleMiddle.position = CGPoint(x: self.handle.bounds.midX, y: self.handle.bounds.midY)
+        handleMiddle.position = CGPoint(x: handleView.bounds.midX, y: handleView.bounds.midY)
         handleMiddle.masksToBounds = true
-        self.handle.layer.addSublayer(handleMiddle)
     }
 }

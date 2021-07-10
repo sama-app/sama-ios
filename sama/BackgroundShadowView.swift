@@ -29,7 +29,6 @@ class BackgroundShadowView: UIView {
 
     private func redrawLayers() {
         background.backgroundColor = UIColor.neutral3.cgColor
-        background.anchorPoint = .zero
         background.cornerRadius = 24
         background.masksToBounds = true
         background.bounds = bounds
