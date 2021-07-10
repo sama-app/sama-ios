@@ -154,10 +154,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             })
         case .privacy:
             Sama.bi.track(event: "privacy")
-            openBrowser(with: "https://meetsama.com/privacy")
+            openBrowser(with: "https://www.meetsama.com/privacy")
         case .terms:
             Sama.bi.track(event: "terms")
-            openBrowser(with: "https://meetsama.com/terms")
+            openBrowser(with: "https://www.meetsama.com/terms")
         case .acknowledgements:
             Sama.bi.track(event: "acknowledgements")
             let controller = AcknowledgementsViewController()
