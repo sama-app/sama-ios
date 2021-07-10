@@ -38,4 +38,8 @@ class Sama {
             auth: auth
         )
     }
+
+    static func makeUnauthApi() -> Api {
+        return Api(baseUri: Sama.env.baseUri, defaultHeaders: [:], auth: nil)
+    }
 }

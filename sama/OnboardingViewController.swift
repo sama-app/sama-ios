@@ -7,6 +7,15 @@
 
 import UIKit
 import AuthenticationServices
+import FirebaseCrashlytics
+
+struct GoogleAuthRequest: ApiRequest {
+    typealias T = EmptyBody
+    typealias U = AuthDirections
+    let uri = "/auth/google-authorize"
+    let logKey = "/auth/google-authorize"
+    let method = HttpMethod.post
+}
 
 class OnboardingViewController: UIViewController, ASWebAuthenticationPresentationContextProviding {
 
@@ -14,6 +23,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
 
     private var currentBlock: UIView?
     private var currentBlockLeadingConstraint: NSLayoutConstraint?
+
+    private let api = Sama.makeUnauthApi()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,16 +170,14 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     @objc private func onConnectCalendar() {
         Sama.bi.track(event: "connectcal")
 
-        var req = URLRequest(url: URL(string: "\(Sama.env.baseUri)/auth/google-authorize")!)
-        req.httpMethod = "post"
-        URLSession.shared.dataTask(with: req) { (data, resp, err) in
-            if let data = data, let directions = try? JSONDecoder().decode(AuthDirections.self, from: data) {
-                DispatchQueue.main.async {
-                    print(directions)
-                    self.authenticate(with: directions.authorizationUrl)
-                }
+        api.request(for: GoogleAuthRequest()) {
+            switch $0 {
+            case let .success(directions):
+                self.authenticate(with: directions.authorizationUrl)
+            case .failure:
+                self.presentError()
             }
-        }.resume()
+        }
     }
 
     private func authenticate(with url: String) {
@@ -176,12 +185,17 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             guard
                 let url = callbackUrl,
                 url.scheme == Sama.env.productId,
-                url.host == "auth",
+                url.host == "authu",
                 url.path == "/success",
                 let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
                 let accessToken = queryItems.first(where: { $0.name == "accessToken" })?.value,
                 let refreshToken = queryItems.first(where: { $0.name == "refreshToken" })?.value
-            else { return }
+            else {
+                let errOut = err ?? NSError(domain: "com.meetsama.app.auth", code: 1000, userInfo: [:])
+                Crashlytics.crashlytics().record(error: errOut)
+                self.presentError()
+                return
+            }
 
             let token = AuthToken(accessToken: accessToken, refreshToken: refreshToken)
             let auth = AuthContainer.makeAndStore(with: token)
@@ -195,5 +209,11 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
 
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return view.window!
+    }
+
+    private func presentError() {
+        let alert = UIAlertController(title: nil, message: "Unexpected error occurred", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }

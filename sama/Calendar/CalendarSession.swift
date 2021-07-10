@@ -11,6 +11,7 @@ struct CalendarBlocksRequest: ApiRequest {
     typealias T = EmptyBody
     typealias U = CalendarBlocks
     let uri = "/calendar/blocks"
+    let logKey = "calendar/blocks"
     let method: HttpMethod = .get
     let query: [URLQueryItem]
 }

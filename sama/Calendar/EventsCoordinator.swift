@@ -24,6 +24,7 @@ struct MeetingProposalRequest: ApiRequest {
     typealias U = MeetingProposalResult
     let intentId: Int
     var uri: String { "/meeting/\(intentId)/propose" }
+    let logKey = "/meeting/***/propose"
     let method: HttpMethod = .post
     let body: MeetingProposalBody
 }

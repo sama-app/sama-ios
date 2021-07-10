@@ -47,6 +47,7 @@ struct MeetingInitiationRequest: ApiRequest {
     typealias T = EventSearchRequestData
     typealias U = MeetingInitiationResult
     let uri = "/meeting/initiate"
+    let logKey = "/meeting/initiate"
     let method: HttpMethod = .post
     var body: EventSearchRequestData
 }

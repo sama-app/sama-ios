@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseCrashlytics
 
 enum HttpMethod: String {
     case get
@@ -21,6 +22,7 @@ protocol ApiRequest {
     var method: HttpMethod { get }
     var body: T { get }
     var query: [URLQueryItem] { get }
+    var logKey: String { get }
 }
 
 extension ApiRequest where T == EmptyBody {
@@ -31,7 +33,9 @@ extension ApiRequest {
 }
 
 enum ApiError: Error {
+    case network
     case http(Int)
+    case parsing
     case unknown
 }
 
@@ -94,23 +98,7 @@ class Api {
             let result: Result<T.U, ApiError> = self.getResultFrom(data, resp: resp, err: err)
 
             #if DEBUG
-            var msg: [String] = []
-            var errBody: String = ""
-            if case .success = result {
-                msg.append("isSuccess: true")
-            } else {
-                msg.append("isSuccess: false")
-            }
-            if let httpResp = resp as? HTTPURLResponse {
-                msg.append("httpStatusCode: \(httpResp.statusCode)")
-                if !(200 ..< 300).contains(httpResp.statusCode) {
-                    errBody = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
-                }
-            }
-            print([
-                "[API] RESPONSE \(request.uri): {\(msg.joined(separator: ", "))}",
-                errBody
-            ].filter { !$0.isEmpty }.joined(separator: "\n"))
+            self.logDebug(request: request, resp: resp, result: result, data: data)
             #endif
 
             if let token = self.getRefreshTokenIfNeeded(with: result), !isRefreshHandled {
@@ -120,6 +108,9 @@ class Api {
                         self.auth?.update(token: updatedToken)
                         self.request(for: request, isRefreshHandled: true, completion: completion)
                     case .failure:
+                        let errOut = NSError(domain: "com.meetsama.app.api.token_refresh", code: 1000, userInfo: [:])
+                        Crashlytics.crashlytics().record(error: errOut)
+
                         DispatchQueue.main.async {
                             completion(result)
                         }
@@ -133,9 +124,43 @@ class Api {
         }.resume()
     }
 
+    private func logCrashlytics<T>(request: T, result: Result<T.U, ApiError>) where T: ApiRequest {
+        guard case let .failure(err) = result else { return }
+
+        let code: Int
+        switch err {
+        case .network: code = 1000
+        case .unknown: code = 1001
+        case .parsing: code = 1002
+        case let .http(httpCode): code = httpCode
+        }
+        let errOut = NSError(domain: request.logKey, code: code, userInfo: [:])
+        Crashlytics.crashlytics().record(error: errOut)
+    }
+
+    private func logDebug<T>(request: T, resp: URLResponse?, result: Result<T.U, ApiError>, data: Data?) where T: ApiRequest {
+        var msg: [String] = []
+        var errBody: String = ""
+        if case .success = result {
+            msg.append("isSuccess: true")
+        } else {
+            msg.append("isSuccess: false")
+        }
+        if let httpResp = resp as? HTTPURLResponse {
+            msg.append("httpStatusCode: \(httpResp.statusCode)")
+            if !(200 ..< 300).contains(httpResp.statusCode) {
+                errBody = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+            }
+        }
+        print([
+            "[API] RESPONSE \(request.uri): {\(msg.joined(separator: ", "))}",
+            errBody
+        ].filter { !$0.isEmpty }.joined(separator: "\n"))
+    }
+
     private func getResultFrom<T>(_ data: Data?, resp: URLResponse?, err: Error?) -> Result<T, ApiError> where T: Decodable {
         if err != nil {
-            return .failure(.unknown)
+            return .failure(.network)
         }
         guard let httpResp = resp as? HTTPURLResponse else {
             return .failure(.unknown)
@@ -147,7 +172,7 @@ class Api {
                 let jsonData = data ?? "{}".data(using: .utf8)!
                 return .success(try self.decoder.decode(T.self, from: jsonData))
             } catch {
-                return .failure(.http(httpResp.statusCode))
+                return .failure(.parsing)
             }
         default:
             return .failure(.http(httpResp.statusCode))
