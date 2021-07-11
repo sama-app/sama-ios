@@ -15,10 +15,28 @@ class CalendarNavigationBlock: UIView {
 final class CalendarNavigationCenter: UIView {
 
     var onActivePanelHeightChange: ((CGFloat) -> Void)?
+
     private var stack: [UIView] = []
     private var stackLeadingConstraint: [NSLayoutConstraint] = []
+    private var bottomConstraints: [NSLayoutConstraint] = []
 
     private var toastDismissJob: DispatchWorkItem?
+
+    private var isMinimized = false
+    private var yPan: CGFloat = 0
+
+    private var pan: UIPanGestureRecognizer!
+
+    init() {
+        super.init(frame: .zero)
+        pan = UIPanGestureRecognizer(target: self, action: #selector(onPan))
+        pan.minimumNumberOfTouches = 1
+        addGestureRecognizer(pan)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func pushBlock(_ block: CalendarNavigationBlock, animated: Bool) {
         block.translatesAutoresizingMaskIntoConstraints = false
@@ -51,10 +69,11 @@ final class CalendarNavigationCenter: UIView {
         ])
 
         let leading = fullBlock.leadingAnchor.constraint(equalTo: leadingAnchor, constant: bounds.width)
+        let bottom = fullBlock.bottomAnchor.constraint(equalTo: bottomAnchor)
         NSLayoutConstraint.activate([
             fullBlock.widthAnchor.constraint(equalTo: widthAnchor),
             leading,
-            fullBlock.bottomAnchor.constraint(equalTo: bottomAnchor)
+            bottom
         ])
         stack.append(fullBlock)
 
@@ -75,20 +94,67 @@ final class CalendarNavigationCenter: UIView {
         }
 
         stackLeadingConstraint.append(leading)
+        bottomConstraints.append(bottom)
+    }
+
+    @objc private func onPan(_ recognizer: UIPanGestureRecognizer) {
+        guard let panel = stack.last else { return }
+
+        let translation = recognizer.translation(in: recognizer.view!)
+        let velocity = recognizer.velocity(in: recognizer.view!)
+        let bottomConstraint = bottomConstraints.last
+
+        if recognizer.state == .changed {
+            bottomConstraint?.constant = yPan + translation.y
+        } else if recognizer.state == .ended {
+            let yEnd: CGFloat
+            if (velocity.y < -100) {
+                yEnd = 0
+                isMinimized = false
+            } else if (velocity.y > 100) {
+                yEnd = panel.frame.height - 50
+                isMinimized = true
+            } else if (yPan + translation.y <= 50) {
+                yEnd = 0
+                isMinimized = false
+            } else {
+                yEnd = panel.frame.height - 50
+                isMinimized = true
+            }
+            yPan = yEnd
+
+            bottomConstraint?.constant = yPan
+
+            UIView.animate(withDuration: 0.3, animations: {
+                self.setNeedsLayout()
+                self.layoutIfNeeded()
+            }, completion: nil)
+        }
     }
 
     func pop() {
+        pan.isEnabled = false
+        yPan = 0
+        isMinimized = false
+
         guard stack.count >= 2 else { return }
 
         toastDismissJob?.perform()
 
         let currentBlock = stack.popLast()
+
         stackLeadingConstraint.popLast()?.constant = bounds.width
         stackLeadingConstraint.last?.constant = 0
+
+        bottomConstraints.removeLast()
+
         UIView.animate(withDuration: 0.3, animations: {
             self.setNeedsLayout()
             self.layoutIfNeeded()
-        }, completion: { _ in currentBlock?.removeFromSuperview() })
+        }, completion: {
+            _ in currentBlock?.removeFromSuperview()
+            self.pan.isEnabled = true
+        })
     }
 
     func showToast(withMessage message: String) {
@@ -130,13 +196,16 @@ final class CalendarNavigationCenter: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        onActivePanelHeightChange?(stack.last?.frame.height ?? 0)
+        let bottomConstraint = bottomConstraints.last
+        onActivePanelHeightChange?((stack.last?.frame.height ?? 0) - (bottomConstraint?.constant ?? 0))
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        for v in subviews {
-            if let target = v.hitTest(v.convert(point, from: self), with: event) {
-                return target
+        for v in subviews where v.frame.contains(point) {
+            if isMinimized {
+                return self
+            } else {
+                return v.hitTest(v.convert(point, from: self), with: event)
             }
         }
         return nil
@@ -148,10 +217,26 @@ private final class CalendarBlockWrapper: UIView {
     private let shadow = CALayer()
     private let background = CALayer()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private let handle = UIView()
+
+    init() {
+        super.init(frame: .zero)
+
         layer.insertSublayer(shadow, at: 0)
         layer.insertSublayer(background, at: 1)
+
+        handle.translatesAutoresizingMaskIntoConstraints = false
+        handle.layer.cornerRadius = 2
+        handle.layer.masksToBounds = true
+        handle.backgroundColor = .secondary.withAlphaComponent(0.15)
+        addSubview(handle)
+
+        NSLayoutConstraint.activate([
+            handle.widthAnchor.constraint(equalToConstant: 42),
+            handle.heightAnchor.constraint(equalToConstant: 5),
+            handle.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            handle.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ])
     }
 
     required init?(coder: NSCoder) {
@@ -177,5 +262,7 @@ private final class CalendarBlockWrapper: UIView {
         shadow.shadowOffset = CGSize(width: 0, height: 2)
         shadow.bounds = bounds
         shadow.anchorPoint = .zero
+
+        bringSubviewToFront(handle)
     }
 }
