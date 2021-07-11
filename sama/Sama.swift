@@ -5,7 +5,7 @@
 //  Created by Viktoras Laukevičius on 6/24/21.
 //
 
-import Foundation
+import UIKit
 import CoreGraphics
 
 struct Environment {
@@ -32,14 +32,27 @@ class Sama {
     static func makeApi(with auth: AuthContainer) -> Api {
         return Api(
             baseUri: env.baseUri,
-            defaultHeaders: [
-                "Content-Type": "application/json"
-            ],
+            defaultHeaders: getDefaultHeaders(),
             auth: auth
         )
     }
 
     static func makeUnauthApi() -> Api {
-        return Api(baseUri: Sama.env.baseUri, defaultHeaders: [:], auth: nil)
+        return Api(baseUri: Sama.env.baseUri, defaultHeaders: getDefaultHeaders(), auth: nil)
     }
+}
+
+private func getDefaultHeaders() -> [String: String] {
+    return [
+        "Content-Type": "application/json",
+        "User-Agent": "SamaiOS/v\(getAppVersion()) (OS \(getOsVersion()))"
+    ]
+}
+
+private func getAppVersion() -> String {
+    return (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "0"
+}
+
+private func getOsVersion() -> String {
+    return UIDevice.current.systemVersion
 }
