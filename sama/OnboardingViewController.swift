@@ -185,7 +185,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             guard
                 let url = callbackUrl,
                 url.scheme == Sama.env.productId,
-                url.host == "authu",
+                url.host == "auth",
                 url.path == "/success",
                 let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
                 let accessToken = queryItems.first(where: { $0.name == "accessToken" })?.value,
