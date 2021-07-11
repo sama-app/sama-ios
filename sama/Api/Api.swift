@@ -100,6 +100,7 @@ class Api {
             #if DEBUG
             self.logDebug(request: request, resp: resp, result: result, data: data)
             #endif
+            self.logCrashlytics(withKey: request.logKey, result: result)
 
             if let token = self.getRefreshTokenIfNeeded(with: result), !isRefreshHandled {
                 self.refreshToken(with: token) {
@@ -124,7 +125,7 @@ class Api {
         }.resume()
     }
 
-    private func logCrashlytics<T>(request: T, result: Result<T.U, ApiError>) where T: ApiRequest {
+    private func logCrashlytics<T>(withKey key: String, result: Result<T, ApiError>) where T: Decodable {
         guard case let .failure(err) = result else { return }
 
         let code: Int
@@ -134,7 +135,7 @@ class Api {
         case .parsing: code = 1002
         case let .http(httpCode): code = httpCode
         }
-        let errOut = NSError(domain: request.logKey, code: code, userInfo: [:])
+        let errOut = NSError(domain: key, code: code, userInfo: [:])
         Crashlytics.crashlytics().record(error: errOut)
     }
 
@@ -198,7 +199,9 @@ class Api {
         req.httpBody = try? encoder.encode(["refreshToken": token])
 
         session.dataTask(with: req) { (data, resp, err) in
-            completion(self.getResultFrom(data, resp: resp, err: err))
+            let result: Result<AuthToken, ApiError> = self.getResultFrom(data, resp: resp, err: err)
+            self.logCrashlytics(withKey: "/auth/refresh-token", result: result)
+            completion(result)
         }.resume()
     }
 }
