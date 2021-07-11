@@ -193,7 +193,11 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             else {
                 let errOut = err ?? NSError(domain: "com.meetsama.app.auth", code: 1000, userInfo: [:])
                 Crashlytics.crashlytics().record(error: errOut)
-                self.presentError()
+                if let authErr = errOut as? ASWebAuthenticationSessionError, authErr.code == .canceledLogin {
+                    // cancelled
+                } else {
+                    self.presentError()
+                }
                 return
             }
 
