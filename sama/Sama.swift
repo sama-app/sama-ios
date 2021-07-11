@@ -14,8 +14,7 @@ struct Environment {
     }
 
     let productId = "meetsama"
-//    let baseUri = "https://app.meetsama.com/api"
-    let baseUri = "https://app.meetsama.com.smtest.it/api"
+    let baseUri = SamaKeys.baseUri
 
     let ui = UI()
 }

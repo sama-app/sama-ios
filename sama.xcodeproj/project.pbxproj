@@ -48,6 +48,7 @@
 		E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
 		E7BFB365269AC59800EA6AFD /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
+		E7BFB368269AEB6500EA6AFD /* SamaKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C09226413340009CAB88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
@@ -123,6 +124,7 @@
 		E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposeCoordinator.swift; sourceTree = "<group>"; };
 		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		E7BFB364269AC59800EA6AFD /* sama.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = sama.xcconfig; sourceTree = "<group>"; };
+		E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamaKeys.swift; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* Sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7D3C08C26413340009CAB88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +228,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E7BFB366269AEB5500EA6AFD /* Environment */ = {
+			isa = PBXGroup;
+			children = (
+				E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */,
+			);
+			path = Environment;
+			sourceTree = "<group>";
+		};
 		E7D3C07E26413340009CAB88 = {
 			isa = PBXGroup;
 			children = (
@@ -284,6 +294,7 @@
 				E7B50CA626949C7400BBEFD9 /* Banalytics.swift */,
 				E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */,
 				E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */,
+				E7BFB366269AEB5500EA6AFD /* Environment */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -528,6 +539,7 @@
 				E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
 				E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */,
+				E7BFB368269AEB6500EA6AFD /* SamaKeys.swift in Sources */,
 				E79C90C32684C7A100398E41 /* Sama.swift in Sources */,
 				E7B50CA726949C7400BBEFD9 /* Banalytics.swift in Sources */,
 				E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */,
