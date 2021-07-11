@@ -47,6 +47,7 @@
 		E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */; };
 		E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
+		E7BFB365269AC59800EA6AFD /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C09226413340009CAB88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
@@ -121,6 +122,7 @@
 		E7B8970D2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTimesForDaysTransformerTests.swift; sourceTree = "<group>"; };
 		E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposeCoordinator.swift; sourceTree = "<group>"; };
 		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
+		E7BFB364269AC59800EA6AFD /* sama.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = sama.xcconfig; sourceTree = "<group>"; };
 		E7D3C08726413340009CAB88 /* Sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D3C08A26413340009CAB88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7D3C08C26413340009CAB88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 		E763A6D8269737F900082BCE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E7BFB364269AC59800EA6AFD /* sama.xcconfig */,
 				E763A6D92697380600082BCE /* Licenses */,
 			);
 			path = Resources;
@@ -453,6 +456,7 @@
 				E763A6DB2697383B00082BCE /* firebase in Resources */,
 				E7D3C09426413342009CAB88 /* Assets.xcassets in Resources */,
 				E7D3C09226413340009CAB88 /* Main.storyboard in Resources */,
+				E7BFB365269AC59800EA6AFD /* sama.xcconfig in Resources */,
 				E7B50CAB2694A44B00BBEFD9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -662,6 +666,7 @@
 		};
 		E7D3C0B026413342009CAB88 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E7BFB364269AC59800EA6AFD /* sama.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -717,6 +722,7 @@
 		};
 		E7D3C0B226413342009CAB88 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E7BFB364269AC59800EA6AFD /* sama.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -730,9 +736,7 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app.dev;
 				PRODUCT_NAME = Sama;
-				PROVISIONING_PROFILE_SPECIFIER = sama_dev_dev;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -753,9 +757,7 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app.dev;
 				PRODUCT_NAME = Sama;
-				PROVISIONING_PROFILE_SPECIFIER = sama_dev_appstore;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
