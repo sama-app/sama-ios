@@ -29,16 +29,12 @@ struct MeetingProposalRequest: ApiRequest {
     let body: MeetingProposalBody
 }
 
-struct EventConstraints {
-    let duration: Decimal
-}
-
 class EventsCoordinator {
 
     var onChanges: (() -> Void)?
     var api: Api
 
-    private var constraints = EventConstraints(duration: 0.25)
+    private var constraints = EventConstraints(duration: 0.25, min: RescheduleTarget(daysOffset: 0, start: 0))
     private var intentId = 0
 
     private(set) var eventProperties: [EventProperties] = [] {
@@ -58,6 +54,7 @@ class EventsCoordinator {
 
     // pin to 15 mins
     private let hourSplit = 4
+    private let minsBase = 15
     private let hotEdge: CGFloat = 40
 
     private var dragState: DragState = .makeClear()
@@ -68,6 +65,18 @@ class EventsCoordinator {
     }
 
     private let finder = SlotFinder()
+
+    private var minTarget: RescheduleTarget {
+        let comps = Calendar.current.dateComponents([.hour, .minute], from: Date())
+        let ab = Int(floor(Double(comps.minute!) / Double(minsBase))) + 1
+        let minsNormalized = NSDecimalNumber(value: ab * minsBase).dividing(by: NSDecimalNumber(value: 60))
+        let start = NSDecimalNumber(value: comps.hour!).adding(minsNormalized).decimalValue
+        if start == 25 {
+            return RescheduleTarget(daysOffset: 1, start: 0)
+        } else {
+            return RescheduleTarget(daysOffset: 0, start: start)
+        }
+    }
 
     init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
         self.api = api
@@ -86,8 +95,10 @@ class EventsCoordinator {
         intentId = id
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
+
         constraints = EventConstraints(
-            duration: NSDecimalNumber(value: durationMins).dividing(by: NSDecimalNumber(value: 60)).decimalValue
+            duration: NSDecimalNumber(value: durationMins).dividing(by: NSDecimalNumber(value: 60)).decimalValue,
+            min: minTarget
         )
 
         repositionEventViews()
@@ -312,6 +323,16 @@ class EventsCoordinator {
                 break
             }
         }
+
+        switch true {
+        case target.daysOffset < constraints.min.daysOffset:
+            isValid = false
+        case target.daysOffset == constraints.min.daysOffset && target.start < constraints.min.start:
+            isValid = false
+        default:
+            break
+        }
+
         return isValid ? target : dragState.target
     }
 
@@ -521,4 +542,9 @@ private struct RescheduleTarget {
 
     let daysOffset: Int
     let start: Decimal
+}
+
+private struct EventConstraints {
+    let duration: Decimal
+    let min: RescheduleTarget
 }
