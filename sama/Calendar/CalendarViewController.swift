@@ -53,7 +53,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         panel.coordinator = eventsCoordinator
         panel.api = session.api
         panel.targetTimezoneChangeHandler = { [weak self] in
-            self?.timeline.targetTimezoneHoursDiff = ($0 - 3)
+            guard let self = self else { return }
+            self.timeline.targetTimezoneHoursDiff = self.eventsCoordinator.hoursOffsetWithOffset($0)
         }
         navCenter.pushBlock(panel, animated: false)
     }

@@ -78,6 +78,10 @@ class EventsCoordinator {
         self.container = container
     }
 
+    func hoursOffsetWithOffset(_ offset: Int) -> Int {
+        return offset - Int(round(Double(TimeZone.current.secondsFromGMT()) / 3600))
+    }
+
     func setup(withId id: Int, durationMins: Int, properties props: [EventProperties]) {
         intentId = id
         eventViews = props.map { _ in self.makeEventView() }
