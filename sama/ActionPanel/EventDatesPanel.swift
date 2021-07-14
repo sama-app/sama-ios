@@ -151,13 +151,26 @@ class EventDatesPanel: CalendarNavigationBlock {
                 daysOffset: startComps.day!,
                 timezoneOffset: timezoneOffset
             )
-        }
+        }.sorted(by: {
+            switch true {
+            case $0.daysOffset < $1.daysOffset:
+                return true
+            case $0.daysOffset == $1.daysOffset:
+                return $0.start < $1.start
+            default:
+                return false
+            }
+        })
 
         self.actionButton.isHidden = false
         self.titleLabel.text = "Here are your best slots:"
         self.loader.stopAnimating()
         self.loader.isHidden = true
-        self.coordinator.setup(withId: result.meetingIntentId, properties: props)
+        self.coordinator.setup(
+            withId: result.meetingIntentId,
+            durationMins: options.duration.duration,
+            properties: props
+        )
     }
 
     private func reloadEventsList() {
@@ -202,7 +215,7 @@ class EventDatesPanel: CalendarNavigationBlock {
     @objc private func onAddNewSuggestion() {
         Sama.bi.track(event: "addslot")
 
-        coordinator.addClosestToCenter(withDuration: options.duration.duration)
+        coordinator.addClosestToCenter()
     }
 
     @objc private func onCopySuggestions() {

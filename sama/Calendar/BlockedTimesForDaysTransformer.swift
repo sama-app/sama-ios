@@ -36,7 +36,7 @@ struct BlockedTimesForDaysTransformer {
                 let end = self.calendar.toTimeZone(date: parsedEnd)
                 let duration = end.timeIntervalSince(start)
                 return CalendarBlockedTime(
-                    title: block.title,
+                    title: block.title ?? "",
                     start: Decimal(start.timeIntervalSince(self.calendar.startOfDay(for: start)) / 3600),
                     duration: Decimal(duration / 3600),
                     depth: 0

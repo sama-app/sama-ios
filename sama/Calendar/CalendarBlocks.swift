@@ -12,7 +12,7 @@ struct CalendarBlocks: Decodable {
 }
 
 struct CalendarBlock: Decodable {
-    let title: String
+    let title: String?
     let startDateTime: String
     let endDateTime: String
 }

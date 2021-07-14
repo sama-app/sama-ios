@@ -29,11 +29,16 @@ struct MeetingProposalRequest: ApiRequest {
     let body: MeetingProposalBody
 }
 
+struct EventConstraints {
+    let duration: Decimal
+}
+
 class EventsCoordinator {
 
     var onChanges: (() -> Void)?
     var api: Api
 
+    private var constraints = EventConstraints(duration: 0.25)
     private var intentId = 0
 
     private(set) var eventProperties: [EventProperties] = [] {
@@ -73,10 +78,13 @@ class EventsCoordinator {
         self.container = container
     }
 
-    func setup(withId id: Int, properties props: [EventProperties]) {
+    func setup(withId id: Int, durationMins: Int, properties props: [EventProperties]) {
         intentId = id
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
+        constraints = EventConstraints(
+            duration: NSDecimalNumber(value: durationMins).dividing(by: NSDecimalNumber(value: 60)).decimalValue
+        )
 
         repositionEventViews()
     }
@@ -144,7 +152,7 @@ class EventsCoordinator {
         api.request(for: req, completion: completion)
     }
 
-    func addClosestToCenter(withDuration durationMins: Int) {
+    func addClosestToCenter() {
         let xCenter = calendar.contentOffset.x + (calendar.frame.width) / 2
         let totalDaysOffset = Int(round(xCenter - (cellSize.width / 2)) / cellSize.width)
 
@@ -157,8 +165,7 @@ class EventsCoordinator {
             .rounding(accordingToBehavior: nil)
             .dividing(by: NSDecimalNumber(value: hourSplit))
 
-        let duration = NSDecimalNumber(value: durationMins).dividing(by: NSDecimalNumber(value: 60)).decimalValue
-        let maxMinsOffset = NSDecimalNumber(value: 24).subtracting(NSDecimalNumber(decimal: duration)).decimalValue
+        let maxMinsOffset = NSDecimalNumber(value: 24).subtracting(NSDecimalNumber(decimal: constraints.duration)).decimalValue
 
         let possibleSlots = finder.getPossibleSlots(
             with: SlotFinder.Context(
@@ -167,7 +174,7 @@ class EventsCoordinator {
                 totalDaysOffset: totalDaysOffset,
                 currentDayIndex: currentDayIndex,
                 baseStart: max(0, min(maxMinsOffset, totalMinsOffset.decimalValue)),
-                duration: duration
+                duration: constraints.duration
             )
         )
 
@@ -180,7 +187,7 @@ class EventsCoordinator {
                 x: xForDaysOffset(slot.daysOffset) + calendar.contentOffset.x,
                 y: yForTimestampInDay(slot.start) + calendar.contentOffset.y,
                 width: cellSize.width,
-                height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
+                height: CGFloat(truncating: constraints.duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
             let xd = xCenter - rect.midX
             let yd = yCenter - rect.midY
@@ -194,7 +201,7 @@ class EventsCoordinator {
         eventViews.append(makeEventView())
         eventProperties.append(EventProperties(
             start: possibleSlots[idx].start,
-            duration: duration,
+            duration: constraints.duration,
             daysOffset: possibleSlots[idx].daysOffset,
             timezoneOffset: eventProperties.first!.timezoneOffset
         ))
@@ -316,7 +323,7 @@ class EventsCoordinator {
         let extra = loc.y - dragState.origin.y
         let eventHeight = originalHeight + extra
 
-        let minHeight = CGFloat(0.25) * cellSize.height + eventHandleExtraSpace
+        let minHeight = CGFloat(truncating: constraints.duration as NSNumber) * cellSize.height + eventHandleExtraSpace
         let maxHeight = CGFloat(truncating: dragState.maxDuration as NSNumber) * cellSize.height + eventHandleExtraSpace
         let safeEvHeight = min(max(eventHeight, minHeight), maxHeight)
 
