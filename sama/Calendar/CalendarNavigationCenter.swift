@@ -228,7 +228,7 @@ private final class CalendarBlockWrapper: UIView {
         handle.translatesAutoresizingMaskIntoConstraints = false
         handle.layer.cornerRadius = 2
         handle.layer.masksToBounds = true
-        handle.backgroundColor = .secondary.withAlphaComponent(0.15)
+        handle.backgroundColor = UIColor.secondary.withAlphaComponent(0.15)
         addSubview(handle)
 
         NSLayoutConstraint.activate([
