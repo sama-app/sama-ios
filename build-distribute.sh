@@ -10,4 +10,4 @@ rm -rf $archivePath
 set -o pipefail && xcodebuild -project sama.xcodeproj -scheme sama -configuration Release -archivePath $archivePath archive CODE_SIGN_STYLE=Manual | xcpretty
 set -o pipefail && xcodebuild -exportArchive -archivePath $archivePath -exportOptionsPlist exportOptions.plist -exportPath $buildPath | xcpretty
 # distribute
-# xcrun altool --upload-app --type ios --file "$buildPath/sama.ipa" --apiKey "7UWL52C499" --apiIssuer "24008dc4-903c-4cc7-b839-86d9c5a30660"
+xcrun altool --upload-app --type ios --file "$buildPath/Sama.ipa" --apiKey $APPSTORE_API_KEY --apiIssuer $APPSTORE_API_ISSUER

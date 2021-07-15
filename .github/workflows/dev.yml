@@ -1,0 +1,33 @@
+name: dev
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup build identity
+        env:
+          BUILD_CERT_BASE64: ${{ secrets.DEV_CERT_BASE64 }}
+          BUILD_CERT_PASS: ${{ secrets.DEV_CERT_PASS }}
+          BUILD_PROVISIONING: ${{ secrets.DEV_PROVISIONING }}
+          KEYCHAIN_PASS: ${{ secrets.DEV_KEYCHAIN_PASS }}
+        run: ./setup-build-identity.sh
+
+      - name: Set build number
+        run: |
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ github.run_number }}" "sama/Info.plist"
+
+      - name: Set environment
+        run: ./set-env.sh dev
+
+      - name: Build and distribute
+        env:
+          APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
+          APPSTORE_API_ISSUER: ${{ secrets.APPSTORE_API_ISSUER }}
+        run: ./build-distribute.sh

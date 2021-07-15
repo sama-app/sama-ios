@@ -8,8 +8,8 @@
     <string>6QTT2B2N75</string>
     <key>provisioningProfiles</key>
     <dict>
-        <key>com.yoursama.app</key>
-        <string>appstore</string>
+        <key>com.meetsama.app.dev</key>
+        <string>sama_dev_appstore</string>
     </dict>
 </dict>
 </plist>
