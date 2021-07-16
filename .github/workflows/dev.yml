@@ -19,6 +19,15 @@ jobs:
           KEYCHAIN_PASS: ${{ secrets.DEV_KEYCHAIN_PASS }}
         run: ./setup-build-identity.sh
 
+      - name: Setup auth key
+        env:
+          APPSTORE_AUTH_KEY_BASE64: ${{ secrets.APPSTORE_AUTH_KEY_BASE64 }}
+          APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
+        run: |
+          mkdir -p "~/.appstoreconnect/private_keys/"
+          AUTH_KEY_PATH="~/.appstoreconnect/private_keys/AuthKey_$APPSTORE_API_KEY.p8"
+          echo -n "$APPSTORE_AUTH_KEY_BASE64" | base64 --decode --output $AUTH_KEY_PATH
+
       - name: Set build number
         run: |
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ github.run_number }}" "sama/Info.plist"
