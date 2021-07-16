@@ -26,20 +26,6 @@ jobs:
       - name: Set environment
         run: ./set-env.sh dev
 
-      - uses: actions/download-artifact@v2
-        with:
-          name: app-ipa
-          path: app.ipa
-
-      - name: validate artifact
-        env:
-          APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
-          APPSTORE_API_ISSUER: ${{ secrets.APPSTORE_API_ISSUER }}
-        run: |
-          xcrun altool --validate-app --type ios --file "app.ipa" --apiKey "$APPSTORE_API_KEY" --apiIssuer "$APPSTORE_API_ISSUER"
-          echo "upload"
-          xcrun altool --upload-app --type ios --file "app.ipa" --apiKey "$APPSTORE_API_KEY" --apiIssuer "$APPSTORE_API_ISSUER"
-
       - name: Build and distribute
         env:
           APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
