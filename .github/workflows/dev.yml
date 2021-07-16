@@ -25,7 +25,7 @@ jobs:
           APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
         run: |
           mkdir -p ~/.appstoreconnect/private_keys/
-          AUTH_KEY_PATH=~/.appstoreconnect/private_keys/AuthKeys_$APPSTORE_API_KEY.p8
+          AUTH_KEY_PATH=~/.appstoreconnect/private_keys/AuthKey_$APPSTORE_API_KEY.p8
           echo -n "$APPSTORE_AUTH_KEY_BASE64" | base64 --decode --output $AUTH_KEY_PATH
 
       - name: Set build number
