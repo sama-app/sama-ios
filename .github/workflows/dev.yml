@@ -40,10 +40,3 @@ jobs:
           APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
           APPSTORE_API_ISSUER: ${{ secrets.APPSTORE_API_ISSUER }}
         run: ./build-distribute.sh
-
-      - name: Archive app artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-ipa
-          path: |
-            build-sama/Sama.ipa
