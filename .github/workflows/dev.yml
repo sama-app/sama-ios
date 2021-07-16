@@ -11,10 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '12.5'
-
       - name: Setup build identity
         env:
           BUILD_CERT_BASE64: ${{ secrets.DEV_CERT_BASE64 }}
