@@ -29,3 +29,10 @@ sama/Environment/SamaKeys.swift
 sama/Assets.xcassets/AppIcon.appiconset/*
 sama/GoogleService-Info.plist
 sama/Resources/sama.xcconfig
+
+# building
+build-sama
+sama.xcarchive
+
+# SPM
+SourcePackages/*
