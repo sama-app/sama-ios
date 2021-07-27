@@ -70,7 +70,6 @@ class DurationPickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
         if indexPath.row > 0 {
             optionPickHandler?(options[itemIndex(from: indexPath)])
             navigation?.pop()
-            fatalError("whoops")
         }
     }
 
