@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseApp.configure()
         #if DEBUG
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
+        Analytics.setAnalyticsCollectionEnabled(false)
         #endif
         Messaging.messaging().isAutoInitEnabled = false
         Messaging.messaging().delegate = self
