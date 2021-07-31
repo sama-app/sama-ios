@@ -3,7 +3,6 @@ set -e
 
 archivePath='sama.xcarchive'
 buildPath='build-sama'
-pkgsDir='SourcePackages'
 # clean
 rm -rf $buildPath
 rm -rf $archivePath
@@ -14,7 +13,6 @@ set -o pipefail && \
  -scheme sama \
  -configuration Release \
  -archivePath $archivePath \
- -clonedSourcePackagesDirPath $pkgsDir \
  archive CODE_SIGN_STYLE=Manual \
  | xcpretty
 set -o pipefail && \
@@ -23,11 +21,6 @@ set -o pipefail && \
  -exportOptionsPlist $EXPORT_OPTIONS_PLIST \
  -exportPath $buildPath \
  | xcpretty
-# upload dSYMs
-$pkgsDir/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols \
- -gsp sama/GoogleService-Info.plist \
- -p ios \
- $archivePath/dSYMs/Sama.app.dSYM
 # distribute
 xcrun altool \
  --upload-app \
