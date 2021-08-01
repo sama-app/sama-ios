@@ -14,6 +14,7 @@ struct SlotFinder {
         let blocksForDayIndex: [Int: [CalendarBlockedTime]]
         let totalDaysOffset: Int
         let currentDayIndex: Int
+        let minTarget: RescheduleTarget
         let baseStart: Decimal
         let duration: Decimal
     }
@@ -29,24 +30,16 @@ struct SlotFinder {
 
         var possibleSlots: [PossibleSlot] = []
         for i in (baseDaysOffset - 1 ..< baseDaysOffset + 3) {
-            // exact and down
-            var start = context.baseStart
-            while start < maxMinsOffset {
-                if isSlotPossible(with: context, dayIndex: i, start: start) {
-                    possibleSlots.append(PossibleSlot(daysOffset: i, start: start))
-                    break
-                }
-                start += 0.25
-            }
+            possibleSlots += getPossibleSlots(with: context, dayIndex: i, maxMinsOffset: maxMinsOffset)
+        }
 
-            // exact and up
-            start = context.baseStart
-            while start > 0 {
-                if isSlotPossible(with: context, dayIndex: i, start: start) {
-                    possibleSlots.append(PossibleSlot(daysOffset: i, start: start))
+        if possibleSlots.isEmpty {
+            for i in (context.minTarget.daysOffset ..< 90) {
+                let slots = getPossibleSlots(with: context, dayIndex: i, maxMinsOffset: maxMinsOffset)
+                if !slots.isEmpty {
+                    possibleSlots += slots
                     break
                 }
-                start -= 0.25
             }
         }
 
@@ -59,7 +52,38 @@ struct SlotFinder {
         return uniqueSlots
     }
 
+    private func getPossibleSlots(with context: Context, dayIndex: Int, maxMinsOffset: Decimal) -> [PossibleSlot] {
+        var possibleSlots: [PossibleSlot] = []
+
+        // exact and down
+        var start = context.baseStart
+        while start < maxMinsOffset {
+            if isSlotPossible(with: context, dayIndex: dayIndex, start: start) {
+                possibleSlots.append(PossibleSlot(daysOffset: dayIndex, start: start))
+                break
+            }
+            start += 0.25
+        }
+
+        // exact and up
+        start = context.baseStart
+        while start > 0 {
+            if isSlotPossible(with: context, dayIndex: dayIndex, start: start) {
+                possibleSlots.append(PossibleSlot(daysOffset: dayIndex, start: start))
+                break
+            }
+            start -= 0.25
+        }
+
+        return possibleSlots
+    }
+
     private func isSlotPossible(with context: Context, dayIndex: Int, start: Decimal) -> Bool {
+        if dayIndex < context.minTarget.daysOffset {
+            return false
+        } else if dayIndex == context.minTarget.daysOffset && start < context.minTarget.start {
+            return false
+        }
         let end = start + context.duration
 
         for props in (context.eventProperties.filter { $0.daysOffset == dayIndex}) {

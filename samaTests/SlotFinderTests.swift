@@ -33,6 +33,7 @@ class SlotFinderTests: XCTestCase {
                 blocksForDayIndex: [:],
                 totalDaysOffset: 5002,
                 currentDayIndex: 5000,
+                minTarget: RescheduleTarget(daysOffset: 0, start: 21),
                 baseStart: 11.75,
                 duration: 3
             )
@@ -57,6 +58,7 @@ class SlotFinderTests: XCTestCase {
                 ],
                 totalDaysOffset: 5001,
                 currentDayIndex: 5000,
+                minTarget: RescheduleTarget(daysOffset: 0, start: 21),
                 baseStart: 11.5,
                 duration: 3
             )
@@ -68,6 +70,24 @@ class SlotFinderTests: XCTestCase {
             SlotFinder.PossibleSlot(daysOffset: 2, start: 11.5),
             SlotFinder.PossibleSlot(daysOffset: 3, start: 13.5),
             SlotFinder.PossibleSlot(daysOffset: 3, start: 9.5),
+        ]
+        XCTAssertEqual(result, exp)
+    }
+
+    func test_notIncludesPastDates() {
+        let result = finder.getPossibleSlots(
+            with: SlotFinder.Context(
+                eventProperties: [],
+                blocksForDayIndex: [:],
+                totalDaysOffset: 4999,
+                currentDayIndex: 5000,
+                minTarget: RescheduleTarget(daysOffset: 0, start: 21),
+                baseStart: 11.5,
+                duration: 3
+            )
+        )
+        let exp = [
+            SlotFinder.PossibleSlot(daysOffset: 1, start: 11.5)
         ]
         XCTAssertEqual(result, exp)
     }

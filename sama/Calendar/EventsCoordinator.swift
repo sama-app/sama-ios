@@ -177,7 +177,8 @@ class EventsCoordinator {
         let xCenter = calendar.contentOffset.x + (calendar.frame.width) / 2
         let totalDaysOffset = Int(round(xCenter - (cellSize.width / 2)) / cellSize.width)
 
-        let yOffset = touchableCalendarMidY - cellSize.height
+        let yCenter = calendar.contentOffset.y + touchableCalendarMidY
+        let yOffset = yCenter - cellSize.height
         let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
             .multiplying(by: NSDecimalNumber(value: hourSplit))
             .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
@@ -192,6 +193,7 @@ class EventsCoordinator {
                 blocksForDayIndex: context.blocksForDayIndex,
                 totalDaysOffset: totalDaysOffset,
                 currentDayIndex: currentDayIndex,
+                minTarget: minTarget,
                 baseStart: max(0, min(maxMinsOffset, totalMinsOffset.decimalValue)),
                 duration: constraints.duration
             )
@@ -209,7 +211,7 @@ class EventsCoordinator {
                 height: CGFloat(truncating: constraints.duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
             let xd = xCenter - rect.midX
-            let yd = touchableCalendarMidY - rect.midY
+            let yd = yCenter - rect.midY
             let d = sqrt(xd*xd + yd*yd)
             if d < minD {
                 idx = i
@@ -550,7 +552,7 @@ private struct DragUI {
     let recognizer: UIGestureRecognizer
 }
 
-private struct RescheduleTarget {
+struct RescheduleTarget {
     static var none: RescheduleTarget {
         return RescheduleTarget(daysOffset: 0, start: 0)
     }
