@@ -78,6 +78,11 @@ class EventsCoordinator {
         }
     }
 
+    private var touchableCalendarMidY: CGFloat {
+        let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
+        return touchableCalendarHeight / 2
+    }
+
     init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
         self.api = api
         self.currentDayIndex = currentDayIndex
@@ -101,6 +106,7 @@ class EventsCoordinator {
             min: minTarget
         )
 
+        autoScrollToSuggestedSlot()
         repositionEventViews()
     }
 
@@ -171,9 +177,7 @@ class EventsCoordinator {
         let xCenter = calendar.contentOffset.x + (calendar.frame.width) / 2
         let totalDaysOffset = Int(round(xCenter - (cellSize.width / 2)) / cellSize.width)
 
-        let visibleCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
-        let yCenter = calendar.contentOffset.y + visibleCalendarHeight / 2
-        let yOffset = yCenter - cellSize.height
+        let yOffset = touchableCalendarMidY - cellSize.height
         let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
             .multiplying(by: NSDecimalNumber(value: hourSplit))
             .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
@@ -205,7 +209,7 @@ class EventsCoordinator {
                 height: CGFloat(truncating: constraints.duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
             let xd = xCenter - rect.midX
-            let yd = yCenter - rect.midY
+            let yd = touchableCalendarMidY - rect.midY
             let d = sqrt(xd*xd + yd*yd)
             if d < minD {
                 idx = i
@@ -222,6 +226,17 @@ class EventsCoordinator {
         ))
 
         repositionEventViews()
+    }
+
+    private func autoScrollToSuggestedSlot() {
+        guard let props = eventProperties.first else { return }
+
+        let timestamp = NSDecimalNumber(decimal: props.start).adding(NSDecimalNumber(decimal: props.duration).dividing(by: NSDecimalNumber(value: 2)))
+        let y = CGFloat(truncating: timestamp) * cellSize.height - touchableCalendarMidY
+        calendar.setContentOffset(CGPoint(
+            x: CGFloat(currentDayIndex + props.daysOffset - 1) * cellSize.width,
+            y: y
+        ), animated: true)
     }
 
     private func makeEventView() -> EventView {
