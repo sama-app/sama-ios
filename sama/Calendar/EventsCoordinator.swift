@@ -106,7 +106,7 @@ class EventsCoordinator {
             min: minTarget
         )
 
-        autoScrollToSuggestedSlot()
+        autoScrollToSlot(at: 0)
         repositionEventViews()
     }
 
@@ -228,10 +228,11 @@ class EventsCoordinator {
         ))
 
         repositionEventViews()
+        autoScrollToSlot(at: eventProperties.count - 1)
     }
 
-    private func autoScrollToSuggestedSlot() {
-        guard let props = eventProperties.first else { return }
+    private func autoScrollToSlot(at index: Int) {
+        let props = eventProperties[index]
 
         let timestamp = NSDecimalNumber(decimal: props.start).adding(NSDecimalNumber(decimal: props.duration).dividing(by: NSDecimalNumber(value: 2)))
         let y = CGFloat(truncating: timestamp) * cellSize.height - touchableCalendarMidY
