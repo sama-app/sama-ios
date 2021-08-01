@@ -174,38 +174,28 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             switch $0 {
             case let .success(directions):
                 self.authenticate(with: directions.authorizationUrl)
-            case .failure:
-                self.presentError()
+            case let .failure(err):
+                self.presentError(err)
             }
         }
     }
 
     private func authenticate(with url: String) {
         let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
-            guard
-                let url = callbackUrl,
-                url.scheme == Sama.env.productId,
-                url.host == "auth",
-                url.path == "/success",
-                let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
-                let accessToken = queryItems.first(where: { $0.name == "accessToken" })?.value,
-                let refreshToken = queryItems.first(where: { $0.name == "refreshToken" })?.value
-            else {
-                let errOut = err ?? NSError(domain: "com.meetsama.app.auth", code: 1000, userInfo: [:])
-                Crashlytics.crashlytics().record(error: errOut)
-                if let authErr = errOut as? ASWebAuthenticationSessionError, authErr.code == .canceledLogin {
+            do {
+                let token = try AuthResultHandler().handle(callbackUrl: callbackUrl, error: err)
+                let auth = AuthContainer.makeAndStore(with: token)
+                RemoteNotificationsTokenSync.shared.syncToken()
+
+                self.startSession(with: auth)
+            } catch let err {
+                Crashlytics.crashlytics().record(error: err)
+                if let authErr = err as? ASWebAuthenticationSessionError, authErr.code == .canceledLogin {
                     // cancelled
                 } else {
-                    self.presentError()
+                    self.presentError(err)
                 }
-                return
             }
-
-            let token = AuthToken(accessToken: accessToken, refreshToken: refreshToken)
-            let auth = AuthContainer.makeAndStore(with: token)
-            RemoteNotificationsTokenSync.shared.syncToken()
-
-            self.startSession(with: auth)
         }
         session.presentationContextProvider = self
         session.start()
@@ -215,9 +205,15 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         return view.window!
     }
 
-    private func presentError() {
-        let alert = UIAlertController(title: nil, message: "Unexpected error occurred", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
+    private func presentError(_ error: Error) {
+        if let authErr = error as? AppAuthError, authErr.code == .insufficientPermissions {
+            let alert = UIAlertController(title: "Insufficient permissions", message: "Sama app required calendar read and write permissions", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: nil, message: "Unexpected error occurred", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
     }
 }
