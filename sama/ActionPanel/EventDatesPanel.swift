@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseCrashlytics
 
 struct EventProperties: Equatable {
     var start: Decimal
@@ -230,6 +231,12 @@ class EventDatesPanel: CalendarNavigationBlock {
                 self.navigation?.showToast(withMessage: "Copied to clipboard.")
             case .failure:
                 break
+            }
+        }
+
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
+            if let err = error {
+                Crashlytics.crashlytics().record(error: err)
             }
         }
     }

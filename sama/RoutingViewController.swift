@@ -31,7 +31,9 @@ class RoutingViewController: UIViewController {
                 UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
             }
         }
-        viewController.session = CalendarSession(api: api, currentDayIndex: 5000)
+        let session = CalendarSession(api: api, currentDayIndex: 5000)
+        session.setupNotificationsTokenObserver()
+        viewController.session = session
         UIApplication.shared.windows[0].rootViewController = viewController
     }
 

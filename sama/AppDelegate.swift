@@ -16,12 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return true
         }
 
+        UNUserNotificationCenter.current().delegate = self
+        application.registerForRemoteNotifications()
+
         FirebaseApp.configure()
         #if DEBUG
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
         Analytics.setAnalyticsCollectionEnabled(false)
         #endif
-        Messaging.messaging().isAutoInitEnabled = false
         Messaging.messaging().delegate = self
 
         return true
@@ -43,47 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     // MARK: APNs Notification Center PNs
 
-    // Receive displayed notifications for iOS 10 devices.
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        let userInfo = notification.request.content.userInfo
-
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
-        // [START_EXCLUDE]
-        // Print message ID.
-        if let messageID = userInfo[gcmMessageIDKey] {
-            print("Message ID: \(messageID)")
-        }
-        // [END_EXCLUDE]
-        // Print full message.
-        print(userInfo)
-
-        // Change this to your preferred presentation option
-        completionHandler([.sound])
-    }
-
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-        let userInfo = response.notification.request.content.userInfo
-
-        // [START_EXCLUDE]
-        // Print message ID.
-        if let messageID = userInfo[gcmMessageIDKey] {
-            print("Message ID: \(messageID)")
-        }
-        // [END_EXCLUDE]
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
-        // Print full message.
-        print(userInfo)
-
-        completionHandler()
+        // present notification if app is in foreground
+        completionHandler([.sound, .alert])
     }
 
     // MARK: APNs PNs handling

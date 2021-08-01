@@ -20,6 +20,14 @@ protocol CalendarContextProvider {
     var blocksForDayIndex: [Int: [CalendarBlockedTime]] { get }
 }
 
+struct RegisterDeviceRequest: ApiRequest {
+    typealias U = EmptyBody
+    let uri = "/user/me/register-device"
+    let logKey = "/user/me/register-device"
+    let method: HttpMethod = .post
+    let body: RegisterDeviceData
+}
+
 final class CalendarSession: CalendarContextProvider {
 
     var reloadHandler: () -> Void = {}
@@ -56,6 +64,13 @@ final class CalendarSession: CalendarContextProvider {
         if !(isBlockBusy[index] ?? false) {
             loadCalendar(blockIndices: (index ... index))
         }
+    }
+
+    func setupNotificationsTokenObserver() {
+        RemoteNotificationsTokenSync.shared.observer = { [weak self] data in
+            self?.api.request(for: RegisterDeviceRequest(body: data)) { _ in }
+        }
+        RemoteNotificationsTokenSync.shared.syncToken()
     }
 
     private func loadCalendar(blockIndices: ClosedRange<Int>) {
