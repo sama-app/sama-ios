@@ -40,6 +40,9 @@ enum ApiError: Error {
 }
 
 class Api {
+
+    var forbiddenHandler: (() -> Void)?
+
     private let session: URLSession
     private let baseUri: String
     private let auth: AuthContainer?
@@ -112,10 +115,20 @@ class Api {
                         let errOut = NSError(domain: "com.meetsama.app.api.token_refresh", code: 1000, userInfo: [:])
                         Crashlytics.crashlytics().record(error: errOut)
 
-                        DispatchQueue.main.async {
-                            completion(result)
+                        if result.error?.httpCode == 400 {
+                            DispatchQueue.main.async {
+                                self.forbiddenHandler?()
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                completion(result)
+                            }
                         }
                     }
+                }
+            } else if result.error?.httpCode == 403 {
+                DispatchQueue.main.async {
+                    self.forbiddenHandler?()
                 }
             } else {
                 DispatchQueue.main.async {
@@ -181,12 +194,11 @@ class Api {
     }
 
     private func getRefreshTokenIfNeeded<T>(with result: Result<T, ApiError>) -> String? {
-        if case let .failure(err) = result {
-            if case let .http(status) = err,status == 403 {
-                return auth?.token.refreshToken
-            }
+        if result.error?.httpCode == 401 {
+            return auth?.token.refreshToken
+        } else {
+            return nil
         }
-        return nil
     }
 
     private func refreshToken(with token: String, completion: @escaping (Result<AuthToken, ApiError>) -> Void) {
@@ -203,5 +215,27 @@ class Api {
             self.logCrashlytics(withKey: "/auth/refresh-token", result: result)
             completion(result)
         }.resume()
+    }
+}
+
+private extension Result {
+    var error: Failure? {
+        switch self {
+        case .success:
+            return nil
+        case let .failure(error):
+            return error
+        }
+    }
+}
+
+private extension ApiError {
+    var httpCode: Int? {
+        switch self {
+        case let .http(code):
+            return code
+        default:
+            return nil
+        }
     }
 }
