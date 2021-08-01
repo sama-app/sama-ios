@@ -13,6 +13,7 @@ struct ProposedSlot: Encodable {
 }
 
 struct MeetingProposalBody: Encodable {
+    let meetingIntentCode: String
     let proposedSlots: [ProposedSlot]
 }
 
@@ -22,9 +23,8 @@ struct MeetingProposalResult: Decodable {
 
 struct MeetingProposalRequest: ApiRequest {
     typealias U = MeetingProposalResult
-    let intentId: Int
-    var uri: String { "/meeting/\(intentId)/propose" }
-    let logKey = "/meeting/***/propose"
+    let uri = "/meeting/propose"
+    let logKey = "/meeting/propose"
     let method: HttpMethod = .post
     let body: MeetingProposalBody
 }
@@ -35,7 +35,7 @@ class EventsCoordinator {
     var api: Api
 
     private var constraints = EventConstraints(duration: 0.25, min: RescheduleTarget(daysOffset: 0, start: 0))
-    private var intentId = 0
+    private var intentCode = ""
 
     private(set) var eventProperties: [EventProperties] = [] {
         didSet {
@@ -96,8 +96,8 @@ class EventsCoordinator {
         return offset - Int(round(Double(TimeZone.current.secondsFromGMT()) / 3600))
     }
 
-    func setup(withId id: Int, durationMins: Int, properties props: [EventProperties]) {
-        intentId = id
+    func setup(withCode code: String, durationMins: Int, properties props: [EventProperties]) {
+        intentCode = code
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
 
@@ -167,8 +167,10 @@ class EventsCoordinator {
         }
 
         let req = MeetingProposalRequest(
-            intentId: intentId,
-            body: MeetingProposalBody(proposedSlots: slots)
+            body: MeetingProposalBody(
+                meetingIntentCode: intentCode,
+                proposedSlots: slots
+            )
         )
         api.request(for: req, completion: completion)
     }

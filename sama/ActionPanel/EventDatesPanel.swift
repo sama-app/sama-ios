@@ -29,7 +29,6 @@ struct EventSearchRequestData: Encodable {
     let durationMinutes: Int
     let timeZone: String
     let suggestionSlotCount: Int
-    let suggestionDayCount: Int
 }
 
 struct MeetingSuggestedSlot: Decodable {
@@ -38,7 +37,7 @@ struct MeetingSuggestedSlot: Decodable {
 }
 
 struct MeetingInitiationResult: Decodable {
-    let meetingIntentId: Int
+    let meetingIntentCode: String
     let durationMinutes: Int
     let suggestedSlots: [MeetingSuggestedSlot]
 }
@@ -119,8 +118,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         let data = EventSearchRequestData(
             durationMinutes: options.duration.duration,
             timeZone: options.timezone.id,
-            suggestionSlotCount: 3,
-            suggestionDayCount: 4
+            suggestionSlotCount: 3
         )
         api.request(for: MeetingInitiationRequest(body: data)) {
             switch $0 {
@@ -167,7 +165,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         self.loader.stopAnimating()
         self.loader.isHidden = true
         self.coordinator.setup(
-            withId: result.meetingIntentId,
+            withCode: result.meetingIntentCode,
             durationMins: options.duration.duration,
             properties: props
         )
