@@ -23,17 +23,7 @@ class RoutingViewController: UIViewController {
 
     private func startSession(with auth: AuthContainer) {
         let viewController = CalendarViewController()
-        let api = Sama.makeApi(with: auth)
-        var isHandledForbidden = false
-        api.forbiddenHandler = {
-            if !isHandledForbidden {
-                isHandledForbidden = true
-                UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
-            }
-        }
-        let session = CalendarSession(api: api, currentDayIndex: 5000)
-        session.setupNotificationsTokenObserver()
-        viewController.session = session
+        viewController.session = makeCalendarSession(with: auth)
         UIApplication.shared.windows[0].rootViewController = viewController
     }
 

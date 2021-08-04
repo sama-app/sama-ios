@@ -103,13 +103,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     private func startSession(with auth: AuthContainer) {
-        let api = Sama.makeApi(with: auth)
-
-        let session = CalendarSession(api: api, currentDayIndex: 5000)
-        session.setupNotificationsTokenObserver()
-
         let viewController = CalendarViewController()
-        viewController.session = session
+        viewController.session = makeCalendarSession(with: auth)
         UIApplication.shared.windows[0].rootViewController = viewController
     }
 

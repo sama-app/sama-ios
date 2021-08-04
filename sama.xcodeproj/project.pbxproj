@@ -58,6 +58,7 @@
 		E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */; };
 		E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0AC26413342009CAB88 /* samaUITests.swift */; };
 		E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
+		E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
 		E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
 		E7F5AD0D266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */; };
 		E7F5AD0F266FB03700138E42 /* UIFont+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */; };
@@ -142,6 +143,7 @@
 		E7D3C0AC26413342009CAB88 /* samaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = samaUITests.swift; sourceTree = "<group>"; };
 		E7D3C0AE26413342009CAB88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7D3C0CC26413952009CAB88 /* AuthDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDirections.swift; sourceTree = "<group>"; };
+		E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarSession+Factory.swift"; sourceTree = "<group>"; };
 		E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt Regular.otf"; sourceTree = "<group>"; };
 		E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt SemiBold.otf"; sourceTree = "<group>"; };
 		E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Branded.swift"; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */,
 				E7B46FFD2694708D00558BB9 /* SlotFinder.swift */,
 				E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */,
+				E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -523,6 +526,7 @@
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
 				E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */,
 				E7BFB368269AEB6500EA6AFD /* SamaKeys.swift in Sources */,
+				E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */,
 				E79C90C32684C7A100398E41 /* Sama.swift in Sources */,
 				E7B50CA726949C7400BBEFD9 /* Banalytics.swift in Sources */,
 				E70A665D2674F02C00C88EA1 /* MainActionButton.swift in Sources */,
