@@ -130,11 +130,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             block.trailingAnchor.constraint(equalTo: text.trailingAnchor, constant: 40)
         ])
 
-        let actionBtn = UIButton(type: .system)
-        actionBtn.setTitle("Connect", for: .normal)
-        actionBtn.translatesAutoresizingMaskIntoConstraints = false
-        actionBtn.setTitleColor(.primary, for: .normal)
-        actionBtn.titleLabel?.font = .brandedFont(ofSize: 28, weight: .semibold)
+        let actionBtn = SignInGoogleButton(frame: .zero)
         actionBtn.addTarget(self, action: #selector(onConnectCalendar), for: .touchUpInside)
         block.addSubview(actionBtn)
         NSLayoutConstraint.activate([

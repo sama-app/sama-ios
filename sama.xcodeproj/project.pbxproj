@@ -32,6 +32,7 @@
 		E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957944266F628A005B9F39 /* RoutingViewController.swift */; };
 		E7957947266F629B005B9F39 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957946266F629B005B9F39 /* CalendarViewController.swift */; };
 		E7957949266F6457005B9F39 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957948266F6457005B9F39 /* OnboardingViewController.swift */; };
+		E7978E9A26BC5124001B199A /* SignInGoogleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7978E9926BC5124001B199A /* SignInGoogleButton.swift */; };
 		E79B09D62677A05300ADD43D /* EventDatesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79B09D52677A05300ADD43D /* EventDatesPanel.swift */; };
 		E79B09D82677A34A00ADD43D /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79B09D72677A34A00ADD43D /* EventView.swift */; };
 		E79C90C12684C37A00398E41 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C02684C37A00398E41 /* Api.swift */; };
@@ -112,6 +113,7 @@
 		E7957944266F628A005B9F39 /* RoutingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingViewController.swift; sourceTree = "<group>"; };
 		E7957946266F629B005B9F39 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		E7957948266F6457005B9F39 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		E7978E9926BC5124001B199A /* SignInGoogleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInGoogleButton.swift; sourceTree = "<group>"; };
 		E79B09D52677A05300ADD43D /* EventDatesPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDatesPanel.swift; sourceTree = "<group>"; };
 		E79B09D72677A34A00ADD43D /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		E79C90C02684C37A00398E41 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */,
 				E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */,
 				E7BFB366269AEB5500EA6AFD /* Environment */,
+				E7978E9926BC5124001B199A /* SignInGoogleButton.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -505,6 +508,7 @@
 				E7F5AD182670A57900138E42 /* FindTimePanel.swift in Sources */,
 				E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */,
 				E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */,
+				E7978E9A26BC5124001B199A /* SignInGoogleButton.swift in Sources */,
 				E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */,
 				E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
