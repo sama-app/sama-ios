@@ -37,7 +37,7 @@ final class CalendarSession: CalendarContextProvider {
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
     let api: Api
-    private let refDate = Date()
+    let refDate = Date()
     private let calendar = Calendar.current
 
     private var isBlockBusy: [Int: Bool] = [:]

@@ -57,6 +57,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.timeline.targetTimezoneHoursDiff = self.eventsCoordinator.hoursOffsetWithOffset($0)
         }
         navCenter.pushBlock(panel, animated: false)
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onDeviceDayChange),
+            name: .NSCalendarDayChanged,
+            object: nil
+        )
+    }
+
+    @objc private func onDeviceDayChange() {
+        calendar.reloadData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -238,9 +249,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         cell.cellSize = cellSize
         cell.vOffset = vOffset
         cell.blockedTimes = session.blocksForDayIndex[indexPath.item] ?? []
-        cell.isCurrentDay = (indexPath.item == session.currentDayIndex)
         let daysOffset = -session.currentDayIndex + indexPath.item
-        cell.date = Calendar.current.date(byAdding: .day, value: daysOffset, to: Date())
+        let date = Calendar.current.date(byAdding: .day, value: daysOffset, to: session.refDate)!
+        cell.isCurrentDay = Calendar.current.isDate(date, inSameDayAs: Date())
+        cell.date = date
         cell.setNeedsDisplay()
 
         if isCalendarReady {
