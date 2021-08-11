@@ -60,6 +60,7 @@
 		E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0AC26413342009CAB88 /* samaUITests.swift */; };
 		E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
 		E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
+		E7F2810226C4620E0051BB5B /* SuggestionsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */; };
 		E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
 		E7F5AD0D266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */; };
 		E7F5AD0F266FB03700138E42 /* UIFont+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */; };
@@ -146,6 +147,7 @@
 		E7D3C0AE26413342009CAB88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7D3C0CC26413952009CAB88 /* AuthDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDirections.swift; sourceTree = "<group>"; };
 		E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarSession+Factory.swift"; sourceTree = "<group>"; };
+		E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsViewCoordinator.swift; sourceTree = "<group>"; };
 		E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt Regular.otf"; sourceTree = "<group>"; };
 		E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt SemiBold.otf"; sourceTree = "<group>"; };
 		E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Branded.swift"; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				E7B46FFD2694708D00558BB9 /* SlotFinder.swift */,
 				E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */,
 				E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */,
+				E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				E7957949266F6457005B9F39 /* OnboardingViewController.swift in Sources */,
 				E74C8A4326B7045B009D6D90 /* AuthResultHandler.swift in Sources */,
 				E79B09D62677A05300ADD43D /* EventDatesPanel.swift in Sources */,
+				E7F2810226C4620E0051BB5B /* SuggestionsViewCoordinator.swift in Sources */,
 				E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */,
 				E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */,
 				E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */,

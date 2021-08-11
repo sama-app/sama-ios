@@ -26,6 +26,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var scrollLock: ScrollLock?
 
     private var eventsCoordinator: EventsCoordinator!
+    private var suggestionsViewCoordinator: SuggestionsViewCoordinator!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +36,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         self.setupViews()
         eventsCoordinator = EventsCoordinator(
+            api: session.api,
+            currentDayIndex: session.currentDayIndex,
+            context: session,
+            cellSize: cellSize,
+            calendar: calendar,
+            container: slotPickerContainer
+        )
+        suggestionsViewCoordinator = SuggestionsViewCoordinator(
             api: session.api,
             currentDayIndex: session.currentDayIndex,
             context: session,
@@ -64,6 +73,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             name: .NSCalendarDayChanged,
             object: nil
         )
+
+        suggestionsViewCoordinator.present()
     }
 
     @objc private func onDeviceDayChange() {
@@ -210,6 +221,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             (cell as! CalendarDayCell).headerInset = scrollView.contentOffset.y
         }
         eventsCoordinator.repositionEventViews()
+        suggestionsViewCoordinator.repositionEventViews()
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
