@@ -57,12 +57,12 @@ class SuggestionsViewCoordinator {
     }
 
     func present() {
-        api.request(for: MeetingProposalsRequest(code: "gjiuXxpz")) {
+        api.request(for: MeetingProposalsRequest(code: "D4DCBMhu")) {
             switch $0 {
             case let .success(proposals):
                 let calendar = Calendar.current
                 let refDate = Date()
-                self.availableSlotProps = proposals.proposedSlots.map { slot in
+                let rawSlots: [ProposedAvailableSlot] = proposals.proposedSlots.map { slot in
                     let parsedStart = self.apiDateF.date(from: slot.startDateTime)
                     let startDate = calendar.toTimeZone(date: parsedStart)
                     let parsedEnd = self.apiDateF.date(from: slot.endDateTime)
@@ -82,6 +82,32 @@ class SuggestionsViewCoordinator {
                         daysOffset: daysOffset
                     )
                 }
+
+                // merging slots
+                var mergedSlots: [ProposedAvailableSlot] = []
+                for slot in rawSlots {
+                    var isMerged = false
+                    for (idx, finalSlot) in mergedSlots.enumerated() {
+                        if slot.daysOffset == finalSlot.daysOffset && slot.start >= finalSlot.start && slot.start < (finalSlot.start + finalSlot.duration) {
+                            let end = slot.start + slot.duration
+                            let duration = end - finalSlot.start
+
+                            mergedSlots[idx] = ProposedAvailableSlot(
+                                start: finalSlot.start,
+                                duration: duration,
+                                daysOffset: finalSlot.daysOffset
+                            )
+
+                            isMerged = true
+                            break
+                        }
+                    }
+                    if !isMerged {
+                        mergedSlots.append(slot)
+                    }
+                }
+                self.availableSlotProps = mergedSlots
+
                 self.availableSlotViews = proposals.proposedSlots.map { _ in
                     let v = UIView()
                     v.backgroundColor = .red
