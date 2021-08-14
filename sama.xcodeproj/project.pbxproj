@@ -25,6 +25,7 @@
 		E763A6DB2697383B00082BCE /* firebase in Resources */ = {isa = PBXBuildFile; fileRef = E763A6DA2697383B00082BCE /* firebase */; };
 		E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E76E85E1264D195200FAC1DF /* FirebaseMessaging */; };
 		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
+		E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */; };
 		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
 		E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */; };
 		E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957940266F5F62005B9F39 /* CalendarSession.swift */; };
@@ -107,6 +108,7 @@
 		E763A6DA2697383B00082BCE /* firebase */ = {isa = PBXFileReference; lastKnownFileType = text; path = firebase; sourceTree = "<group>"; };
 		E76E85EE264D1E4F00FAC1DF /* sama.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sama.entitlements; sourceTree = "<group>"; };
 		E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTokenSync.swift; sourceTree = "<group>"; };
+		E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotSuggestionView.swift; sourceTree = "<group>"; };
 		E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCoordinator.swift; sourceTree = "<group>"; };
 		E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBlocks.swift; sourceTree = "<group>"; };
 		E7957940266F5F62005B9F39 /* CalendarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSession.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */,
 				E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */,
 				E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */,
+				E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */,
 				E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */,
 				E7B8970C2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift in Sources */,
+				E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */,
 				E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */,
 				E7957943266F5F7B005B9F39 /* CalendarLayout.swift in Sources */,
 				E7F5AD0F266FB03700138E42 /* UIFont+Branded.swift in Sources */,

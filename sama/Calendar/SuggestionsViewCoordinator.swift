@@ -38,9 +38,18 @@ class SuggestionsViewCoordinator {
 
     private var duration: Decimal = 1
     private var availableSlotProps: [ProposedAvailableSlot] = []
-    private var availableSlotViews: [UIView] = []
+    private var availableSlotViews: [SlotSuggestionView] = []
 
     private let apiDateF = ApiDateTimeFormatter()
+
+    private var highlightedIndex = 0 {
+        didSet {
+            for (idx, view) in availableSlotViews.enumerated() {
+                view.isHighlighted = idx == highlightedIndex
+                view.setNeedsLayout()
+            }
+        }
+    }
 
     private var touchableCalendarMidY: CGFloat {
         let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
@@ -57,7 +66,7 @@ class SuggestionsViewCoordinator {
     }
 
     func present() {
-        api.request(for: MeetingProposalsRequest(code: "D4DCBMhu")) {
+        api.request(for: MeetingProposalsRequest(code: "5XlvI9ZT")) {
             switch $0 {
             case let .success(proposals):
                 let calendar = Calendar.current
@@ -106,17 +115,26 @@ class SuggestionsViewCoordinator {
                         mergedSlots.append(slot)
                     }
                 }
+
+                if let firstSlot = rawSlots.first {
+                    // first slot defines duration
+                    self.duration = firstSlot.duration
+                }
                 self.availableSlotProps = mergedSlots
 
-                self.availableSlotViews = proposals.proposedSlots.map { _ in
-                    let v = UIView()
-                    v.backgroundColor = .red
+                self.availableSlotViews = mergedSlots.enumerated().map { idx, slot in
+                    let v = SlotSuggestionView()
+
+                    let tapHandler = UITapGestureRecognizer(target: self, action: #selector(self.handleSlotTap))
+                    v.addGestureRecognizer(tapHandler)
+
                     self.container.addSubview(v)
                     return v
                 }
+                self.highlightedIndex = 0
 
                 self.repositionEventViews()
-                self.autoScrollToSlot(at: 0)
+                self.autoScrollToSlot(at: self.highlightedIndex)
             case let .failure(err):
                 print(err)
             }
@@ -138,6 +156,15 @@ class SuggestionsViewCoordinator {
                 height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
         }
+    }
+
+    @objc private func handleSlotTap(_ gesture: UIGestureRecognizer) {
+        guard
+            let slotIndex = availableSlotViews.firstIndex(of: gesture.view as! SlotSuggestionView),
+            slotIndex != highlightedIndex
+        else { return }
+        highlightedIndex = slotIndex
+        autoScrollToSlot(at: highlightedIndex)
     }
 
     private func xForDaysOffset(_ daysOffset: Int) -> CGFloat {
