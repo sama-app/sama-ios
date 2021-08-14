@@ -24,6 +24,7 @@ struct ProposedAvailableSlot: Equatable {
     var start: Decimal
     var duration: Decimal
     var daysOffset: Int
+    var pickStart: Decimal
 }
 
 class SuggestionsViewCoordinator {
@@ -39,13 +40,25 @@ class SuggestionsViewCoordinator {
     private var duration: Decimal = 1
     private var availableSlotProps: [ProposedAvailableSlot] = []
     private var availableSlotViews: [SlotSuggestionView] = []
+    private var timeInSlotPickerView: UIView?
 
     private let apiDateF = ApiDateTimeFormatter()
 
-    private var highlightedIndex = 0 {
+    private var selectionIndex = 0 {
         didSet {
+            let isFullSlot = availableSlotProps[selectionIndex].duration == duration
+            if isFullSlot {
+                timeInSlotPickerView?.removeFromSuperview()
+                timeInSlotPickerView = nil
+            } else if timeInSlotPickerView == nil {
+                let v = SlotSuggestionView()
+                v.isHighlighted = true
+                self.container.addSubview(v)
+                timeInSlotPickerView = v
+            }
+
             for (idx, view) in availableSlotViews.enumerated() {
-                view.isHighlighted = idx == highlightedIndex
+                view.isHighlighted = idx == selectionIndex && isFullSlot
                 view.setNeedsLayout()
             }
         }
@@ -66,7 +79,7 @@ class SuggestionsViewCoordinator {
     }
 
     func present() {
-        api.request(for: MeetingProposalsRequest(code: "5XlvI9ZT")) {
+        api.request(for: MeetingProposalsRequest(code: "n3HQNbFr")) {
             switch $0 {
             case let .success(proposals):
                 let calendar = Calendar.current
@@ -88,7 +101,8 @@ class SuggestionsViewCoordinator {
                     return ProposedAvailableSlot(
                         start: start,
                         duration: duration,
-                        daysOffset: daysOffset
+                        daysOffset: daysOffset,
+                        pickStart: start
                     )
                 }
 
@@ -104,7 +118,8 @@ class SuggestionsViewCoordinator {
                             mergedSlots[idx] = ProposedAvailableSlot(
                                 start: finalSlot.start,
                                 duration: duration,
-                                daysOffset: finalSlot.daysOffset
+                                daysOffset: finalSlot.daysOffset,
+                                pickStart: finalSlot.pickStart
                             )
 
                             isMerged = true
@@ -131,10 +146,10 @@ class SuggestionsViewCoordinator {
                     self.container.addSubview(v)
                     return v
                 }
-                self.highlightedIndex = 0
+                self.selectionIndex = 0
 
                 self.repositionEventViews()
-                self.autoScrollToSlot(at: self.highlightedIndex)
+                self.autoScrollToSlot(at: self.selectionIndex)
             case let .failure(err):
                 print(err)
             }
@@ -156,15 +171,27 @@ class SuggestionsViewCoordinator {
                 height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
         }
+
+        if let pickerView = timeInSlotPickerView {
+            let eventProps = availableSlotProps[selectionIndex]
+            let start = eventProps.pickStart
+            let duration = duration
+            pickerView.frame = CGRect(
+                x: xForDaysOffset(eventProps.daysOffset),
+                y: yForTimestampInDay(start),
+                width: cellSize.width,
+                height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
+            )
+        }
     }
 
     @objc private func handleSlotTap(_ gesture: UIGestureRecognizer) {
         guard
             let slotIndex = availableSlotViews.firstIndex(of: gesture.view as! SlotSuggestionView),
-            slotIndex != highlightedIndex
+            slotIndex != selectionIndex
         else { return }
-        highlightedIndex = slotIndex
-        autoScrollToSlot(at: highlightedIndex)
+        selectionIndex = slotIndex
+        autoScrollToSlot(at: selectionIndex)
     }
 
     private func xForDaysOffset(_ daysOffset: Int) -> CGFloat {
