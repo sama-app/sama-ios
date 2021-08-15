@@ -227,7 +227,7 @@ class SuggestionsViewCoordinator {
             resetDragState()
             repositionEventViews()
         case .ended:
-            let loc = recognizer.location(in: container)
+            let loc = timeInSlotPickerView!.frame.origin
 
             var slot = availableSlotProps[selectionIndex]
             slot.pickStart = target(from: loc)
@@ -275,7 +275,7 @@ class SuggestionsViewCoordinator {
     }
 
     private func target(from loc: CGPoint) -> Decimal {
-        let calcYOffset = calendar.contentOffset.y + loc.y - dragOrigin.y
+        let calcYOffset = calendar.contentOffset.y + loc.y
         let eventHeight = CGFloat(truncating: duration as NSNumber) * cellSize.height
         let maxYOffset = CGFloat(24) * cellSize.height - eventHeight
         let yOffset = min(max((calcYOffset), 0), maxYOffset)
