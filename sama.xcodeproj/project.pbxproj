@@ -60,6 +60,7 @@
 		E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */; };
 		E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0AC26413342009CAB88 /* samaUITests.swift */; };
 		E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
+		E7D5FE8226C971190047B6D3 /* SuggestionsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */; };
 		E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
 		E7F2810226C4620E0051BB5B /* SuggestionsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */; };
 		E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
@@ -148,6 +149,7 @@
 		E7D3C0AC26413342009CAB88 /* samaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = samaUITests.swift; sourceTree = "<group>"; };
 		E7D3C0AE26413342009CAB88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7D3C0CC26413952009CAB88 /* AuthDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDirections.swift; sourceTree = "<group>"; };
+		E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickerView.swift; sourceTree = "<group>"; };
 		E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarSession+Factory.swift"; sourceTree = "<group>"; };
 		E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsViewCoordinator.swift; sourceTree = "<group>"; };
 		E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt Regular.otf"; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */,
 				E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */,
 				E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */,
+				E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */,
 				E7978E9A26BC5124001B199A /* SignInGoogleButton.swift in Sources */,
 				E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */,
+				E7D5FE8226C971190047B6D3 /* SuggestionsPickerView.swift in Sources */,
 				E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,

@@ -12,6 +12,11 @@ class CalendarNavigationBlock: UIView {
     func didLoad() {}
 }
 
+protocol UnstyledCalendarNavigationBlock: AnyObject {
+    var navigation: CalendarNavigationCenter? { get set }
+    func didLoad()
+}
+
 final class CalendarNavigationCenter: UIView {
 
     var onActivePanelHeightChange: ((CGFloat) -> Void)?
@@ -36,6 +41,16 @@ final class CalendarNavigationCenter: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func pushUnstyledBlock(_ fullBlock: (UIView & UnstyledCalendarNavigationBlock), animated: Bool) {
+        fullBlock.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(fullBlock)
+
+        fullBlock.navigation = self
+        fullBlock.didLoad()
+
+        setup(fullBlock: fullBlock, animated: animated)
     }
 
     func pushBlock(_ block: CalendarNavigationBlock, animated: Bool) {
@@ -68,6 +83,10 @@ final class CalendarNavigationCenter: UIView {
             fullBlock.bottomAnchor.constraint(equalTo: blockWrapper.bottomAnchor, constant: 16),
         ])
 
+        setup(fullBlock: fullBlock, animated: animated)
+    }
+
+    private func setup(fullBlock: UIView, animated: Bool) {
         let leading = fullBlock.leadingAnchor.constraint(equalTo: leadingAnchor, constant: bounds.width)
         let bottom = fullBlock.bottomAnchor.constraint(equalTo: bottomAnchor)
         NSLayoutConstraint.activate([
