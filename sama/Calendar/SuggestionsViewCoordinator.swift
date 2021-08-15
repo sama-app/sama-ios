@@ -27,6 +27,11 @@ struct ProposedAvailableSlot: Equatable {
     var pickStart: Decimal
 }
 
+private struct DragUI {
+    let repositionLink: CADisplayLink
+    let recognizer: UIGestureRecognizer
+}
+
 class SuggestionsViewCoordinator {
 
     var api: Api
@@ -42,6 +47,10 @@ class SuggestionsViewCoordinator {
     private var availableSlotViews: [SlotSuggestionView] = []
     private var timeInSlotPickerView: UIView?
 
+    private let hotEdge: CGFloat = 40
+    // pin to 15 mins
+    private let hourSplit = 4
+
     private let apiDateF = ApiDateTimeFormatter()
 
     private var selectionIndex = 0 {
@@ -53,6 +62,11 @@ class SuggestionsViewCoordinator {
             } else if timeInSlotPickerView == nil {
                 let v = SlotSuggestionView()
                 v.isHighlighted = true
+
+                let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handlePickerDrag(_:)))
+                dragRecognizer.minimumPressDuration = 0.01
+                v.addGestureRecognizer(dragRecognizer)
+
                 self.container.addSubview(v)
                 timeInSlotPickerView = v
             }
@@ -61,6 +75,13 @@ class SuggestionsViewCoordinator {
                 view.isHighlighted = idx == selectionIndex && isFullSlot
                 view.setNeedsLayout()
             }
+        }
+    }
+
+    private var dragOrigin: CGPoint = .zero
+    private var dragUi: DragUI? {
+        didSet {
+            oldValue?.repositionLink.invalidate()
         }
     }
 
@@ -172,7 +193,7 @@ class SuggestionsViewCoordinator {
             )
         }
 
-        if let pickerView = timeInSlotPickerView {
+        if dragUi == nil, let pickerView = timeInSlotPickerView {
             let eventProps = availableSlotProps[selectionIndex]
             let start = eventProps.pickStart
             let duration = duration
@@ -192,6 +213,101 @@ class SuggestionsViewCoordinator {
         else { return }
         selectionIndex = slotIndex
         autoScrollToSlot(at: selectionIndex)
+    }
+
+    @objc private func handlePickerDrag(_ recognizer: UIGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            dragOrigin = recognizer.location(in: recognizer.view)
+
+            let repositionLink = CADisplayLink(target: self, selector: #selector(changePickerPos))
+            repositionLink.add(to: RunLoop.current, forMode: .common)
+            dragUi = DragUI(repositionLink: repositionLink, recognizer: recognizer)
+        case .cancelled:
+            resetDragState()
+            repositionEventViews()
+        case .ended:
+            let loc = recognizer.location(in: container)
+
+            var slot = availableSlotProps[selectionIndex]
+            slot.pickStart = target(from: loc)
+
+            let oldVal = availableSlotProps[selectionIndex]
+            if oldVal != slot {
+                availableSlotProps[selectionIndex] = slot
+            }
+
+            UIView.animate(withDuration: 0.1) {
+                recognizer.view?.frame.origin.y = self.yForTimestampInDay(slot.pickStart)
+            }
+
+            resetDragState()
+        case .changed:
+            // display link handles changes
+            break
+        default:
+            resetDragState()
+        }
+    }
+
+    private func resetDragState() {
+        dragUi = nil
+        dragOrigin = .zero
+    }
+
+    @objc private func changePickerPos() {
+        guard let recognizer = dragUi?.recognizer else { return }
+
+        let slot = availableSlotProps[selectionIndex]
+
+        let loc = recognizer.location(in: container)
+        let pickerView = recognizer.view!
+
+        let minY = yForTimestampInDay(slot.start)
+        let maxY = yForTimestampInDay(slot.start + slot.duration - duration)
+        let rawPosY = loc.y - dragOrigin.y
+        let yPos = min(max(minY, rawPosY), maxY)
+        pickerView.frame.origin.y = yPos
+
+        if let points = contentOffsetChange(from: loc) {
+            self.calendar.contentOffset.y = yOffsetNormalized(calendar.contentOffset.y + points)
+        }
+    }
+
+    private func target(from loc: CGPoint) -> Decimal {
+        let calcYOffset = calendar.contentOffset.y + loc.y - dragOrigin.y
+        let eventHeight = CGFloat(truncating: duration as NSNumber) * cellSize.height
+        let maxYOffset = CGFloat(24) * cellSize.height - eventHeight
+        let yOffset = min(max((calcYOffset), 0), maxYOffset)
+        let totalMinsOffset = NSDecimalNumber(value: Double(yOffset))
+            .multiplying(by: NSDecimalNumber(value: hourSplit))
+            .dividing(by: NSDecimalNumber(value: Double(cellSize.height)))
+            .rounding(accordingToBehavior: nil)
+            .dividing(by: NSDecimalNumber(value: hourSplit))
+        return totalMinsOffset.decimalValue
+    }
+
+    private func yOffsetNormalized(_ y: CGFloat) -> CGFloat {
+        let minY = CGFloat(0)
+        let maxY = calendar.contentSize.height - calendar.contentInset.bottom
+        if (y < minY) {
+            return minY
+        } else if (y > maxY) {
+            return maxY
+        } else {
+            return y
+        }
+    }
+
+    private func contentOffsetChange(from loc: CGPoint) -> CGFloat? {
+        let bottomThreshold = (container.frame.height - (container.safeAreaInsets.bottom + calendar.contentInset.bottom) - hotEdge)
+        if loc.y < hotEdge {
+            return -2 * log(max(hotEdge - loc.y, 1))
+        } else if loc.y > bottomThreshold {
+            return 2 * log(max(loc.y - bottomThreshold, 1))
+        }
+
+        return nil
     }
 
     private func xForDaysOffset(_ daysOffset: Int) -> CGFloat {
