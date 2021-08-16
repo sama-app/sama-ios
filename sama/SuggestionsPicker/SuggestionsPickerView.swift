@@ -11,13 +11,22 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
 
     weak var navigation: CalendarNavigationCenter?
 
-    var coordinator: SuggestionsViewCoordinator!
+    var coordinator: SuggestionsViewCoordinator! {
+        didSet {
+            coordinator.onSelectionChange = { [weak self] index in
+                self?.layout.focusItem(withIndex: index)
+            }
+        }
+    }
 
     private let layout: SuggestionsPickerLayout
 
     init(parentWidth: CGFloat) {
         layout = SuggestionsPickerLayout(parentWidth: parentWidth)
         super.init(frame: .zero, collectionViewLayout: layout)
+        layout.onSelectionChange = { [weak self] index in
+            self?.coordinator.changeSelection(index)
+        }
         clipsToBounds = false
     }
 

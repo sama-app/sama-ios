@@ -9,9 +9,15 @@ import UIKit
 
 class SuggestionsPickerLayout: UICollectionViewFlowLayout {
 
+    var onSelectionChange: ((Int) -> Void)?
+
     let sideInset: CGFloat
 
-    private var focusedIndex = 0
+    private var focusedIndex = 0 {
+        didSet {
+            onSelectionChange?(focusedIndex)
+        }
+    }
 
     private let cardSize = CGSize(width: 272, height: 156)
     private let cardInset: CGFloat = 8

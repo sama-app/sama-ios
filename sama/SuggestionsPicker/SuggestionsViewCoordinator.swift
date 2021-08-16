@@ -35,6 +35,7 @@ private struct DragUI {
 class SuggestionsViewCoordinator {
 
     var api: Api
+    var onSelectionChange: ((Int) -> Void)?
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -206,13 +207,18 @@ class SuggestionsViewCoordinator {
         }
     }
 
+    func changeSelection(_ index: Int) {
+        selectionIndex = index
+        autoScrollToSlot(at: selectionIndex)
+    }
+
     @objc private func handleSlotTap(_ gesture: UIGestureRecognizer) {
         guard
             let slotIndex = availableSlotViews.firstIndex(of: gesture.view as! SlotSuggestionView),
             slotIndex != selectionIndex
         else { return }
-        selectionIndex = slotIndex
-        autoScrollToSlot(at: selectionIndex)
+        changeSelection(slotIndex)
+        onSelectionChange?(selectionIndex)
     }
 
     @objc private func handlePickerDrag(_ recognizer: UIGestureRecognizer) {

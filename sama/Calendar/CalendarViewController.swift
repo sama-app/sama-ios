@@ -76,7 +76,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.suggestionsViewCoordinator.present()
-            self.navCenter.pushUnstyledBlock(SuggestionsPickerView(parentWidth: self.view.frame.width), animated: true)
+
+            let picker = SuggestionsPickerView(parentWidth: self.view.frame.width)
+            picker.coordinator = self.suggestionsViewCoordinator
+            self.navCenter.pushUnstyledBlock(picker, animated: true)
         }
     }
 
