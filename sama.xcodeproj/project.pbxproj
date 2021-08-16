@@ -15,6 +15,8 @@
 		E70A665F267536A400C88EA1 /* HighlightableSimpleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */; };
 		E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */; };
 		E71755102698AAEE003B5A32 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = E717550F2698AAEE003B5A32 /* FirebaseCrashlytics */; };
+		E72634C526CADAC60041886D /* SuggestionsPickerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72634C426CADAC60041886D /* SuggestionsPickerLayout.swift */; };
+		E72634CC26CADB380041886D /* SuggestionsPickerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72634CB26CADB380041886D /* SuggestionsPickerViewCell.swift */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
@@ -99,6 +101,8 @@
 		E70A665C2674F02C00C88EA1 /* MainActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionButton.swift; sourceTree = "<group>"; };
 		E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightableSimpleCell.swift; sourceTree = "<group>"; };
 		E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Helpers.swift"; sourceTree = "<group>"; };
+		E72634C426CADAC60041886D /* SuggestionsPickerLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickerLayout.swift; sourceTree = "<group>"; };
+		E72634CB26CADB380041886D /* SuggestionsPickerViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickerViewCell.swift; sourceTree = "<group>"; };
 		E732E958266256A9008A8B82 /* UIColors+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Branded.swift"; sourceTree = "<group>"; };
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
 		E7480392269390A600573DE2 /* Calendar+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Convenience.swift"; sourceTree = "<group>"; };
@@ -191,6 +195,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E72634CA26CADB0F0041886D /* SuggestionsPicker */ = {
+			isa = PBXGroup;
+			children = (
+				E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */,
+				E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */,
+				E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */,
+				E72634C426CADAC60041886D /* SuggestionsPickerLayout.swift */,
+				E72634CB26CADB380041886D /* SuggestionsPickerViewCell.swift */,
+			);
+			path = SuggestionsPicker;
+			sourceTree = "<group>";
+		};
 		E763A6D8269737F900082BCE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,9 +239,6 @@
 				E7B46FFD2694708D00558BB9 /* SlotFinder.swift */,
 				E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */,
 				E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */,
-				E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */,
-				E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */,
-				E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -284,6 +297,7 @@
 				E795793D266F5F40005B9F39 /* Calendar */,
 				E76E85EE264D1E4F00FAC1DF /* sama.entitlements */,
 				E7D3C0CB26413948009CAB88 /* Auth */,
+				E72634CA26CADB0F0041886D /* SuggestionsPicker */,
 				E7D3C08A26413340009CAB88 /* AppDelegate.swift */,
 				E7D3C08C26413340009CAB88 /* SceneDelegate.swift */,
 				E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */,
@@ -522,6 +536,7 @@
 				E7D5FE8226C971190047B6D3 /* SuggestionsPickerView.swift in Sources */,
 				E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
+				E72634CC26CADB380041886D /* SuggestionsPickerViewCell.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */,
 				E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */,
@@ -536,6 +551,7 @@
 				E7F8DD83264EB61D00CD3759 /* CalendarDayCell.swift in Sources */,
 				E70A66592674C7D100C88EA1 /* DurationPickerPanel.swift in Sources */,
 				E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */,
+				E72634C526CADAC60041886D /* SuggestionsPickerLayout.swift in Sources */,
 				E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */,
 				E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */,

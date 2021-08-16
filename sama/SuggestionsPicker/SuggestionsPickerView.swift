@@ -7,24 +7,18 @@
 
 import UIKit
 
-class SuggestionsPickerViewCell: UICollectionViewCell {
-
-}
-
 class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UnstyledCalendarNavigationBlock {
 
     weak var navigation: CalendarNavigationCenter?
 
-    init(parentWidth: CGFloat) {
-        let width: CGFloat = 272
-        let sideInset = (parentWidth - width) / 2
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 272, height: 156)
-        layout.minimumLineSpacing = 16
-        layout.sectionInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
-        layout.scrollDirection = .horizontal
+    var coordinator: SuggestionsViewCoordinator!
 
+    private let layout: SuggestionsPickerLayout
+
+    init(parentWidth: CGFloat) {
+        layout = SuggestionsPickerLayout(parentWidth: parentWidth)
         super.init(frame: .zero, collectionViewLayout: layout)
+        clipsToBounds = false
     }
 
     required init?(coder: NSCoder) {
@@ -37,6 +31,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
 
         delegate = self
         dataSource = self
+        decelerationRate = .fast
         showsHorizontalScrollIndicator = false
 
         let height = (collectionViewLayout as! UICollectionViewFlowLayout).itemSize.height
@@ -49,7 +44,10 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: "SuggestionsPickerViewCell", for: indexPath)
-        cell.backgroundColor = .white
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        layout.focusItem(withIndex: indexPath.item)
     }
 }
