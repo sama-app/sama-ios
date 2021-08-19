@@ -8,6 +8,15 @@
 import UIKit
 
 class SuggestionsPickerViewCell: UICollectionViewCell {
+
+    var slot: ProposedAvailableSlot!
+    var confirmHandler: (() -> Void)?
+
+    let titleLabel = UILabel()
+    let rangeIndication = UILabel()
+    let valueLabel = UILabel()
+    let actionBtn = MainActionButton.make(withTitle: "Confirm")
+
     private let shadow = CALayer()
     private let background = CALayer()
 
@@ -16,6 +25,40 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
 
         layer.insertSublayer(shadow, at: 0)
         layer.insertSublayer(background, at: 1)
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = .neutral1
+        titleLabel.font = .brandedFont(ofSize: 18, weight: .regular)
+        titleLabel.text = "Alternative 1"
+        addSubview(titleLabel)
+
+        rangeIndication.translatesAutoresizingMaskIntoConstraints = false
+        rangeIndication.textColor = .primary
+        rangeIndication.font = .brandedFont(ofSize: 18, weight: .regular)
+        rangeIndication.text = "Range"
+        addSubview(rangeIndication)
+
+        valueLabel.translatesAutoresizingMaskIntoConstraints = false
+        valueLabel.textColor = .neutral1
+        valueLabel.font = .brandedFont(ofSize: 24, weight: .regular)
+        valueLabel.text = "Tuesday 11am-12pm"
+        addSubview(valueLabel)
+
+        actionBtn.addTarget(self, action: #selector(onConfirm), for: .touchUpInside)
+        addSubview(actionBtn)
+
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            rangeIndication.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            trailingAnchor.constraint(equalTo: rangeIndication.trailingAnchor, constant: 16),
+            valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            valueLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            actionBtn.heightAnchor.constraint(equalToConstant: 48),
+            actionBtn.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            trailingAnchor.constraint(equalTo: actionBtn.trailingAnchor, constant: 16),
+            bottomAnchor.constraint(equalTo: actionBtn.bottomAnchor, constant: 16)
+        ])
     }
 
     required init?(coder: NSCoder) {
@@ -41,5 +84,9 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
         shadow.shadowOffset = CGSize(width: 0, height: 2)
         shadow.bounds = bounds
         shadow.anchorPoint = .zero
+    }
+
+    @objc private func onConfirm() {
+        confirmHandler?()
     }
 }

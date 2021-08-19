@@ -36,6 +36,8 @@ class SuggestionsViewCoordinator {
 
     var api: Api
     var onSelectionChange: ((Int) -> Void)?
+    var onLoad: (([ProposedAvailableSlot], Decimal) -> Void)?
+    var onChange: ((Int, ProposedAvailableSlot) -> Void)?
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -101,7 +103,7 @@ class SuggestionsViewCoordinator {
     }
 
     func present() {
-        api.request(for: MeetingProposalsRequest(code: "n3HQNbFr")) {
+        api.request(for: MeetingProposalsRequest(code: "EWOdWQ5C")) {
             switch $0 {
             case let .success(proposals):
                 let calendar = Calendar.current
@@ -172,6 +174,8 @@ class SuggestionsViewCoordinator {
 
                 self.repositionEventViews()
                 self.autoScrollToSlot(at: self.selectionIndex)
+
+                self.onLoad?(self.availableSlotProps, self.duration)
             case let .failure(err):
                 print(err)
             }
@@ -241,6 +245,7 @@ class SuggestionsViewCoordinator {
             let oldVal = availableSlotProps[selectionIndex]
             if oldVal != slot {
                 availableSlotProps[selectionIndex] = slot
+                onChange?(selectionIndex, slot)
             }
 
             UIView.animate(withDuration: 0.1) {
