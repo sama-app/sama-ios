@@ -182,6 +182,15 @@ class SuggestionsViewCoordinator {
         }
     }
 
+    func reset() {
+        availableSlotProps = []
+        availableSlotViews.forEach { $0.removeFromSuperview() }
+        availableSlotViews = []
+
+        timeInSlotPickerView?.removeFromSuperview()
+        timeInSlotPickerView = nil
+    }
+
     func repositionEventViews() {
         let count = availableSlotProps.count
         for i in (0 ..< count) {

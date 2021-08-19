@@ -11,6 +11,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     var session: CalendarSession!
 
+    private var topBar: UIView!
     private var calendar: UICollectionView!
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
@@ -80,11 +81,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             let picker = SuggestionsPickerView(parentWidth: self.view.frame.width)
             picker.coordinator = self.suggestionsViewCoordinator
             self.navCenter.pushUnstyledBlock(picker, animated: true)
+
+            self.setupMeetingInviteTopBar()
         }
     }
 
     @objc private func onDeviceDayChange() {
         calendar.reloadData()
+    }
+
+    @objc private func onMeetingInviteClose() {
+        suggestionsViewCoordinator.reset()
+        navCenter.pop()
+        setupCalendarScreenTopBar()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -114,7 +123,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
         vOffset = contentVPadding
 
-        let topBar = setupTopBar()
+        setupTopBar()
 
         timelineScrollView = UIScrollView(frame: .zero)
         timelineScrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -157,8 +166,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         ])
     }
 
-    func setupTopBar() -> UIView {
-        let topBar = UIView(frame: .zero)
+    private var navBarItems: [UIView] = []
+
+    func setupTopBar() {
+        topBar = UIView(frame: .zero)
         topBar.translatesAutoresizingMaskIntoConstraints = false
         topBar.backgroundColor = .base
         view.addSubview(topBar)
@@ -169,6 +180,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         separator.backgroundColor = .calendarGrid
         topBar.addSubview(separator)
         separator.pinLeadingAndTrailing(bottom: 0, and: [separator.heightAnchor.constraint(equalToConstant: 1)])
+
+        setupCalendarScreenTopBar()
+    }
+
+    private func setupCalendarScreenTopBar() {
+        navBarItems.forEach { $0.removeFromSuperview() }
 
         let title = UILabel(frame: .zero)
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -194,7 +211,37 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             topBar.trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6)
         ])
 
-        return topBar
+        navBarItems = [title, profileBtn]
+    }
+
+    private func setupMeetingInviteTopBar() {
+        navBarItems.forEach { $0.removeFromSuperview() }
+
+        let title = UILabel(frame: .zero)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textColor = .neutral1
+        title.font = .brandedFont(ofSize: 20, weight: .regular)
+        title.text = "Meeting Invite"
+        topBar.addSubview(title)
+        NSLayoutConstraint.activate([
+            title.centerXAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerXAnchor),
+            title.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor)
+        ])
+
+        let closeBtn = UIButton(type: .system)
+        closeBtn.translatesAutoresizingMaskIntoConstraints = false
+        closeBtn.tintColor = .primary
+        closeBtn.setTitle("Close", for: .normal)
+        closeBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+        closeBtn.addTarget(self, action: #selector(onMeetingInviteClose), for: .touchUpInside)
+        topBar.addSubview(closeBtn)
+        NSLayoutConstraint.activate([
+            closeBtn.heightAnchor.constraint(equalToConstant: 44),
+            closeBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
+            closeBtn.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 16)
+        ])
+
+        navBarItems = [title, closeBtn]
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
