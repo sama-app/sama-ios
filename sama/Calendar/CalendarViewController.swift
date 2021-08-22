@@ -18,6 +18,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var slotPickerContainer: UIView!
 
     private var navCenter = CalendarNavigationCenter()
+    private var navCenterBottomConstraint: NSLayoutConstraint!
 
     private var cellSize: CGSize = .zero
     private var vOffset: CGFloat = 0
@@ -75,6 +76,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             object: nil
         )
 
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.suggestionsViewCoordinator.present()
 
@@ -86,11 +90,24 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
+    @objc private func onKeyboardChange(_ notification: Notification) {
+        let val = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        let sf = self.view.safeAreaInsets.bottom
+        let inset = self.view.window!.frame.size.height - val!.origin.y - sf
+        navCenterBottomConstraint.constant = max(inset, 0)
+
+        UIView.animate(withDuration: 0.3, animations: {
+            self.navCenter.setNeedsLayout()
+            self.navCenter.layoutIfNeeded()
+        }, completion: nil)
+    }
+
     @objc private func onDeviceDayChange() {
         calendar.reloadData()
     }
 
     @objc private func onMeetingInviteClose() {
+        view.endEditing(true)
         suggestionsViewCoordinator.reset()
         navCenter.popToRoot()
         setupCalendarScreenTopBar()
@@ -158,11 +175,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         navCenter.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(navCenter)
+
+        navCenterBottomConstraint = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
         NSLayoutConstraint.activate([
             navCenter.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             navCenter.topAnchor.constraint(equalTo: topBar.bottomAnchor),
             view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor),
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
+            navCenterBottomConstraint
         ])
     }
 

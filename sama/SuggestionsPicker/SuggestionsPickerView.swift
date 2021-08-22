@@ -46,7 +46,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         layout.onSelectionChange = { [weak self] index in
             self?.coordinator.changeSelection(index)
         }
-        clipsToBounds = false
+        clipsToBounds = true
     }
 
     required init?(coder: NSCoder) {
@@ -62,7 +62,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         decelerationRate = .fast
         showsHorizontalScrollIndicator = false
 
-        let height = (collectionViewLayout as! UICollectionViewFlowLayout).itemSize.height
+        let height: CGFloat = 176
         heightAnchor.constraint(equalToConstant: height).isActive = true
     }
 
