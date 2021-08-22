@@ -85,6 +85,9 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         let isRange = item.duration != data.duration
         cell.titleLabel.text = "Alternative \(index + 1)"
         cell.rangeIndication.isHidden = !isRange
+        cell.confirmHandler = { [weak self] in
+            self?.navigation?.pushBlock(MeetingInviteRecipientInputPanel(), animated: true)
+        }
 
         let refDate = calendar.startOfDay(for: Date())
         let startDay = calendar.date(byAdding: .day, value: item.daysOffset, to: refDate)!

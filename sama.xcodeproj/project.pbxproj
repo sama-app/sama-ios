@@ -22,6 +22,7 @@
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E74C8A4326B7045B009D6D90 /* AuthResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */; };
 		E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4426B704DA009D6D90 /* AppAuthError.swift */; };
+		E758054226D2896E00E9DEAD /* LightTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758054126D2896E00E9DEAD /* LightTextField.swift */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
 		E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */; };
 		E763A6DB2697383B00082BCE /* firebase in Resources */ = {isa = PBXBuildFile; fileRef = E763A6DA2697383B00082BCE /* firebase */; };
@@ -29,6 +30,7 @@
 		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
 		E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */; };
 		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
+		E794D32F26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */; };
 		E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */; };
 		E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957940266F5F62005B9F39 /* CalendarSession.swift */; };
 		E7957943266F5F7B005B9F39 /* CalendarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957942266F5F7B005B9F39 /* CalendarLayout.swift */; };
@@ -108,6 +110,7 @@
 		E7480392269390A600573DE2 /* Calendar+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Convenience.swift"; sourceTree = "<group>"; };
 		E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResultHandler.swift; sourceTree = "<group>"; };
 		E74C8A4426B704DA009D6D90 /* AppAuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAuthError.swift; sourceTree = "<group>"; };
+		E758054126D2896E00E9DEAD /* LightTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightTextField.swift; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
 		E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsViewController.swift; sourceTree = "<group>"; };
 		E763A6DA2697383B00082BCE /* firebase */ = {isa = PBXFileReference; lastKnownFileType = text; path = firebase; sourceTree = "<group>"; };
@@ -115,6 +118,7 @@
 		E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTokenSync.swift; sourceTree = "<group>"; };
 		E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotSuggestionView.swift; sourceTree = "<group>"; };
 		E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCoordinator.swift; sourceTree = "<group>"; };
+		E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInviteRecipientInputPanel.swift; sourceTree = "<group>"; };
 		E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBlocks.swift; sourceTree = "<group>"; };
 		E7957940266F5F62005B9F39 /* CalendarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSession.swift; sourceTree = "<group>"; };
 		E7957942266F5F7B005B9F39 /* CalendarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarLayout.swift; sourceTree = "<group>"; };
@@ -203,6 +207,7 @@
 				E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */,
 				E72634C426CADAC60041886D /* SuggestionsPickerLayout.swift */,
 				E72634CB26CADB380041886D /* SuggestionsPickerViewCell.swift */,
+				E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */,
 			);
 			path = SuggestionsPicker;
 			sourceTree = "<group>";
@@ -328,6 +333,7 @@
 				E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */,
 				E7BFB366269AEB5500EA6AFD /* Environment */,
 				E7978E9926BC5124001B199A /* SignInGoogleButton.swift */,
+				E758054126D2896E00E9DEAD /* LightTextField.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -530,6 +536,7 @@
 				E7957947266F629B005B9F39 /* CalendarViewController.swift in Sources */,
 				E7F5AD182670A57900138E42 /* FindTimePanel.swift in Sources */,
 				E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */,
+				E758054226D2896E00E9DEAD /* LightTextField.swift in Sources */,
 				E7036FD4267DF1B300EFFE4E /* EventListItemView.swift in Sources */,
 				E7978E9A26BC5124001B199A /* SignInGoogleButton.swift in Sources */,
 				E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */,
@@ -573,6 +580,7 @@
 				E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */,
 				E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */,
 				E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */,
+				E794D32F26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift in Sources */,
 				E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */,
 				E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */,
 				E7B8970C2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift in Sources */,
