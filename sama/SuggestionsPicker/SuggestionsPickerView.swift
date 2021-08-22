@@ -86,6 +86,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         cell.titleLabel.text = "Alternative \(index + 1)"
         cell.rangeIndication.isHidden = !isRange
         cell.confirmHandler = { [weak self] in
+            self?.coordinator.lockPick()
             self?.navigation?.pushBlock(MeetingInviteRecipientInputPanel(), animated: true)
         }
 

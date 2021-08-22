@@ -9,6 +9,14 @@ import UIKit
 
 class SuggestionsPickCalendarSlider: UIView {
 
+    var isLocked = false {
+        didSet {
+            isUserInteractionEnabled = !isLocked
+            setNeedsLayout()
+            layoutIfNeeded()
+        }
+    }
+
     private let shadow = CALayer()
     private let background = CAGradientLayer()
 
@@ -52,14 +60,16 @@ class SuggestionsPickCalendarSlider: UIView {
             self.shadow.shadowPath = UIBezierPath(roundedRect: innerFrame, cornerRadius: 8).cgPath
         }
 
-        if arrowDown.frame.minY < arrowUp.frame.maxY {
+        if isLocked {
             arrowDown.isHidden = true
             arrowUp.isHidden = true
+            dotsView.isHidden = true
         } else {
-            arrowDown.isHidden = false
-            arrowUp.isHidden = false
+            let isIndicatorHidden = arrowDown.frame.minY < arrowUp.frame.maxY
+            arrowDown.isHidden = isIndicatorHidden
+            arrowUp.isHidden = isIndicatorHidden
+            reframeDotsView()
         }
-        reframeDotsView()
     }
 
     private func redrawLayers() {

@@ -48,7 +48,13 @@ class SuggestionsViewCoordinator {
     private var duration: Decimal = 1
     private var availableSlotProps: [ProposedAvailableSlot] = []
     private var availableSlotViews: [SlotSuggestionView] = []
-    private var timeInSlotPickerView: UIView?
+    private lazy var timeInSlotPickerView: SuggestionsPickCalendarSlider = {
+        let v = SuggestionsPickCalendarSlider()
+        let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handlePickerDrag(_:)))
+        dragRecognizer.minimumPressDuration = 0.01
+        v.addGestureRecognizer(dragRecognizer)
+        return v
+    }()
 
     private let hotEdge: CGFloat = 40
     // pin to 15 mins
@@ -59,25 +65,13 @@ class SuggestionsViewCoordinator {
     private var selectionIndex = 0 {
         didSet {
             let isFullSlot = availableSlotProps[selectionIndex].duration == duration
-            if isFullSlot {
-                timeInSlotPickerView?.removeFromSuperview()
-                timeInSlotPickerView = nil
-            } else if timeInSlotPickerView == nil {
-                let v = SuggestionsPickCalendarSlider()
-                let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handlePickerDrag(_:)))
-                dragRecognizer.minimumPressDuration = 0.01
-                v.addGestureRecognizer(dragRecognizer)
-
-                self.container.addSubview(v)
-                timeInSlotPickerView = v
-            }
-
             for (idx, view) in availableSlotViews.enumerated() {
                 view.isHighlighted = idx == selectionIndex && isFullSlot
                 view.setNeedsLayout()
             }
         }
     }
+    private var isLocked = false
 
     private var dragOrigin: CGPoint = .zero
     private var dragUi: DragUI? {
@@ -179,6 +173,7 @@ class SuggestionsViewCoordinator {
                     return v
                 }
                 self.selectionIndex = 0
+                self.container.addSubview(self.timeInSlotPickerView)
 
                 self.repositionEventViews()
                 self.autoScrollToSlot(at: self.selectionIndex)
@@ -195,11 +190,18 @@ class SuggestionsViewCoordinator {
         availableSlotViews.forEach { $0.removeFromSuperview() }
         availableSlotViews = []
 
-        timeInSlotPickerView?.removeFromSuperview()
-        timeInSlotPickerView = nil
+        timeInSlotPickerView.removeFromSuperview()
+        timeInSlotPickerView.isLocked = false
+
+        isLocked = false
     }
 
     func repositionEventViews() {
+        guard availableSlotProps.count > 0 else { return }
+
+        let isFullSlot = availableSlotProps[selectionIndex].duration == duration
+        timeInSlotPickerView.isHidden = !isLocked && isFullSlot
+
         let count = availableSlotProps.count
         for i in (0 ..< count) {
             let eventProps = availableSlotProps[i]
@@ -213,13 +215,14 @@ class SuggestionsViewCoordinator {
                 width: cellSize.width,
                 height: CGFloat(truncating: duration as NSNumber) * cellSize.height + eventHandleExtraSpace
             )
+            eventView.isHidden = isLocked
         }
 
-        if dragUi == nil, let pickerView = timeInSlotPickerView {
+        if dragUi == nil {
             let eventProps = availableSlotProps[selectionIndex]
             let start = eventProps.pickStart
             let duration = duration
-            pickerView.frame = CGRect(
+            timeInSlotPickerView.frame = CGRect(
                 x: xForDaysOffset(eventProps.daysOffset),
                 y: yForTimestampInDay(start),
                 width: cellSize.width,
@@ -231,6 +234,12 @@ class SuggestionsViewCoordinator {
     func changeSelection(_ index: Int) {
         selectionIndex = index
         autoScrollToSlot(at: selectionIndex)
+    }
+
+    func lockPick() {
+        isLocked = true
+        timeInSlotPickerView.isLocked = true
+        repositionEventViews()
     }
 
     @objc private func handleSlotTap(_ gesture: UIGestureRecognizer) {
@@ -254,7 +263,7 @@ class SuggestionsViewCoordinator {
             resetDragState()
             repositionEventViews()
         case .ended:
-            let loc = timeInSlotPickerView!.frame.origin
+            let loc = timeInSlotPickerView.frame.origin
 
             var slot = availableSlotProps[selectionIndex]
             slot.pickStart = target(from: loc)
