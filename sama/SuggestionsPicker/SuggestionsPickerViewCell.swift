@@ -33,7 +33,7 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
         addSubview(titleLabel)
 
         rangeIndication.translatesAutoresizingMaskIntoConstraints = false
-        rangeIndication.textColor = .primary
+        rangeIndication.textColor = .secondary
         rangeIndication.font = .brandedFont(ofSize: 18, weight: .regular)
         rangeIndication.text = "Range"
         addSubview(rangeIndication)

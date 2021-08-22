@@ -154,6 +154,16 @@ class SuggestionsViewCoordinator {
                         mergedSlots.append(slot)
                     }
                 }
+                mergedSlots.sort(by: {
+                    switch true {
+                    case $0.daysOffset < $1.daysOffset:
+                        return true
+                    case $0.daysOffset == $1.daysOffset:
+                        return $0.start < $1.start
+                    default:
+                        return false
+                    }
+                })
 
                 if let firstSlot = rawSlots.first {
                     // first slot defines duration
