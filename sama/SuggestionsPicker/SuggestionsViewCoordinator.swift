@@ -63,9 +63,7 @@ class SuggestionsViewCoordinator {
                 timeInSlotPickerView?.removeFromSuperview()
                 timeInSlotPickerView = nil
             } else if timeInSlotPickerView == nil {
-                let v = SlotSuggestionView()
-                v.isHighlighted = true
-
+                let v = SuggestionsPickCalendarSlider()
                 let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handlePickerDrag(_:)))
                 dragRecognizer.minimumPressDuration = 0.01
                 v.addGestureRecognizer(dragRecognizer)
