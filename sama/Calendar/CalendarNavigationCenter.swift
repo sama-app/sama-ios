@@ -152,13 +152,9 @@ final class CalendarNavigationCenter: UIView {
     }
 
     func pop() {
-        pan.isEnabled = false
-        yPan = 0
-        isMinimized = false
+        prepareForPop()
 
         guard stack.count >= 2 else { return }
-
-        toastDismissJob?.perform()
 
         let currentBlock = stack.popLast()
 
@@ -166,6 +162,33 @@ final class CalendarNavigationCenter: UIView {
         stackLeadingConstraint.last?.constant = 0
 
         bottomConstraints.removeLast()
+
+        UIView.animate(withDuration: 0.3, animations: {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }, completion: {
+            _ in currentBlock?.removeFromSuperview()
+            self.pan.isEnabled = true
+        })
+    }
+
+    func popToRoot() {
+        prepareForPop()
+
+        guard stack.count >= 2 else { return }
+
+        let currentBlock = stack.popLast()
+
+        stackLeadingConstraint.last?.constant = bounds.width
+        stackLeadingConstraint.first?.constant = 0
+
+        if stack.count >= 2 {
+            // if there are intermediate elements - remove them
+            stack.suffix(from: 1).forEach { $0.removeFromSuperview() }
+        }
+
+        stackLeadingConstraint = [stackLeadingConstraint.first!]
+        bottomConstraints = [bottomConstraints.first!]
 
         UIView.animate(withDuration: 0.3, animations: {
             self.setNeedsLayout()
@@ -199,6 +222,14 @@ final class CalendarNavigationCenter: UIView {
         }, completion: { _ in
             self.queueToastDismiss(with: toastView)
         })
+    }
+
+    private func prepareForPop() {
+        pan.isEnabled = false
+        yPan = 0
+        isMinimized = false
+
+        toastDismissJob?.perform()
     }
 
     private func queueToastDismiss(with view: UIView) {

@@ -92,7 +92,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     @objc private func onMeetingInviteClose() {
         suggestionsViewCoordinator.reset()
-        navCenter.pop()
+        navCenter.popToRoot()
         setupCalendarScreenTopBar()
     }
 
