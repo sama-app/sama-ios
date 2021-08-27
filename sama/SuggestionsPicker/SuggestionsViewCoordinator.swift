@@ -9,6 +9,7 @@ import UIKit
 
 struct MeetingProposal: Decodable {
     let proposedSlots: [MeetingSuggestedSlot]
+    let isOwnMeeting: Bool
 }
 
 struct MeetingProposalsRequest: ApiRequest {
@@ -55,6 +56,8 @@ class SuggestionsViewCoordinator {
     var onLock: ((Bool) -> Void)?
 
     var onReset: (() -> Void)?
+
+    private(set) var isOwnMeeting = false
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -123,6 +126,7 @@ class SuggestionsViewCoordinator {
 
                 self.duration = proposal.duration
                 self.availableSlotProps = proposal.slots
+                self.isOwnMeeting = rawProposal.isOwnMeeting
 
                 self.availableSlotViews = self.availableSlotProps.enumerated().map { idx, slot in
                     let v = SlotSuggestionView()

@@ -105,11 +105,13 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
             guard let self = self else { return }
             self.coordinator.lockPick(true)
 
-//            self?.confirmSelection()
-
-            let panel = MeetingInviteRecipientInputPanel()
-            panel.coordinator = self.coordinator
-            self.navigation?.pushBlock(panel, animated: true)
+            if self.coordinator.isOwnMeeting {
+                let panel = MeetingInviteRecipientInputPanel()
+                panel.coordinator = self.coordinator
+                self.navigation?.pushBlock(panel, animated: true)
+            } else {
+                self.confirmSelection()
+            }
         }
         cell.enable()
 
