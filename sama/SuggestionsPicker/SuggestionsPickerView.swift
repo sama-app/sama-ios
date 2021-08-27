@@ -33,7 +33,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
                 }
             }
             coordinator.onLock = { [weak self] isLocked in
-                self?.isScrollEnabled = !isLocked
+                self?.isUserInteractionEnabled = !isLocked
             }
         }
     }
