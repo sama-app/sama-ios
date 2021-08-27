@@ -22,6 +22,7 @@ struct MeetingProposalsRequest: ApiRequest {
 
 struct MeetingProposalsConfirmData: Encodable {
     let slot: ProposedSlot
+    let recipientEmail: String?
 }
 
 struct MeetingProposalsConfirmRequest: ApiRequest {
@@ -205,7 +206,7 @@ class SuggestionsViewCoordinator {
         repositionEventViews()
     }
 
-    func confirm(completion: @escaping (Error?) -> Void) {
+    func confirm(recipientEmail: String?, completion: @escaping (Error?) -> Void) {
         let slot = availableSlotProps[selectionIndex]
 
         let calendar = Calendar.current
@@ -227,7 +228,8 @@ class SuggestionsViewCoordinator {
                 slot: ProposedSlot(
                     startDateTime: formatter.string(from: startDate),
                     endDateTime: formatter.string(from: endDate)
-                )
+                ),
+                recipientEmail: recipientEmail
             )
         )
 

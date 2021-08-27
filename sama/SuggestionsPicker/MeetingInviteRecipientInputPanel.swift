@@ -9,6 +9,8 @@ import UIKit
 
 class MeetingInviteRecipientInputPanel: CalendarNavigationBlock {
 
+    var coordinator: SuggestionsViewCoordinator!
+
     private let inputField = LightTextField()
     private let actionBtn = MainActionButton.make(withTitle: "Send invite")
 
@@ -33,6 +35,7 @@ class MeetingInviteRecipientInputPanel: CalendarNavigationBlock {
         addSubview(inputField)
 
         actionBtn.isEnabled = false
+        actionBtn.addTarget(self, action: #selector(onConfirm), for: .touchUpInside)
         addSubview(actionBtn)
 
         titleLabel.pinLeadingAndTrailing(top: 0)
@@ -48,5 +51,21 @@ class MeetingInviteRecipientInputPanel: CalendarNavigationBlock {
 
     @objc private func onEmailChange() {
         actionBtn.isEnabled = !enteredEmail.isEmpty
+    }
+
+    @objc private func onConfirm() {
+        inputField.isEnabled = false
+        actionBtn.isEnabled = false
+
+        coordinator.confirm(recipientEmail: enteredEmail) { [weak self] err in
+            self?.inputField.isEnabled = true
+            self?.actionBtn.isEnabled = true
+
+            if err != nil {
+
+            } else {
+                self?.coordinator.reset()
+            }
+        }
     }
 }

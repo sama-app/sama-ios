@@ -84,7 +84,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
     }
 
     func confirmSelection() {
-        coordinator.confirm { [weak self] err in
+        coordinator.confirm(recipientEmail: nil) { [weak self] err in
             if err != nil {
                 self?.coordinator.lockPick(false)
                 self?.visibleCells.forEach {
@@ -102,8 +102,14 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         cell.titleLabel.text = "Alternative \(index + 1)"
         cell.rangeIndication.isHidden = !isRange
         cell.confirmHandler = { [weak self] in
-            self?.coordinator.lockPick(true)
-            self?.confirmSelection()
+            guard let self = self else { return }
+            self.coordinator.lockPick(true)
+
+//            self?.confirmSelection()
+
+            let panel = MeetingInviteRecipientInputPanel()
+            panel.coordinator = self.coordinator
+            self.navigation?.pushBlock(panel, animated: true)
         }
         cell.enable()
 
