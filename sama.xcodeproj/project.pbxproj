@@ -78,6 +78,7 @@
 		E7F5AD1A2670A58A00138E42 /* TimeZonePickerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD192670A58A00138E42 /* TimeZonePickerPanel.swift */; };
 		E7F8DD83264EB61D00CD3759 /* CalendarDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD82264EB61D00CD3759 /* CalendarDayCell.swift */; };
 		E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD872651931500CD3759 /* TimelineView.swift */; };
+		E7FD55DC26D8B48100C81364 /* MeetingInviteDeepLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FD55DB26D8B48100C81364 /* MeetingInviteDeepLinkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +174,7 @@
 		E7F5AD192670A58A00138E42 /* TimeZonePickerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZonePickerPanel.swift; sourceTree = "<group>"; };
 		E7F8DD82264EB61D00CD3759 /* CalendarDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayCell.swift; sourceTree = "<group>"; };
 		E7F8DD872651931500CD3759 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		E7FD55DB26D8B48100C81364 /* MeetingInviteDeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInviteDeepLinkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +342,7 @@
 				E7BFB366269AEB5500EA6AFD /* Environment */,
 				E7978E9926BC5124001B199A /* SignInGoogleButton.swift */,
 				E758054126D2896E00E9DEAD /* LightTextField.swift */,
+				E7FD55DB26D8B48100C81364 /* MeetingInviteDeepLinkService.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -559,6 +562,7 @@
 				E70A665F267536A400C88EA1 /* HighlightableSimpleCell.swift in Sources */,
 				E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */,
 				E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */,
+				E7FD55DC26D8B48100C81364 /* MeetingInviteDeepLinkService.swift in Sources */,
 				E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */,
 				E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */,
 				E7036FD2267D083D00EFFE4E /* ScrollLock.swift in Sources */,

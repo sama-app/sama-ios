@@ -79,8 +79,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.suggestionsViewCoordinator.present()
+        MeetingInviteDeepLinkService.shared.observer = { [weak self] service in
+            guard let self = self, let code = service.getAndClear() else { return }
+
+            self.eventsCoordinator.resetEventViews()
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+
+            self.suggestionsViewCoordinator.present(code: code)
 
             let picker = SuggestionsPickerView(parentWidth: self.view.frame.width)
             picker.coordinator = self.suggestionsViewCoordinator

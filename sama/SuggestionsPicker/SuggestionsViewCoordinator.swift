@@ -38,6 +38,7 @@ class SuggestionsViewCoordinator {
     var onSelectionChange: ((Int) -> Void)?
     var onLoad: (([ProposedAvailableSlot], Decimal) -> Void)?
     var onChange: ((Int, ProposedAvailableSlot) -> Void)?
+    var onReset: (() -> Void)?
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -94,8 +95,8 @@ class SuggestionsViewCoordinator {
         self.container = container
     }
 
-    func present() {
-        api.request(for: MeetingProposalsRequest(code: "EWOdWQ5C")) {
+    func present(code: String) {
+        api.request(for: MeetingProposalsRequest(code: code)) {
             switch $0 {
             case let .success(rawProposal):
                 let proposal = self.transformer.transform(proposal: rawProposal, calendar: .current, refDate: Date())
@@ -134,6 +135,7 @@ class SuggestionsViewCoordinator {
         timeInSlotPickerView.isLocked = false
 
         isLocked = false
+        onReset?()
     }
 
     func repositionEventViews() {

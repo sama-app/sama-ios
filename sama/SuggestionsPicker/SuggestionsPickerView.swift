@@ -32,6 +32,9 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
                     self?.reloadCellContent(cell as! SuggestionsPickerViewCell, index: index)
                 }
             }
+            coordinator.onReset = { [weak self] in
+                self?.isScrollEnabled = true
+            }
         }
     }
 
@@ -87,7 +90,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         cell.rangeIndication.isHidden = !isRange
         cell.confirmHandler = { [weak self] in
             self?.coordinator.lockPick()
-            self?.navigation?.pushBlock(MeetingInviteRecipientInputPanel(), animated: true)
+            self?.isScrollEnabled = false
         }
 
         let refDate = calendar.startOfDay(for: Date())
