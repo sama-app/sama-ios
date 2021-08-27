@@ -188,7 +188,6 @@ class SuggestionsViewCoordinator {
         if dragUi == nil {
             let eventProps = availableSlotProps[selectionIndex]
             let start = eventProps.pickStart
-            let duration = duration
             timeInSlotPickerView.frame = CGRect(
                 x: xForDaysOffset(eventProps.daysOffset),
                 y: yForTimestampInDay(start),
