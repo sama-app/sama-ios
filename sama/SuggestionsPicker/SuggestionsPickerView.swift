@@ -32,8 +32,8 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
                     self?.reloadCellContent(cell as! SuggestionsPickerViewCell, index: index)
                 }
             }
-            coordinator.onReset = { [weak self] in
-                self?.isScrollEnabled = true
+            coordinator.onLock = { [weak self] isLocked in
+                self?.isScrollEnabled = !isLocked
             }
         }
     }
@@ -83,15 +83,25 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         layout.focusItem(withIndex: indexPath.item)
     }
 
+    func confirmSelection() {
+        coordinator.confirm { [weak self] in
+            self?.coordinator.lockPick(false)
+            self?.visibleCells.forEach {
+                ($0 as! SuggestionsPickerViewCell).enable()
+            }
+        }
+    }
+
     private func reloadCellContent(_ cell: SuggestionsPickerViewCell, index: Int) {
         let item = data.alternatives[index]
         let isRange = item.duration != data.duration
         cell.titleLabel.text = "Alternative \(index + 1)"
         cell.rangeIndication.isHidden = !isRange
         cell.confirmHandler = { [weak self] in
-            self?.coordinator.lockPick()
-            self?.isScrollEnabled = false
+            self?.coordinator.lockPick(true)
+            self?.confirmSelection()
         }
+        cell.enable()
 
         let refDate = calendar.startOfDay(for: Date())
         let startDay = calendar.date(byAdding: .day, value: item.daysOffset, to: refDate)!

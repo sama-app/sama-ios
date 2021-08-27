@@ -38,7 +38,7 @@ class SuggestionsViewCoordinator {
     var onSelectionChange: ((Int) -> Void)?
     var onLoad: (([ProposedAvailableSlot], Decimal) -> Void)?
     var onChange: ((Int, ProposedAvailableSlot) -> Void)?
-    var onReset: (() -> Void)?
+    var onLock: ((Bool) -> Void)?
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -132,10 +132,8 @@ class SuggestionsViewCoordinator {
         availableSlotViews = []
 
         timeInSlotPickerView.removeFromSuperview()
-        timeInSlotPickerView.isLocked = false
 
-        isLocked = false
-        onReset?()
+        lockPick(false)
     }
 
     func repositionEventViews() {
@@ -178,10 +176,17 @@ class SuggestionsViewCoordinator {
         autoScrollToSlot(at: selectionIndex)
     }
 
-    func lockPick() {
-        isLocked = true
-        timeInSlotPickerView.isLocked = true
+    func lockPick(_ _isLocked: Bool) {
+        isLocked = _isLocked
+        onLock?(_isLocked)
+        timeInSlotPickerView.isLocked = _isLocked
         repositionEventViews()
+    }
+
+    func confirm(completion: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            completion()
+        }
     }
 
     @objc private func handleSlotTap(_ gesture: UIGestureRecognizer) {

@@ -70,6 +70,10 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
         redrawLayers()
     }
 
+    func enable() {
+        actionBtn.isEnabled = true
+    }
+
     private func redrawLayers() {
         background.backgroundColor = UIColor.neutralN.cgColor
         background.cornerRadius = 24
@@ -87,6 +91,7 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
     }
 
     @objc private func onConfirm() {
+        actionBtn.isEnabled = false
         confirmHandler?()
     }
 }
