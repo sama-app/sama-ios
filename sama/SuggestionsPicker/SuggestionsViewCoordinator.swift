@@ -20,6 +20,19 @@ struct MeetingProposalsRequest: ApiRequest {
     let method: HttpMethod = .get
 }
 
+struct MeetingProposalsConfirmData: Encodable {
+    let slot: ProposedSlot
+}
+
+struct MeetingProposalsConfirmRequest: ApiRequest {
+    typealias U = EmptyBody
+    let code: String
+    var uri: String { "/meeting/by-code/\(code)/confirm" }
+    let logKey = "/meeting/by-code/{meetingCode}/confirm"
+    let method: HttpMethod = .post
+    let body: MeetingProposalsConfirmData
+}
+
 struct ProposedAvailableSlot: Equatable {
     var start: Decimal
     var duration: Decimal
@@ -46,6 +59,8 @@ class SuggestionsViewCoordinator {
     private let calendar: UIScrollView
     private let container: UIView
 
+    private var refDate = Date()
+    private var meetingCode: String = ""
     private var duration: Decimal = 1
     private var availableSlotProps: [ProposedAvailableSlot] = []
     private var availableSlotViews: [SlotSuggestionView] = []
@@ -96,10 +111,12 @@ class SuggestionsViewCoordinator {
     }
 
     func present(code: String) {
-        api.request(for: MeetingProposalsRequest(code: code)) {
+        meetingCode = code
+        refDate = Date()
+        api.request(for: MeetingProposalsRequest(code: meetingCode)) {
             switch $0 {
             case let .success(rawProposal):
-                let proposal = self.transformer.transform(proposal: rawProposal, calendar: .current, refDate: Date())
+                let proposal = self.transformer.transform(proposal: rawProposal, calendar: .current, refDate: self.refDate)
 
                 self.duration = proposal.duration
                 self.availableSlotProps = proposal.slots
@@ -183,9 +200,39 @@ class SuggestionsViewCoordinator {
         repositionEventViews()
     }
 
-    func confirm(completion: @escaping () -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            completion()
+    func confirm(completion: @escaping (Error?) -> Void) {
+        let slot = availableSlotProps[selectionIndex]
+
+        let calendar = Calendar.current
+        let refDate = calendar.startOfDay(for: self.refDate)
+        let formatter = ApiDateTimeFormatter.formatter
+
+        var comps = DateComponents()
+        comps.day = slot.daysOffset
+        comps.second = NSDecimalNumber(decimal: slot.pickStart).multiplying(by: NSDecimalNumber(value: 3600)).intValue
+
+        let startDate = calendar.date(byAdding: comps, to: refDate)!
+
+        let durationInSecs = NSDecimalNumber(decimal: duration).multiplying(by: NSDecimalNumber(value: 3600)).intValue
+        let endDate = calendar.date(byAdding: .second, value: durationInSecs, to: startDate)!
+
+        let req = MeetingProposalsConfirmRequest(
+            code: meetingCode,
+            body: MeetingProposalsConfirmData(
+                slot: ProposedSlot(
+                    startDateTime: formatter.string(from: startDate),
+                    endDateTime: formatter.string(from: endDate)
+                )
+            )
+        )
+
+        api.request(for: req) { result in
+            switch result {
+            case .success:
+                completion(nil)
+            case let .failure(err):
+                completion(err)
+            }
         }
     }
 

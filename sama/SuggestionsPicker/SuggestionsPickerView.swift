@@ -84,10 +84,15 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
     }
 
     func confirmSelection() {
-        coordinator.confirm { [weak self] in
-            self?.coordinator.lockPick(false)
-            self?.visibleCells.forEach {
-                ($0 as! SuggestionsPickerViewCell).enable()
+        coordinator.confirm { [weak self] err in
+            if err != nil {
+                self?.coordinator.lockPick(false)
+                self?.visibleCells.forEach {
+                    ($0 as! SuggestionsPickerViewCell).enable()
+                }
+            } else {
+                self?.coordinator.reset()
+                self?.navigation?.popToRoot()
             }
         }
     }
