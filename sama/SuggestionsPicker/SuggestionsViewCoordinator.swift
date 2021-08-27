@@ -53,6 +53,8 @@ class SuggestionsViewCoordinator {
     var onChange: ((Int, ProposedAvailableSlot) -> Void)?
     var onLock: ((Bool) -> Void)?
 
+    var onReset: (() -> Void)?
+
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
     private let cellSize: CGSize
@@ -110,7 +112,7 @@ class SuggestionsViewCoordinator {
         self.container = container
     }
 
-    func present(code: String) {
+    func present(code: String, onError: @escaping (Error) -> Void) {
         meetingCode = code
         refDate = Date()
         api.request(for: MeetingProposalsRequest(code: meetingCode)) {
@@ -138,7 +140,8 @@ class SuggestionsViewCoordinator {
 
                 self.onLoad?(self.availableSlotProps, self.duration)
             case let .failure(err):
-                print(err)
+                self.reset()
+                onError(err)
             }
         }
     }
@@ -151,6 +154,8 @@ class SuggestionsViewCoordinator {
         timeInSlotPickerView.removeFromSuperview()
 
         lockPick(false)
+
+        onReset?()
     }
 
     func repositionEventViews() {

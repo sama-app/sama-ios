@@ -53,6 +53,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             calendar: calendar,
             container: slotPickerContainer
         )
+        suggestionsViewCoordinator.onReset = { [weak self] in
+            self?.view.endEditing(true)
+            self?.navCenter.popToRoot()
+            self?.setupCalendarScreenTopBar()
+        }
 
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
         session.loadInitial()
@@ -85,7 +90,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.eventsCoordinator.resetEventViews()
             self.presentedViewController?.dismiss(animated: true, completion: nil)
 
-            self.suggestionsViewCoordinator.present(code: code)
+            self.suggestionsViewCoordinator.present(code: code) {
+                if let httpErr = ($0 as? ApiError)?.httpError, httpErr.details?.reason == "already_confirmed" {
+                    let alert = UIAlertController(title: nil, message: "Time for this meeting has already been confirmed.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    let alert = UIAlertController(title: nil, message: "Unexpected error occurred", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
 
             let picker = SuggestionsPickerView(parentWidth: self.view.frame.width)
             picker.coordinator = self.suggestionsViewCoordinator
@@ -112,10 +127,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     @objc private func onMeetingInviteClose() {
-        view.endEditing(true)
         suggestionsViewCoordinator.reset()
-        navCenter.popToRoot()
-        setupCalendarScreenTopBar()
     }
 
     override func viewWillAppear(_ animated: Bool) {

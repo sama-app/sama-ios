@@ -92,7 +92,6 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
                 }
             } else {
                 self?.coordinator.reset()
-                self?.navigation?.popToRoot()
             }
         }
     }
