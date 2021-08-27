@@ -54,9 +54,22 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             container: slotPickerContainer
         )
         suggestionsViewCoordinator.onReset = { [weak self] in
-            self?.view.endEditing(true)
-            self?.navCenter.popToRoot()
-            self?.setupCalendarScreenTopBar()
+            guard let self = self else { return }
+
+            self.view.endEditing(true)
+            self.navCenter.popToRoot()
+            self.setupCalendarScreenTopBar()
+
+            let blockIdx = self.calendar.indexPathsForVisibleItems.first.flatMap { indexPath -> Int in
+                let daysOffset = -self.session.currentDayIndex + indexPath.item
+                let blockIdx = Int(round(Double(daysOffset) / Double(self.session.blockSize)))
+                return blockIdx
+            } ?? 0
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                let range = ((blockIdx - 1) ... (blockIdx + 1))
+                self.session.invalidateAndLoadBlocks(range)
+            }
         }
 
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
@@ -87,6 +100,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         MeetingInviteDeepLinkService.shared.observer = { [weak self] service in
             guard let self = self, let code = service.getAndClear() else { return }
 
+            // TODO: make better reset of current state
+            self.suggestionsViewCoordinator.reset()
             self.eventsCoordinator.resetEventViews()
             self.presentedViewController?.dismiss(animated: true, completion: nil)
 
