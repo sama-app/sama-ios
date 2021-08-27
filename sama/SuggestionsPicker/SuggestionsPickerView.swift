@@ -34,6 +34,11 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
             }
             coordinator.onLock = { [weak self] isLocked in
                 self?.isUserInteractionEnabled = !isLocked
+                if !isLocked {
+                    self?.visibleCells.forEach {
+                        ($0 as! SuggestionsPickerViewCell).enable()
+                    }
+                }
             }
         }
     }
@@ -87,9 +92,6 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         coordinator.confirm(recipientEmail: nil) { [weak self] err in
             if err != nil {
                 self?.coordinator.lockPick(false)
-                self?.visibleCells.forEach {
-                    ($0 as! SuggestionsPickerViewCell).enable()
-                }
             } else {
                 self?.coordinator.reset()
             }
