@@ -66,6 +66,13 @@ final class CalendarSession: CalendarContextProvider {
         }
     }
 
+    func invalidateAndLoadBlocks(_ indices: ClosedRange<Int>) {
+        blocksForDayIndex = [:]
+        isBlockBusy = [:]
+
+        loadCalendar(blockIndices: indices)
+    }
+
     func setupNotificationsTokenObserver() {
         RemoteNotificationsTokenSync.shared.observer = { [weak self] data in
             self?.api.request(for: RegisterDeviceRequest(body: data)) { _ in }

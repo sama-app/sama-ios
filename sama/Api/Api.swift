@@ -32,9 +32,18 @@ extension ApiRequest {
     var query: [URLQueryItem] { [] }
 }
 
+struct ApiErrorDetails: Decodable {
+    let reason: String
+}
+
+struct ApiHttpError {
+    let code: Int
+    let details: ApiErrorDetails?
+}
+
 enum ApiError: Error {
     case network
-    case http(Int)
+    case http(ApiHttpError)
     case parsing
     case unknown
 }
@@ -146,7 +155,7 @@ class Api {
         case .network: code = 1000
         case .unknown: code = 1001
         case .parsing: code = 1002
-        case let .http(httpCode): code = httpCode
+        case let .http(inner): code = inner.code
         }
         let errOut = NSError(domain: key, code: code, userInfo: [:])
         Crashlytics.crashlytics().record(error: errOut)
@@ -180,16 +189,19 @@ class Api {
             return .failure(.unknown)
         }
 
+        let jsonData = data ?? "{}".data(using: .utf8)!
+
         switch httpResp.statusCode {
         case 200 ..< 300:
             do {
-                let jsonData = data ?? "{}".data(using: .utf8)!
                 return .success(try self.decoder.decode(T.self, from: jsonData))
             } catch {
                 return .failure(.parsing)
             }
         default:
-            return .failure(.http(httpResp.statusCode))
+            let details = try? self.decoder.decode(ApiErrorDetails.self, from: jsonData)
+            let httpErr = ApiHttpError(code: httpResp.statusCode, details: details)
+            return .failure(.http(httpErr))
         }
     }
 
@@ -229,11 +241,19 @@ private extension Result {
     }
 }
 
-private extension ApiError {
+extension ApiError {
+    var httpError: ApiHttpError? {
+        switch self {
+        case let .http(inner):
+            return inner
+        default:
+            return nil
+        }
+    }
     var httpCode: Int? {
         switch self {
-        case let .http(code):
-            return code
+        case let .http(inner):
+            return inner.code
         default:
             return nil
         }

@@ -11,12 +11,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     var session: CalendarSession!
 
+    private var topBar: UIView!
     private var calendar: UICollectionView!
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
     private var slotPickerContainer: UIView!
 
     private var navCenter = CalendarNavigationCenter()
+    private var navCenterBottomConstraint: NSLayoutConstraint!
 
     private var cellSize: CGSize = .zero
     private var vOffset: CGFloat = 0
@@ -26,6 +28,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var scrollLock: ScrollLock?
 
     private var eventsCoordinator: EventsCoordinator!
+    private var suggestionsViewCoordinator: SuggestionsViewCoordinator!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +45,32 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             calendar: calendar,
             container: slotPickerContainer
         )
+        suggestionsViewCoordinator = SuggestionsViewCoordinator(
+            api: session.api,
+            currentDayIndex: session.currentDayIndex,
+            context: session,
+            cellSize: cellSize,
+            calendar: calendar,
+            container: slotPickerContainer
+        )
+        suggestionsViewCoordinator.onReset = { [weak self] in
+            guard let self = self else { return }
+
+            self.view.endEditing(true)
+            self.navCenter.popToRoot()
+            self.setupCalendarScreenTopBar()
+
+            let blockIdx = self.calendar.indexPathsForVisibleItems.first.flatMap { indexPath -> Int in
+                let daysOffset = -self.session.currentDayIndex + indexPath.item
+                let blockIdx = Int(round(Double(daysOffset) / Double(self.session.blockSize)))
+                return blockIdx
+            } ?? 0
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                let range = ((blockIdx - 1) ... (blockIdx + 1))
+                self.session.invalidateAndLoadBlocks(range)
+            }
+        }
 
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
         session.loadInitial()
@@ -64,10 +93,56 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             name: .NSCalendarDayChanged,
             object: nil
         )
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        MeetingInviteDeepLinkService.shared.observer = { [weak self] service in
+            guard let self = self, let code = service.getAndClear() else { return }
+
+            // TODO: make better reset of current state
+            self.suggestionsViewCoordinator.reset()
+            self.eventsCoordinator.resetEventViews()
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+
+            self.suggestionsViewCoordinator.present(code: code) {
+                if let httpErr = ($0 as? ApiError)?.httpError, httpErr.details?.reason == "already_confirmed" {
+                    let alert = UIAlertController(title: nil, message: "Time for this meeting has already been confirmed.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    let alert = UIAlertController(title: nil, message: "Unexpected error occurred", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+
+            let picker = SuggestionsPickerView(parentWidth: self.view.frame.width)
+            picker.coordinator = self.suggestionsViewCoordinator
+            self.navCenter.pushUnstyledBlock(picker, animated: true)
+
+            self.setupMeetingInviteTopBar()
+        }
+    }
+
+    @objc private func onKeyboardChange(_ notification: Notification) {
+        let val = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        let sf = self.view.safeAreaInsets.bottom
+        let inset = self.view.window!.frame.size.height - val!.origin.y - sf
+        navCenterBottomConstraint.constant = max(inset, 0)
+
+        UIView.animate(withDuration: 0.3, animations: {
+            self.navCenter.setNeedsLayout()
+            self.navCenter.layoutIfNeeded()
+        }, completion: nil)
     }
 
     @objc private func onDeviceDayChange() {
         calendar.reloadData()
+    }
+
+    @objc private func onMeetingInviteClose() {
+        suggestionsViewCoordinator.reset()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -97,7 +172,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
         vOffset = contentVPadding
 
-        let topBar = setupTopBar()
+        setupTopBar()
 
         timelineScrollView = UIScrollView(frame: .zero)
         timelineScrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -132,16 +207,20 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         navCenter.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(navCenter)
+
+        navCenterBottomConstraint = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
         NSLayoutConstraint.activate([
             navCenter.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             navCenter.topAnchor.constraint(equalTo: topBar.bottomAnchor),
             view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor),
-            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
+            navCenterBottomConstraint
         ])
     }
 
-    func setupTopBar() -> UIView {
-        let topBar = UIView(frame: .zero)
+    private var navBarItems: [UIView] = []
+
+    func setupTopBar() {
+        topBar = UIView(frame: .zero)
         topBar.translatesAutoresizingMaskIntoConstraints = false
         topBar.backgroundColor = .base
         view.addSubview(topBar)
@@ -152,6 +231,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         separator.backgroundColor = .calendarGrid
         topBar.addSubview(separator)
         separator.pinLeadingAndTrailing(bottom: 0, and: [separator.heightAnchor.constraint(equalToConstant: 1)])
+
+        setupCalendarScreenTopBar()
+    }
+
+    private func setupCalendarScreenTopBar() {
+        navBarItems.forEach { $0.removeFromSuperview() }
 
         let title = UILabel(frame: .zero)
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -177,7 +262,37 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             topBar.trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6)
         ])
 
-        return topBar
+        navBarItems = [title, profileBtn]
+    }
+
+    private func setupMeetingInviteTopBar() {
+        navBarItems.forEach { $0.removeFromSuperview() }
+
+        let title = UILabel(frame: .zero)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textColor = .neutral1
+        title.font = .brandedFont(ofSize: 20, weight: .regular)
+        title.text = "Meeting Invite"
+        topBar.addSubview(title)
+        NSLayoutConstraint.activate([
+            title.centerXAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerXAnchor),
+            title.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor)
+        ])
+
+        let closeBtn = UIButton(type: .system)
+        closeBtn.translatesAutoresizingMaskIntoConstraints = false
+        closeBtn.tintColor = .primary
+        closeBtn.setTitle("Close", for: .normal)
+        closeBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+        closeBtn.addTarget(self, action: #selector(onMeetingInviteClose), for: .touchUpInside)
+        topBar.addSubview(closeBtn)
+        NSLayoutConstraint.activate([
+            closeBtn.heightAnchor.constraint(equalToConstant: 44),
+            closeBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
+            closeBtn.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 16)
+        ])
+
+        navBarItems = [title, closeBtn]
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -210,6 +325,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             (cell as! CalendarDayCell).headerInset = scrollView.contentOffset.y
         }
         eventsCoordinator.repositionEventViews()
+        suggestionsViewCoordinator.repositionEventViews()
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
