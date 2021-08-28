@@ -48,15 +48,15 @@ final class CalendarNavigationCenter: UIView {
         addSubview(fullBlock)
 
         fullBlock.navigation = self
-        fullBlock.didLoad()
 
-        setup(fullBlock: fullBlock, animated: animated)
+        setup(fullBlock: fullBlock, animated: animated) {
+            fullBlock.didLoad()
+        }
     }
 
     func pushBlock(_ block: CalendarNavigationBlock, animated: Bool) {
         block.translatesAutoresizingMaskIntoConstraints = false
         block.navigation = self
-        block.didLoad()
 
         let fullBlock = UIView()
         fullBlock.translatesAutoresizingMaskIntoConstraints = false
@@ -83,10 +83,12 @@ final class CalendarNavigationCenter: UIView {
             fullBlock.bottomAnchor.constraint(equalTo: blockWrapper.bottomAnchor, constant: 16),
         ])
 
-        setup(fullBlock: fullBlock, animated: animated)
+        setup(fullBlock: fullBlock, animated: animated) {
+            block.didLoad()
+        }
     }
 
-    private func setup(fullBlock: UIView, animated: Bool) {
+    private func setup(fullBlock: UIView, animated: Bool, onLoad: () -> Void) {
         let leading = fullBlock.leadingAnchor.constraint(equalTo: leadingAnchor, constant: bounds.width)
         let bottom = fullBlock.bottomAnchor.constraint(equalTo: bottomAnchor)
         NSLayoutConstraint.activate([
@@ -95,6 +97,7 @@ final class CalendarNavigationCenter: UIView {
             bottom
         ])
         stack.append(fullBlock)
+        onLoad()
 
         if animated {
             setNeedsLayout()
@@ -202,7 +205,7 @@ final class CalendarNavigationCenter: UIView {
     func showToast(withMessage message: String) {
         toastDismissJob?.perform()
 
-        guard let currentBlock = stack.last?.subviews.first else { return }
+        guard let currentBlock = stack.last else { return }
 
         let toastView = ToastMessageView(message: message) { [weak self] in
             self?.toastDismissJob?.perform()
@@ -211,9 +214,9 @@ final class CalendarNavigationCenter: UIView {
         addSubview(toastView)
 
         NSLayoutConstraint.activate([
-            toastView.widthAnchor.constraint(equalTo: currentBlock.widthAnchor),
+            toastView.leadingAnchor.constraint(equalTo: currentBlock.leadingAnchor, constant: 16),
+            currentBlock.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: 16),
             toastView.centerXAnchor.constraint(equalTo: currentBlock.centerXAnchor),
-            toastView.heightAnchor.constraint(equalToConstant: 96),
             currentBlock.topAnchor.constraint(equalTo: toastView.bottomAnchor, constant: 16)
         ])
 

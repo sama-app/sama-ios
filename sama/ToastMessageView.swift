@@ -34,10 +34,10 @@ class ToastMessageView: UIView {
         addSubview(content)
 
         NSLayoutConstraint.activate([
-            content.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            content.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            content.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+            content.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: 12),
-            bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: 20)
+            bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: 16)
         ])
 
         let label = UILabel()

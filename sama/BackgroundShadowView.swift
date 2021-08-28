@@ -37,7 +37,7 @@ class BackgroundShadowView: UIView {
         shadow.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 8).cgPath
         shadow.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         shadow.shadowOpacity = 1
-        shadow.shadowRadius = 4
+        shadow.shadowRadius = 24
         shadow.shadowOffset = CGSize(width: 0, height: 2)
         shadow.bounds = bounds
         shadow.anchorPoint = .zero
