@@ -23,14 +23,21 @@ extension Calendar {
 
     func relativeFormatted(from: Date, to: Date) -> String {
         let diff = dateComponents([.day], from: from, to: to)
+        if diff.day! >= 0 && diff.day! <= 7 {
+            return weekdayRelativeFormatted(from: from, to: to)
+        } else {
+            return dayFormatter.string(from: to)
+        }
+    }
+
+    func weekdayRelativeFormatted(from: Date, to: Date) -> String {
+        let diff = dateComponents([.day], from: from, to: to)
         if diff.day == 0 {
             return  "Today"
         } else if diff.day == 1 {
             return "Tomorrow"
-        } else if diff.day! >= 2 && diff.day! <= 7 {
-            return weekdayFormatter.string(from: to)
         } else {
-            return  dayFormatter.string(from: to)
+            return weekdayFormatter.string(from: to)
         }
     }
 }

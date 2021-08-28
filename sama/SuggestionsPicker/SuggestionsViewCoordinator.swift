@@ -8,8 +8,12 @@
 import UIKit
 
 struct MeetingProposal: Decodable {
+    struct Initiator: Decodable {
+        let fullName: String
+    }
     let proposedSlots: [MeetingSuggestedSlot]
     let isOwnMeeting: Bool
+    let initiator: Initiator
 }
 
 struct MeetingProposalsRequest: ApiRequest {
@@ -49,6 +53,13 @@ private struct DragUI {
 
 class SuggestionsViewCoordinator {
 
+    struct ConfirmationResult {
+        let meetingInitiator: String
+        let recipientEmail: String?
+        let startDate: Date
+        let endDate: Date
+    }
+
     var api: Api
     var onSelectionChange: ((Int) -> Void)?
     var onLoad: (([ProposedAvailableSlot], Decimal) -> Void)?
@@ -57,7 +68,7 @@ class SuggestionsViewCoordinator {
 
     var onReset: (() -> Void)?
 
-    private(set) var isOwnMeeting = false
+    private(set) var meetingProposalSource = MeetingProposal(proposedSlots: [], isOwnMeeting: true, initiator: MeetingProposal.Initiator(fullName: ""))
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -126,7 +137,7 @@ class SuggestionsViewCoordinator {
 
                 self.duration = proposal.duration
                 self.availableSlotProps = proposal.slots
-                self.isOwnMeeting = rawProposal.isOwnMeeting
+                self.meetingProposalSource = rawProposal
 
                 self.availableSlotViews = self.availableSlotProps.enumerated().map { idx, slot in
                     let v = SlotSuggestionView()
@@ -209,7 +220,7 @@ class SuggestionsViewCoordinator {
         repositionEventViews()
     }
 
-    func confirm(recipientEmail: String?, completion: @escaping (Error?) -> Void) {
+    func confirm(recipientEmail: String?, completion: @escaping (Result<ConfirmationResult, Error>) -> Void) {
         let slot = availableSlotProps[selectionIndex]
 
         let calendar = Calendar.current
@@ -236,12 +247,18 @@ class SuggestionsViewCoordinator {
             )
         )
 
-        api.request(for: req) { result in
-            switch result {
+        let result = ConfirmationResult(
+            meetingInitiator: self.meetingProposalSource.initiator.fullName,
+            recipientEmail: recipientEmail,
+            startDate: startDate,
+            endDate: endDate
+        )
+        api.request(for: req) {
+            switch $0 {
             case .success:
-                completion(nil)
+                completion(.success(result))
             case let .failure(err):
-                completion(err)
+                completion(.failure(err))
             }
         }
     }

@@ -15,6 +15,7 @@
 		E70A665F267536A400C88EA1 /* HighlightableSimpleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */; };
 		E710CFDB2685DD0C0060218C /* CALayer+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */; };
 		E71755102698AAEE003B5A32 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = E717550F2698AAEE003B5A32 /* FirebaseCrashlytics */; };
+		E71EE89C26D94DAF00E0D2CA /* TimeConfirmedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71EE89B26D94DAF00E0D2CA /* TimeConfirmedPanel.swift */; };
 		E72634C526CADAC60041886D /* SuggestionsPickerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72634C426CADAC60041886D /* SuggestionsPickerLayout.swift */; };
 		E72634CC26CADB380041886D /* SuggestionsPickerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72634CB26CADB380041886D /* SuggestionsPickerViewCell.swift */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
@@ -106,6 +107,7 @@
 		E70A665C2674F02C00C88EA1 /* MainActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionButton.swift; sourceTree = "<group>"; };
 		E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightableSimpleCell.swift; sourceTree = "<group>"; };
 		E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Helpers.swift"; sourceTree = "<group>"; };
+		E71EE89B26D94DAF00E0D2CA /* TimeConfirmedPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConfirmedPanel.swift; sourceTree = "<group>"; };
 		E72634C426CADAC60041886D /* SuggestionsPickerLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickerLayout.swift; sourceTree = "<group>"; };
 		E72634CB26CADB380041886D /* SuggestionsPickerViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickerViewCell.swift; sourceTree = "<group>"; };
 		E732E958266256A9008A8B82 /* UIColors+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Branded.swift"; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */,
 				E758054326D2AAFF00E9DEAD /* SuggestionsPickCalendarSlider.swift */,
 				E790EEC526D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift */,
+				E71EE89B26D94DAF00E0D2CA /* TimeConfirmedPanel.swift */,
 			);
 			path = SuggestionsPicker;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				E70A665F267536A400C88EA1 /* HighlightableSimpleCell.swift in Sources */,
 				E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */,
 				E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */,
+				E71EE89C26D94DAF00E0D2CA /* TimeConfirmedPanel.swift in Sources */,
 				E7FD55DC26D8B48100C81364 /* MeetingInviteDeepLinkService.swift in Sources */,
 				E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */,
 				E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */,

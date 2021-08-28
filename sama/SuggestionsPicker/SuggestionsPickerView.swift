@@ -89,11 +89,16 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
     }
 
     func confirmSelection() {
-        coordinator.confirm(recipientEmail: nil) { [weak self] err in
-            if err != nil {
-                self?.coordinator.lockPick(false)
-            } else {
-                self?.coordinator.reset()
+        coordinator.confirm(recipientEmail: nil) { [weak self] in
+            guard let self = self else { return }
+            switch $0 {
+            case let .success(result):
+                let panel = TimeConfirmedPanel()
+                panel.coordinator = self.coordinator
+                panel.model = result
+                self.navigation?.pushBlock(panel, animated: true)
+            case .failure:
+                self.coordinator.lockPick(false)
             }
         }
     }
@@ -107,7 +112,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
             guard let self = self else { return }
             self.coordinator.lockPick(true)
 
-            if self.coordinator.isOwnMeeting {
+            if self.coordinator.meetingProposalSource.isOwnMeeting {
                 let panel = MeetingInviteRecipientInputPanel()
                 panel.coordinator = self.coordinator
                 self.navigation?.pushBlock(panel, animated: true)

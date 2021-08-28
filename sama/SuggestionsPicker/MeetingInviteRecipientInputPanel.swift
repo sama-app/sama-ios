@@ -77,14 +77,20 @@ class MeetingInviteRecipientInputPanel: CalendarNavigationBlock {
         inputField.isEnabled = false
         actionBtn.isEnabled = false
 
-        coordinator.confirm(recipientEmail: enteredEmail) { [weak self] err in
-            self?.inputField.isEnabled = true
-            self?.actionBtn.isEnabled = true
+        coordinator.confirm(recipientEmail: enteredEmail) { [weak self] in
+            guard let self = self else { return }
 
-            if err != nil {
+            self.inputField.isEnabled = true
+            self.actionBtn.isEnabled = true
 
-            } else {
-                self?.coordinator.reset()
+            switch $0 {
+            case let .success(result):
+                let panel = TimeConfirmedPanel()
+                panel.coordinator = self.coordinator
+                panel.model = result
+                self.navigation?.pushBlock(panel, animated: true)
+            case .failure:
+                break
             }
         }
     }
