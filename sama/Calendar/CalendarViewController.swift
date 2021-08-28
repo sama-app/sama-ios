@@ -138,7 +138,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     @objc private func onDeviceDayChange() {
-        calendar.reloadData()
+        DispatchQueue.main.async {
+            self.calendar.reloadData()
+        }
     }
 
     @objc private func onMeetingInviteClose() {
