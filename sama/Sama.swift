@@ -9,8 +9,13 @@ import UIKit
 import CoreGraphics
 
 struct Environment {
+    struct ColumnsSetting {
+        let count: Int
+        let centerOffset: Int
+    }
     struct UI {
         let calenarHeaderHeight: CGFloat = 48
+        let columns = ColumnsSetting(count: 5, centerOffset: -2)
     }
 
     let productId = "meetsama"

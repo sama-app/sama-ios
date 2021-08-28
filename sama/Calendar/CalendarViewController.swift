@@ -167,7 +167,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private func setupViews() {
         let timelineWidth: CGFloat = 56
-        cellSize = CGSize(width: (view.frame.width - timelineWidth) / 4, height: 65)
+        cellSize = CGSize(
+            width: (view.frame.width - timelineWidth) / CGFloat(Sama.env.ui.columns.count),
+            height: 65
+        )
 
         let contentVPadding = Sama.env.ui.calenarHeaderHeight
         let contentHeight = cellSize.height * 24 + contentVPadding * 2
