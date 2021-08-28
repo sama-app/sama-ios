@@ -10,15 +10,22 @@ import UIKit
 extension UIView {
 
     @discardableResult
-    func addBackButton(action: Selector) -> UIButton {
+    func addBackButton(title: String? = nil, action: Selector) -> UIButton {
         let backBtn = UIButton(type: .system)
         backBtn.addTarget(self, action: action, for: .touchUpInside)
         backBtn.translatesAutoresizingMaskIntoConstraints = false
         backBtn.tintColor = .primary
         backBtn.setImage(UIImage(named: "arrow-back")!, for: .normal)
+        if let btnTitle = title {
+            backBtn.setTitle(btnTitle, for: .normal)
+            backBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+            backBtn.titleEdgeInsets.left = 8
+            backBtn.titleEdgeInsets.right = -8
+            backBtn.contentEdgeInsets.right = 8
+        }
         addSubview(backBtn)
         NSLayoutConstraint.activate([
-            backBtn.widthAnchor.constraint(equalToConstant: 44),
+            backBtn.widthAnchor.constraint(greaterThanOrEqualToConstant: 44),
             backBtn.heightAnchor.constraint(equalToConstant: 44),
             backBtn.topAnchor.constraint(equalTo: topAnchor, constant: -4),
             backBtn.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -8)
