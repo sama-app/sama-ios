@@ -19,18 +19,7 @@ class MeetingInviteRecipientInputPanel: CalendarNavigationBlock {
     }
 
     override func didLoad() {
-        let backBtn = addBackButton(action: #selector(onBackButton))
-
-        let titleLabel = UILabel()
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.textColor = .primary
-        titleLabel.font = .brandedFont(ofSize: 20, weight: .semibold)
-        titleLabel.text = "Change selection"
-        addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: backBtn.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: backBtn.trailingAnchor, constant: 4)
-        ])
+        let backBtn = addBackButton(title: "Change selection", action: #selector(onBackButton))
 
         let contentLabel = UILabel()
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +42,7 @@ class MeetingInviteRecipientInputPanel: CalendarNavigationBlock {
         addSubview(actionBtn)
 
         contentLabel.pinLeadingAndTrailing(and: [
-            contentLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16)
+            contentLabel.topAnchor.constraint(equalTo: backBtn.bottomAnchor, constant: 8)
         ])
         inputField.pinLeadingAndTrailing(and: [
             inputField.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 8),
