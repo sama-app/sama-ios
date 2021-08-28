@@ -62,7 +62,7 @@ class SuggestionsViewCoordinator {
 
     var api: Api
     var onSelectionChange: ((Int) -> Void)?
-    var onLoad: (([ProposedAvailableSlot], Decimal) -> Void)?
+    var onLoad: ((SuggestionsViewCoordinator) -> Void)?
     var onChange: ((Int, ProposedAvailableSlot) -> Void)?
     var onLock: ((Bool) -> Void)?
 
@@ -78,8 +78,8 @@ class SuggestionsViewCoordinator {
 
     private var refDate = Date()
     private var meetingCode: String = ""
-    private var duration: Decimal = 1
-    private var availableSlotProps: [ProposedAvailableSlot] = []
+    private(set) var duration: Decimal = 1
+    private(set) var availableSlotProps: [ProposedAvailableSlot] = []
     private var availableSlotViews: [SlotSuggestionView] = []
     private lazy var timeInSlotPickerView: SuggestionsPickCalendarSlider = {
         let v = SuggestionsPickCalendarSlider()
@@ -154,7 +154,7 @@ class SuggestionsViewCoordinator {
                 self.repositionEventViews()
                 self.autoScrollToSlot(at: self.selectionIndex)
 
-                self.onLoad?(self.availableSlotProps, self.duration)
+                self.onLoad?(self)
             case let .failure(err):
                 self.reset()
                 onError(err)

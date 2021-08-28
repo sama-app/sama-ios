@@ -21,9 +21,12 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
             coordinator.onSelectionChange = { [weak self] index in
                 self?.layout.focusItem(withIndex: index)
             }
-            coordinator.onLoad = { [weak self] alternatives, duration in
-                self?.data.alternatives = alternatives
-                self?.data.duration = duration
+            coordinator.onLoad = { [weak self] in
+                self?.data.alternatives = $0.availableSlotProps
+                self?.data.duration = $0.duration
+                if $0.meetingProposalSource.isOwnMeeting {
+                    self?.navigation?.showToast(withMessage: "This is your own meeting.")
+                }
                 self?.reloadData()
             }
             coordinator.onChange = { [weak self] index, item in
