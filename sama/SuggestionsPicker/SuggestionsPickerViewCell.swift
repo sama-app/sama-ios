@@ -15,7 +15,7 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
     let titleLabel = UILabel()
     let rangeIndication = UILabel()
     let valueLabel = UILabel()
-    let actionBtn = MainActionButton.make(withTitle: "Confirm")
+    let actionBtn = MainActionButton.make(withTitle: "Select time")
 
     private let shadow = CALayer()
     private let background = CALayer()
@@ -28,20 +28,18 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .neutral1
-        titleLabel.font = .brandedFont(ofSize: 18, weight: .regular)
-        titleLabel.text = "Alternative 1"
+        titleLabel.font = .brandedFont(ofSize: 20, weight: .regular)
         addSubview(titleLabel)
 
         rangeIndication.translatesAutoresizingMaskIntoConstraints = false
         rangeIndication.textColor = .secondary
-        rangeIndication.font = .brandedFont(ofSize: 18, weight: .regular)
-        rangeIndication.text = "Range"
+        rangeIndication.font = .brandedFont(ofSize: 14, weight: .semibold)
+        rangeIndication.attributedText = NSAttributedString(string: "RANGE", attributes: [.kern: 1.5])
         addSubview(rangeIndication)
 
         valueLabel.translatesAutoresizingMaskIntoConstraints = false
         valueLabel.textColor = .neutral1
-        valueLabel.font = .brandedFont(ofSize: 24, weight: .regular)
-        valueLabel.text = "Tuesday 11am-12pm"
+        valueLabel.font = .brandedFont(ofSize: 20, weight: .regular)
         addSubview(valueLabel)
 
         actionBtn.addTarget(self, action: #selector(onConfirm), for: .touchUpInside)
@@ -52,7 +50,7 @@ class SuggestionsPickerViewCell: UICollectionViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             rangeIndication.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             trailingAnchor.constraint(equalTo: rangeIndication.trailingAnchor, constant: 16),
-            valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
             valueLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             actionBtn.heightAnchor.constraint(equalToConstant: 48),
             actionBtn.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),

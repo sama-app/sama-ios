@@ -109,7 +109,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
     private func reloadCellContent(_ cell: SuggestionsPickerViewCell, index: Int) {
         let item = data.alternatives[index]
         let isRange = item.duration != data.duration
-        cell.titleLabel.text = "Alternative \(index + 1)"
+
         cell.rangeIndication.isHidden = !isRange
         cell.confirmHandler = { [weak self] in
             guard let self = self else { return }
@@ -130,11 +130,11 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         let startDate = startDay.addingTimeInterval(3600 * (item.pickStart as NSDecimalNumber).doubleValue)
         let endDate = startDate.addingTimeInterval(3600 * (data.duration as NSDecimalNumber).doubleValue)
 
+        cell.titleLabel.text = calendar.relativeFormatted(from: refDate, to: startDay)
         cell.valueLabel.text = [
-            calendar.relativeFormatted(from: refDate, to: startDay),
             [
                 timeFormatter.string(from: startDate),
-                "-",
+                " - ",
                 timeFormatter.string(from: endDate)
             ].joined()
         ].joined(separator: " ")

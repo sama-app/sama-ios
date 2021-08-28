@@ -41,6 +41,7 @@ class MeetingInviteRecipientInputPanel: CalendarNavigationBlock {
 
         inputField.translatesAutoresizingMaskIntoConstraints = false
         inputField.addTarget(self, action: #selector(onEmailChange), for: .editingChanged)
+        inputField.font = .brandedFont(ofSize: 20, weight: .regular)
         inputField.placeholder = "other@email.com"
         inputField.keyboardType = .emailAddress
         inputField.autocorrectionType = .no
