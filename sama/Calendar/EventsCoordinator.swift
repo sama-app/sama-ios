@@ -42,7 +42,7 @@ class EventsCoordinator {
             onChanges?()
         }
     }
-    private var eventViews: [UIView] = []
+    private var eventViews: [EventView] = []
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -233,6 +233,11 @@ class EventsCoordinator {
         autoScrollToSlot(at: eventProperties.count - 1)
     }
 
+    func lockPick(_ _isLocked: Bool) {
+        eventViews.forEach { $0.isLocked = _isLocked }
+        repositionEventViews()
+    }
+
     private func autoScrollToSlot(at index: Int) {
         let props = eventProperties[index]
 
@@ -284,7 +289,7 @@ class EventsCoordinator {
         guard let recognizer = dragUi?.recognizer else { return }
 
         let loc = recognizer.location(in: container)
-        let eventView = recognizer.view!
+        let eventView = recognizer.view as! EventView
         let idx = eventViews.firstIndex(of: eventView)!
         eventView.frame.origin = CGPoint(
             x: loc.x - dragState.origin.x,
@@ -474,7 +479,7 @@ class EventsCoordinator {
             resetDragState()
             repositionEventViews()
         case .ended:
-            guard let idx = eventViews.firstIndex(of: recognizer.view!) else { return }
+            guard let idx = eventViews.firstIndex(of: recognizer.view as! EventView) else { return }
 
             var event = eventProperties[idx]
             event.daysOffset = dragState.target.daysOffset

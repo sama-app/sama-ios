@@ -228,7 +228,12 @@ class EventDatesPanel: CalendarNavigationBlock {
             switch $0 {
             case let .success(result):
                 UIPasteboard.general.string = result.shareableMessage
-                self.navigation?.showToast(withMessage: "Copied to clipboard.")
+
+                self.coordinator.lockPick(true)
+
+                let panel = InvitationCopiedPanel()
+                panel.coordinator = self.coordinator
+                self.navigation?.pushBlock(panel, animated: true)
             case .failure:
                 break
             }

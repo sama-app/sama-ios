@@ -13,6 +13,14 @@ class EventView: UIView {
 
     let handleView = UIView()
 
+    var isLocked = false {
+        didSet {
+            isUserInteractionEnabled = !isLocked
+            setNeedsLayout()
+            layoutIfNeeded()
+        }
+    }
+
     private let dotsView = UIView()
     private let shadow = CALayer()
     private let background = CAGradientLayer()
@@ -68,7 +76,7 @@ class EventView: UIView {
         let x = (innerFrameSize.width - width) / 2
         dotsView.frame = CGRect(x: x, y: 6, width: width, height: 16)
 
-        dotsView.isHidden = (innerFrameSize.height < 28)
+        dotsView.isHidden = isLocked || (innerFrameSize.height < 28)
     }
 
     private func redrawLayers() {
@@ -89,11 +97,13 @@ class EventView: UIView {
         handle.cornerRadius = 4
         handle.position = CGPoint(x: handleView.bounds.midX, y: handleView.bounds.midY)
         handle.masksToBounds = true
+        handle.isHidden = isLocked
 
         handleMiddle.backgroundColor = UIColor.base.cgColor
         handleMiddle.bounds = CGRect(x: 0, y: 0, width: 32, height: 4)
         handleMiddle.cornerRadius = 2
         handleMiddle.position = CGPoint(x: handleView.bounds.midX, y: handleView.bounds.midY)
         handleMiddle.masksToBounds = true
+        handleMiddle.isHidden = isLocked
     }
 }
