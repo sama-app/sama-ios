@@ -179,12 +179,15 @@ class EventDatesPanel: CalendarNavigationBlock {
         }
         let isRemovable = events.count > 1
         let isButtonVisible = events.count < 3
-        for props in events {
+        for (index, props) in events.enumerated() {
             let itemView = EventListItemView(props: props, isRemovable: isRemovable)
             itemView.handleRemove = { [weak self] in
                 Sama.bi.track(event: "deleteslot")
 
                 self?.coordinator.remove(props)
+            }
+            itemView.handleFocus = { [weak self] in
+                self?.coordinator.autoScrollToSlot(at: index)
             }
             self.content.addArrangedSubview(itemView)
         }

@@ -10,11 +10,19 @@ import UIKit
 class EventListItemView: UIView {
 
     var handleRemove: (() -> Void)?
+    var handleFocus: (() -> Void)?
     let calendar = Calendar.current
 
     init(props: EventProperties, isRemovable: Bool) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
+
+        let focusButton = UIButton(type: .system)
+        focusButton.addTarget(self, action: #selector(onFocus), for: .touchUpInside)
+        focusButton.translatesAutoresizingMaskIntoConstraints = false
+        focusButton.tintColor = .primary
+        focusButton.setImage(UIImage(named: "focus")!, for: .normal)
+        addSubview(focusButton)
 
         let removalButton = UIButton(type: .system)
         removalButton.addTarget(self, action: #selector(onRemove), for: .touchUpInside)
@@ -29,9 +37,9 @@ class EventListItemView: UIView {
         textsStack.axis = .vertical
         addSubview(textsStack)
         NSLayoutConstraint.activate([
-            textsStack.leadingAnchor.constraint(equalTo: removalButton.trailingAnchor, constant: 4),
+            textsStack.leadingAnchor.constraint(equalTo: focusButton.trailingAnchor, constant: 4),
             textsStack.centerYAnchor.constraint(equalTo: centerYAnchor),
-            trailingAnchor.constraint(equalTo: textsStack.trailingAnchor),
+            focusButton.leadingAnchor.constraint(equalTo: leadingAnchor),
         ])
 
         let refDate = calendar.startOfDay(for: Date())
@@ -72,8 +80,12 @@ class EventListItemView: UIView {
         NSLayoutConstraint.activate([
             removalButton.widthAnchor.constraint(equalToConstant: 44),
             removalButton.heightAnchor.constraint(equalToConstant: 44),
-            removalButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            removalButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor)
+            trailingAnchor.constraint(equalTo: removalButton.trailingAnchor, constant: -8),
+            removalButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            focusButton.widthAnchor.constraint(equalToConstant: 44),
+            focusButton.heightAnchor.constraint(equalToConstant: 44),
+            focusButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            focusButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor)
         ])
     }
 
@@ -83,6 +95,10 @@ class EventListItemView: UIView {
 
     @objc private func onRemove() {
         handleRemove?()
+    }
+
+    @objc private func onFocus() {
+        handleFocus?()
     }
 }
 

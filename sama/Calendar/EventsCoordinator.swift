@@ -238,7 +238,7 @@ class EventsCoordinator {
         repositionEventViews()
     }
 
-    private func autoScrollToSlot(at index: Int) {
+    func autoScrollToSlot(at index: Int) {
         let props = eventProperties[index]
 
         let timestamp = NSDecimalNumber(decimal: props.start).adding(NSDecimalNumber(decimal: props.duration).dividing(by: NSDecimalNumber(value: 2)))
