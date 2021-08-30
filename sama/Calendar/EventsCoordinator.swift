@@ -18,6 +18,11 @@ struct MeetingProposalBody: Encodable {
 }
 
 struct MeetingProposalResult: Decodable {
+    struct Meeting: Decodable {
+        let title: String
+    }
+    let meeting: Meeting
+    let meetingCode: String
     let shareableMessage: String
 }
 
@@ -29,6 +34,19 @@ struct MeetingProposalRequest: ApiRequest {
     let body: MeetingProposalBody
 }
 
+struct MeetingTitleUpdateBody: Encodable {
+    let title: String
+}
+
+struct MeetingTitleUpdateRequest: ApiRequest {
+    typealias U = EmptyBody
+    var uri: String { "/meeting/by-code/\(code)/update-title" }
+    let code: String
+    let logKey = "/meeting/by-code/{meetingCode}/update-title"
+    let method: HttpMethod = .post
+    let body: MeetingTitleUpdateBody
+}
+
 class EventsCoordinator {
 
     var onChanges: (() -> Void)?
@@ -36,12 +54,15 @@ class EventsCoordinator {
 
     private var constraints = EventConstraints(duration: 0.25, min: RescheduleTarget(daysOffset: 0, start: 0))
     private var intentCode = ""
+    private var meetingCode = ""
 
     private(set) var eventProperties: [EventProperties] = [] {
         didSet {
             onChanges?()
         }
     }
+    private(set) var meetingTitle = ""
+
     private var eventViews: [EventView] = []
 
     private let context: CalendarContextProvider
@@ -98,6 +119,7 @@ class EventsCoordinator {
 
     func setup(withCode code: String, durationMins: Int, properties props: [EventProperties]) {
         intentCode = code
+        meetingCode = ""
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
 
@@ -172,7 +194,24 @@ class EventsCoordinator {
                 proposedSlots: slots
             )
         )
-        api.request(for: req, completion: completion)
+
+        api.request(for: req) {
+            if case let .success(result) = $0 {
+                self.meetingTitle = result.meeting.title
+                self.meetingCode = result.meetingCode
+            }
+            completion($0)
+        }
+    }
+
+    func updateMeetingTitle(with title: String, completion: @escaping (Result<EmptyBody, ApiError>) -> Void) {
+        let req = MeetingTitleUpdateRequest(code: meetingCode, body: MeetingTitleUpdateBody(title: title))
+        api.request(for: req) {
+            if case .success = $0 {
+                self.meetingTitle = title
+            }
+            completion($0)
+        }
     }
 
     func addClosestToCenter() {

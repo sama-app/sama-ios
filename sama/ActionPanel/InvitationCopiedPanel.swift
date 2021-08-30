@@ -43,23 +43,39 @@ class InvitationCopiedPanel: CalendarNavigationBlock {
         subtitleLabel.textAlignment = .center
         textsStack.addArrangedSubview(subtitleLabel)
 
+        let editBtn = UIButton(type: .system)
+        editBtn.setTitle("Edit meeting title", for: .normal)
+        editBtn.translatesAutoresizingMaskIntoConstraints = false
+        editBtn.setTitleColor(.primary, for: .normal)
+        editBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+        editBtn.addTarget(self, action: #selector(onEdit), for: .touchUpInside)
+
         actionBtn.addTarget(self, action: #selector(onClose), for: .touchUpInside)
 
         addSubview(illustration)
+        addSubview(editBtn)
         addSubview(actionBtn)
         addSubview(textsStack)
 
         textsStack.pinLeadingAndTrailing()
+        editBtn.pinLeadingAndTrailing()
+        actionBtn.pinLeadingAndTrailing()
         NSLayoutConstraint.activate([
             illustration.topAnchor.constraint(equalTo: backBtn.bottomAnchor, constant: 8),
             illustration.centerXAnchor.constraint(equalTo: centerXAnchor),
             textsStack.topAnchor.constraint(equalTo: illustration.bottomAnchor, constant: 16),
-            actionBtn.topAnchor.constraint(equalTo: textsStack.bottomAnchor, constant: 16),
+            editBtn.topAnchor.constraint(equalTo: textsStack.bottomAnchor, constant: 16),
+            editBtn.heightAnchor.constraint(equalToConstant: 48),
+            actionBtn.topAnchor.constraint(equalTo: editBtn.bottomAnchor, constant: 8),
             actionBtn.heightAnchor.constraint(equalToConstant: 48),
-            actionBtn.leadingAnchor.constraint(equalTo: leadingAnchor),
-            trailingAnchor.constraint(equalTo: actionBtn.trailingAnchor),
             bottomAnchor.constraint(equalTo: actionBtn.bottomAnchor)
         ])
+    }
+
+    @objc private func onEdit() {
+        let panel = SuggestionsEditPanel()
+        panel.coordinator = coordinator
+        navigation?.pushBlock(panel, animated: true)
     }
 
     @objc private func onBack() {
