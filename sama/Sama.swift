@@ -15,6 +15,7 @@ struct Environment {
     }
     struct UI {
         let calenarHeaderHeight: CGFloat = 48
+        let calendarHeaderRightSeparatorHeight: CGFloat = 40
         let columns = ColumnsSetting(count: 5, centerOffset: -2)
     }
 

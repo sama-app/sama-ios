@@ -55,7 +55,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.text = "Hi.\nI’m Sama.\nI will help you find the best time for a meeting."
-        text.textColor = .neutral3
+        text.textColor = .neutral1
         text.font = .brandedFont(ofSize: 28, weight: .regular)
         text.numberOfLines = 0
         text.lineBreakMode = .byWordWrapping
@@ -119,7 +119,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.text = "Before I can help you, I need you to grant me access to your Google Calendar."
-        text.textColor = .neutral3
+        text.textColor = .neutral1
         text.font = .brandedFont(ofSize: 28, weight: .regular)
         text.numberOfLines = 0
         text.lineBreakMode = .byWordWrapping

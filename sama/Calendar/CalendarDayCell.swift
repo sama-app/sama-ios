@@ -117,9 +117,10 @@ final class CalendarDayCell: UICollectionViewCell {
             let v = UIView(frame: CGRect(x: 0, y: headerInset, width: cellSize.width, height: cellHeight))
             v.backgroundColor = .base
 
-            let sepBtm = UIView(frame: CGRect(x: 0, y: cellHeight - 1, width: cellSize.width, height: 1))
+            let sepBtm = UIView(frame: CGRect(x: 0, y: v.frame.height - 1, width: cellSize.width, height: 1))
             sepBtm.backgroundColor = .calendarGrid
-            let sepRht = UIView(frame: CGRect(x: cellSize.width - 1, y: 0, width: 1, height: cellHeight))
+            let sepRhtHeight = Sama.env.ui.calendarHeaderRightSeparatorHeight
+            let sepRht = UIView(frame: CGRect(x: cellSize.width - 1, y: cellHeight - sepRhtHeight, width: 1, height: sepRhtHeight))
             sepRht.backgroundColor = .calendarGrid
             v.addSubview(sepBtm)
             v.addSubview(sepRht)

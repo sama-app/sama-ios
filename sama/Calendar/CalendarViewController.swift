@@ -242,12 +242,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         view.addSubview(topBar)
         topBar.pinLeadingAndTrailing(top: 0, and: [topBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44)])
 
-        let separator = UIView(frame: .zero)
-        separator.translatesAutoresizingMaskIntoConstraints = false
-        separator.backgroundColor = .calendarGrid
-        topBar.addSubview(separator)
-        separator.pinLeadingAndTrailing(bottom: 0, and: [separator.heightAnchor.constraint(equalToConstant: 1)])
-
         setupCalendarScreenTopBar()
     }
 

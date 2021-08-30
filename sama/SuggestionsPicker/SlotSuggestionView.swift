@@ -52,8 +52,8 @@ class SlotSuggestionView: UIView {
             self.outShadow.shadowPath = UIBezierPath(roundedRect: innerFrame, cornerRadius: 8).cgPath
 
             inShadow.frame = innerFrame
-            let path = UIBezierPath(rect: inShadow.bounds.insetBy(dx: -1, dy: -1))
-            let cutout = UIBezierPath(rect: inShadow.bounds).reversing()
+            let path = UIBezierPath(roundedRect: inShadow.bounds.insetBy(dx: 3, dy: 3), cornerRadius: 8)
+            let cutout = UIBezierPath(roundedRect: inShadow.bounds, cornerRadius: 8).reversing()
             path.append(cutout)
             inShadow.shadowPath = path.cgPath
         }
@@ -72,10 +72,10 @@ class SlotSuggestionView: UIView {
         outShadow.anchorPoint = .zero
 
         inShadow.masksToBounds = true
-        inShadow.shadowColor = UIColor(white: 0, alpha: 0.15).cgColor
+        inShadow.shadowColor = UIColor(white: 0, alpha: 0.3).cgColor
         inShadow.shadowOffset = CGSize.zero
         inShadow.shadowOpacity = 1
-        inShadow.shadowRadius = 3
+        inShadow.shadowRadius = 4
 
         if isHighlighted {
             background.colors = [UIColor.primary.cgColor, UIColor.primaryDarker.cgColor]
