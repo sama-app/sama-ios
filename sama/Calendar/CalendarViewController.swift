@@ -30,6 +30,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var eventsCoordinator: EventsCoordinator!
     private var suggestionsViewCoordinator: SuggestionsViewCoordinator!
 
+    private lazy var monthTitle: UILabel = {
+        let title = UILabel(frame: .zero)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textColor = .neutral1
+        title.font = .brandedFont(ofSize: 24, weight: .regular)
+        return title
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -161,6 +169,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                 x: cellSize.width * CGFloat(session.currentDayIndex),
                 y: y
             )
+            DispatchQueue.main.async {
+                self.scrollViewDidScroll(self.calendar)
+            }
         }
         isFirstLoad = false
     }
@@ -243,15 +254,20 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private func setupCalendarScreenTopBar() {
         navBarItems.forEach { $0.removeFromSuperview() }
 
-        let title = UILabel(frame: .zero)
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.textColor = .neutral1
-        title.font = .brandedFont(ofSize: 24, weight: .regular)
-        title.text = "Sama"
-        topBar.addSubview(title)
+        let iconView = UIImageView(image: UIImage(named: "main-illustration")!)
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        topBar.addSubview(iconView)
         NSLayoutConstraint.activate([
-            title.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
-            title.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 16)
+            iconView.widthAnchor.constraint(equalToConstant: 40),
+            iconView.heightAnchor.constraint(equalToConstant: 40),
+            iconView.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
+            iconView.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 8)
+        ])
+
+        topBar.addSubview(monthTitle)
+        NSLayoutConstraint.activate([
+            monthTitle.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
+            monthTitle.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 8)
         ])
 
         let profileBtn = UIButton(type: .system)
@@ -267,7 +283,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             topBar.trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6)
         ])
 
-        navBarItems = [title, profileBtn]
+        navBarItems = [iconView, monthTitle, profileBtn]
     }
 
     private func setupMeetingInviteTopBar() {
@@ -331,6 +347,31 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         eventsCoordinator.repositionEventViews()
         suggestionsViewCoordinator.repositionEventViews()
+
+        changeDisplayedMonth()
+    }
+
+    private func changeDisplayedMonth() {
+        let indexPathsAndOffsets = calendar.indexPathsForVisibleItems.reduce([] as [(IndexPath, CGFloat)]) { result, indexPath in
+            if let cell = calendar.cellForItem(at: indexPath) {
+                return result + [(indexPath, cell.frame.midX - calendar.contentOffset.x)]
+            } else {
+                return result
+            }
+        }
+        let leftMostColumn = indexPathsAndOffsets
+            .filter { (_, offset) in offset > 0 }
+            .sorted(by: { $0.1 < $1.1 })
+            .first?.0
+
+        if let indexPath = leftMostColumn {
+            let daysOffset = -session.currentDayIndex + indexPath.item
+            let date = Calendar.current.date(byAdding: .day, value: daysOffset, to: session.refDate)!
+
+            let monthNumber = Calendar.current.component(.month, from: date)
+            let monthIndex = monthNumber - 1
+            monthTitle.text = Calendar.current.monthSymbols[monthIndex]
+        }
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
