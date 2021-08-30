@@ -34,30 +34,31 @@ final class TimelineView: UIView {
         UIRectFill(rect)
 
         UIColor.calendarGrid.setFill()
+        let sepWidth: CGFloat = 4
         for i in (1 ... 24) {
-            UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
+            UIRectFillUsingBlendMode(CGRect(x: frame.width - sepWidth, y: vOffset + CGFloat(i) * cellSize.height, width: sepWidth, height: 1), .normal)
         }
 
         //text attributes
-        let font=UIFont.systemFont(ofSize: 15)
         let text_style=NSMutableParagraphStyle()
-        text_style.alignment=NSTextAlignment.center
+        text_style.alignment=NSTextAlignment.right
         let defaultAttrs: [NSAttributedString.Key : Any] = [
-            .font: font,
+            .font: UIFont.systemFont(ofSize: 15),
             .paragraphStyle: text_style,
             .foregroundColor: UIColor.neutral2
         ]
         let currentZoneAttrs: [NSAttributedString.Key : Any] = [
-            .font: font,
+            .font: UIFont.systemFont(ofSize: 12),
             .paragraphStyle: text_style,
-            .foregroundColor: UIColor.black.withAlphaComponent(0.4)
+            .foregroundColor: UIColor.secondary.withAlphaComponent(0.7)
         ]
 
-        let textBoxH: CGFloat = 24
-        let baseInset = max((textBoxH - font.lineHeight) / 2, 0)
+        let textBoxH: CGFloat = 20
+        let baseInset = max((textBoxH - UIFont.systemFont(ofSize: 15).lineHeight) / 2, 0)
+        let rightInset: CGFloat = sepWidth + 4
 
         for i in (0 ... 23) {
-            let cellRect = CGRect(x: 0, y: vOffset + (CGFloat(i) * cellSize.height), width: bounds.width, height: cellSize.height)
+            let cellRect = CGRect(x: 0, y: vOffset + (CGFloat(i) * cellSize.height), width: bounds.width - rightInset, height: cellSize.height)
             if targetTimezoneHoursDiff == 0 {
                 i.hourToTime.draw(
                     inRect: cellRect,
@@ -68,13 +69,13 @@ final class TimelineView: UIView {
             } else {
                 (i + targetTimezoneHoursDiff).toHour.hourToTime.draw(
                     inRect: cellRect,
-                    yInset: baseInset - textBoxH / 2,
+                    yInset: baseInset,
                     withFontHeight: textBoxH,
                     attributes: defaultAttrs
                 )
                 i.hourToTime.draw(
                     inRect: cellRect,
-                    yInset: baseInset + textBoxH / 2,
+                    yInset: baseInset + textBoxH,
                     withFontHeight: textBoxH,
                     attributes: currentZoneAttrs
                 )
@@ -121,7 +122,7 @@ private extension Int {
 
 private extension String {
     func draw(inRect rect: CGRect, yInset: CGFloat, withFontHeight fontHeight: CGFloat, attributes: [NSAttributedString.Key : Any]) {
-        let textY = rect.minY + (rect.height - fontHeight) / 2 + yInset
+        let textY = rect.minY - fontHeight / 2 + yInset
         let textRect = CGRect(x: 0, y: textY, width: rect.width, height: fontHeight)
         draw(in: textRect.integral, withAttributes: attributes)
     }
