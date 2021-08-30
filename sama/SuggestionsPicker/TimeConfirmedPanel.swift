@@ -98,7 +98,7 @@ class TimeConfirmedPanel: CalendarNavigationBlock {
 
             let parts = [
                 ("An event called “", defaultAttrs),
-                ("Meeting with \(model.meetingInitiator)", boldAttrs),
+                (model.meetingTitle, boldAttrs),
                 ("” has been added to your calendar for \(dateText)", defaultAttrs),
             ]
             let finalText = NSMutableAttributedString()

@@ -14,6 +14,7 @@ struct MeetingProposal: Decodable {
     let proposedSlots: [MeetingSuggestedSlot]
     let isOwnMeeting: Bool
     let initiator: Initiator
+    let title: String
 }
 
 struct MeetingProposalsRequest: ApiRequest {
@@ -55,6 +56,7 @@ class SuggestionsViewCoordinator {
 
     struct ConfirmationResult {
         let meetingInitiator: String
+        let meetingTitle: String
         let recipientEmail: String?
         let startDate: Date
         let endDate: Date
@@ -68,7 +70,7 @@ class SuggestionsViewCoordinator {
 
     var onReset: (() -> Void)?
 
-    private(set) var meetingProposalSource = MeetingProposal(proposedSlots: [], isOwnMeeting: true, initiator: MeetingProposal.Initiator(fullName: ""))
+    private(set) var meetingProposalSource = MeetingProposal(proposedSlots: [], isOwnMeeting: true, initiator: MeetingProposal.Initiator(fullName: ""), title: "")
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
@@ -249,6 +251,7 @@ class SuggestionsViewCoordinator {
 
         let result = ConfirmationResult(
             meetingInitiator: self.meetingProposalSource.initiator.fullName,
+            meetingTitle: self.meetingProposalSource.title,
             recipientEmail: recipientEmail,
             startDate: startDate,
             endDate: endDate
