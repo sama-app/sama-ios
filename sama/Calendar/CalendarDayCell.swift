@@ -60,10 +60,9 @@ final class CalendarDayCell: UICollectionViewCell {
         }
 
         //text attributes
-        let font=UIFont.systemFont(ofSize: 12, weight: .regular)
+        let font = UIFont.systemFont(ofSize: 12, weight: .regular)
         let text_style = NSMutableParagraphStyle()
-        text_style.lineBreakMode = .byTruncatingTail
-//        text_style.alignment=NSTextAlignment.center
+        text_style.lineBreakMode = .byWordWrapping
         let text_color = UIColor.secondary
         let attributes: [NSAttributedString.Key : Any] = [
             .font: font,
@@ -82,18 +81,20 @@ final class CalendarDayCell: UICollectionViewCell {
             let x: CGFloat = CGFloat(block.depth) * 8
             let y = vOffset + CGFloat(truncating: block.start as NSNumber) * cellSize.height + 1
             UIColor.eventBackground.setFill()
+            let boxWidth = cellSize.width - eventRightBottomInset.x - x
+            let boxHeight = cellSize.height * CGFloat(lengthHour) - eventRightBottomInset.y
             UIBezierPath(
                 roundedRect: CGRect(
                     x: x,
                     y: y,
-                    width: cellSize.width - eventRightBottomInset.x - x,
-                    height: cellSize.height * CGFloat(lengthHour) - eventRightBottomInset.y
+                    width: boxWidth,
+                    height: boxHeight
                 ),
                 byRoundingCorners: .allCorners,
                 cornerRadii: CGSize(width: 4, height: 4)
             ).fill(with: .normal, alpha: 1)
             let text_y = y + padding
-            let textRect = CGRect(x: x + padding, y: text_y, width: cellSize.width - padding, height: 16)
+            let textRect = CGRect(x: x + padding, y: text_y, width: boxWidth - padding, height: boxHeight - padding)
             block.title.draw(in: textRect.integral, withAttributes: attributes)
         }
     }
