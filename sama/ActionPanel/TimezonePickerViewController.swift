@@ -17,6 +17,9 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
         TimeZoneOption.from(timeZone: TimeZone(identifier: $0)!, usersTimezone: .current)
     }.sorted { $0.hoursFromGMT < $1.hoursFromGMT }
 
+    private var searchResults: [TimeZoneOption] = []
+    private var isSearchActive = false
+
     private let inputField = UITextField()
     private let contentView = UITableView()
 
@@ -77,6 +80,16 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     @objc private func onSearchTermChange() {
+        let term = (inputField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if term.isEmpty {
+            isSearchActive = false
+            searchResults = []
+            contentView.reloadData()
+        } else {
+            isSearchActive = true
+            searchResults = allTimezones.filter { $0.placeTitle.lowercased().contains(term.lowercased()) }
+            contentView.reloadData()
+        }
     }
 
     @objc private func onKeyboardChange(_ notification: Notification) {
@@ -87,22 +100,22 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allTimezones.count
+        return isSearchActive ? searchResults.count : allTimezones.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
+        switch (isSearchActive, indexPath.row) {
+        case (false, 0):
             let cell = tableView.dequeueReusableCell(withIdentifier: "currentCell") as! CurrentTimezoneOptionCell
             cell.nameLabel.text = "My Timezone"
             cell.offsetLabel.text = [myTimezone.placeTitle, myTimezone.offsetTitle].joined(separator: ", ")
             cell.selectionMarkView.isHidden = myTimezone.id != selectionId
             return cell
-        case 1:
+        case (false, 1):
             return tableView.dequeueReusableCell(withIdentifier: "sectionCell")!
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "optionCell") as! TimezoneOptionCell
-            let option = timezoneFromAll(forRow: indexPath.row)
+            let option = isSearchActive ? searchResults[indexPath.row] : timezoneFromAll(forRow: indexPath.row)
             cell.nameLabel.text = option.placeTitle
             cell.offsetLabel.text = option.offsetTitle
             cell.selectionMarkView.isHidden = option.id != selectionId
@@ -111,10 +124,10 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
+        switch (isSearchActive, indexPath.row) {
+        case (false, 0):
             return 64
-        case 1:
+        case (false, 1):
             return 50
         default:
             return 48
@@ -122,14 +135,18 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.row != 1
+        return isSearchActive ? true : indexPath.row != 1
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            optionPickHandler?(myTimezone)
-        } else if indexPath.row > 1 {
-            optionPickHandler?(timezoneFromAll(forRow: indexPath.row))
+        if isSearchActive {
+            optionPickHandler?(searchResults[indexPath.row])
+        } else {
+            if indexPath.row == 0 {
+                optionPickHandler?(myTimezone)
+            } else if indexPath.row > 1 {
+                optionPickHandler?(timezoneFromAll(forRow: indexPath.row))
+            }
         }
         dismiss(animated: true, completion: nil)
     }
