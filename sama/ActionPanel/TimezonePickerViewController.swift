@@ -22,7 +22,11 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
         view.backgroundColor = .neutralN
 
         let contentView = UITableView()
-        contentView.register(HighlightableSimpleCell.self, forCellReuseIdentifier: "cell")
+        contentView.register(CurrentTimezoneOptionCell.self, forCellReuseIdentifier: "currentCell")
+        contentView.register(TimezoneOptionCell.self, forCellReuseIdentifier: "optionCell")
+        contentView.register(TimezonesSectionHeaderCell.self, forCellReuseIdentifier: "sectionCell")
+        contentView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        contentView.contentOffset = CGPoint(x: 0, y: -8)
         contentView.dataSource = self
         contentView.delegate = self
         contentView.separatorStyle = .none
@@ -42,46 +46,139 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "My Timezone"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "currentCell") as! CurrentTimezoneOptionCell
+            cell.nameLabel.text = "My Timezone"
+            cell.offsetLabel.text = [myTimezone.placeTitle, myTimezone.offsetTitle].joined(separator: ", ")
+            return cell
         case 1:
-            cell.textLabel?.text = myTimezone.title
-        case 2:
-            cell.textLabel?.text = "Recipient Timezone"
+            return tableView.dequeueReusableCell(withIdentifier: "sectionCell")!
         default:
-            cell.textLabel?.text = timezoneFromAll(forRow: indexPath.row).title
+            let cell = tableView.dequeueReusableCell(withIdentifier: "optionCell") as! TimezoneOptionCell
+            let option = timezoneFromAll(forRow: indexPath.row)
+            cell.nameLabel.text = option.placeTitle
+            cell.offsetLabel.text = option.offsetTitle
+            return cell
         }
-
-        if indexPath.row == 0 || indexPath.row == 2 {
-            cell.textLabel?.textColor = .neutral1
-            cell.textLabel?.font = .brandedFont(ofSize: 20, weight: .regular)
-        } else {
-            cell.textLabel?.textColor = .primary
-            cell.textLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
-        }
-        return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
+        switch indexPath.row {
+        case 0:
+            return 64
+        case 1:
+            return 50
+        default:
+            return 48
+        }
     }
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.row != 0 && indexPath.row != 2
+        return indexPath.row != 1
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 {
+        if indexPath.row == 0 {
             optionPickHandler?(myTimezone)
-        } else if indexPath.row > 2 {
+        } else if indexPath.row > 1 {
             optionPickHandler?(timezoneFromAll(forRow: indexPath.row))
         }
         dismiss(animated: true, completion: nil)
     }
 
     private func timezoneFromAll(forRow row: Int) -> TimeZoneOption {
-        return allTimezones[row - 3]
+        return allTimezones[row - 2]
+    }
+}
+
+class TimezonesSectionHeaderCell: UITableViewCell {
+
+    private let nameLabel = UILabel()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.textColor = .secondary
+        nameLabel.font = .brandedFont(ofSize: 14, weight: .semibold)
+        nameLabel.attributedText = NSAttributedString(string: "RECIPIENT TIMEZONE", attributes: [.kern: 1.5])
+
+        contentView.addSubview(nameLabel)
+
+        NSLayoutConstraint.activate([
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 68),
+            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16)
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class TimezoneOptionCell: HighlightableSimpleCell {
+
+    let nameLabel = UILabel()
+    let offsetLabel = UILabel()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.textColor = .primary
+        nameLabel.font = .brandedFont(ofSize: 20, weight: .semibold)
+
+        offsetLabel.translatesAutoresizingMaskIntoConstraints = false
+        offsetLabel.textColor = .secondary
+        offsetLabel.font = .systemFont(ofSize: 15, weight: .regular)
+
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(offsetLabel)
+
+        NSLayoutConstraint.activate([
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 68),
+            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            offsetLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 8),
+            offsetLabel.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor)
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class CurrentTimezoneOptionCell: HighlightableSimpleCell {
+
+    let nameLabel = UILabel()
+    let offsetLabel = UILabel()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.textColor = .primary
+        nameLabel.font = .brandedFont(ofSize: 20, weight: .semibold)
+
+        offsetLabel.translatesAutoresizingMaskIntoConstraints = false
+        offsetLabel.textColor = .secondary
+        offsetLabel.font = .systemFont(ofSize: 15, weight: .regular)
+
+        let textsStack = UIStackView()
+        textsStack.axis = .vertical
+        textsStack.translatesAutoresizingMaskIntoConstraints = false
+        textsStack.addArrangedSubview(nameLabel)
+        textsStack.addArrangedSubview(offsetLabel)
+        contentView.addSubview(textsStack)
+
+        NSLayoutConstraint.activate([
+            textsStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 68),
+            textsStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
