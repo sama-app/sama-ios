@@ -95,6 +95,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         panel.timezoneChangeIntentHandler = { [weak self] in
             let controller = TimezonePickerViewController()
+            controller.selectionId = $0
             controller.optionPickHandler = { [weak panel] in
                 Sama.bi.track(event: "timezonepicked", parameters: ["value": $0.hoursFromGMT])
                 panel?.changeTimezone(to: $0)

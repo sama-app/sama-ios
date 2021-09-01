@@ -10,6 +10,7 @@ import UIKit
 class TimezonePickerViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     var optionPickHandler: ((TimeZoneOption) -> Void)?
+    var selectionId: String?
 
     private let myTimezone = TimeZoneOption.from(timeZone: .current, usersTimezone: .current)
     private let allTimezones: [TimeZoneOption] = TimeZone.knownTimeZoneIdentifiers.map {
@@ -18,7 +19,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addPanHandle()
+
         view.backgroundColor = .neutralN
 
         let contentView = UITableView()
@@ -39,6 +40,8 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
             view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+
+        view.addPanHandle()
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,6 +54,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
             let cell = tableView.dequeueReusableCell(withIdentifier: "currentCell") as! CurrentTimezoneOptionCell
             cell.nameLabel.text = "My Timezone"
             cell.offsetLabel.text = [myTimezone.placeTitle, myTimezone.offsetTitle].joined(separator: ", ")
+            cell.selectionMarkView.isHidden = myTimezone.id != selectionId
             return cell
         case 1:
             return tableView.dequeueReusableCell(withIdentifier: "sectionCell")!
@@ -59,6 +63,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
             let option = timezoneFromAll(forRow: indexPath.row)
             cell.nameLabel.text = option.placeTitle
             cell.offsetLabel.text = option.offsetTitle
+            cell.selectionMarkView.isHidden = option.id != selectionId
             return cell
         }
     }
@@ -119,11 +124,14 @@ class TimezonesSectionHeaderCell: UITableViewCell {
 
 class TimezoneOptionCell: HighlightableSimpleCell {
 
+    let selectionMarkView = UIImageView(image: UIImage(named: "check")!)
     let nameLabel = UILabel()
     let offsetLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        selectionMarkView.translatesAutoresizingMaskIntoConstraints = false
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.textColor = .primary
@@ -133,10 +141,13 @@ class TimezoneOptionCell: HighlightableSimpleCell {
         offsetLabel.textColor = .secondary
         offsetLabel.font = .systemFont(ofSize: 15, weight: .regular)
 
+        contentView.addSubview(selectionMarkView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(offsetLabel)
 
         NSLayoutConstraint.activate([
+            selectionMarkView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
+            selectionMarkView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 68),
             nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             offsetLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 8),
@@ -151,11 +162,14 @@ class TimezoneOptionCell: HighlightableSimpleCell {
 
 class CurrentTimezoneOptionCell: HighlightableSimpleCell {
 
+    let selectionMarkView = UIImageView(image: UIImage(named: "check")!)
     let nameLabel = UILabel()
     let offsetLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        selectionMarkView.translatesAutoresizingMaskIntoConstraints = false
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.textColor = .primary
@@ -171,8 +185,11 @@ class CurrentTimezoneOptionCell: HighlightableSimpleCell {
         textsStack.addArrangedSubview(nameLabel)
         textsStack.addArrangedSubview(offsetLabel)
         contentView.addSubview(textsStack)
+        contentView.addSubview(selectionMarkView)
 
         NSLayoutConstraint.activate([
+            selectionMarkView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
+            selectionMarkView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
             textsStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 68),
             textsStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])

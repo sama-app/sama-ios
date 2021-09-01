@@ -49,7 +49,7 @@ class FindTimePanel: CalendarNavigationBlock {
     var api: Api!
     var coordinator: EventsCoordinator!
     var targetTimezoneChangeHandler: ((Int) -> Void)?
-    var timezoneChangeIntentHandler: (() -> Void)?
+    var timezoneChangeIntentHandler: ((String) -> Void)?
 
     private var durationOption = DurationOption(text: "1 hour", duration: 60) {
         didSet {
@@ -106,7 +106,7 @@ class FindTimePanel: CalendarNavigationBlock {
             }
             navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
-            timezoneChangeIntentHandler?()
+            timezoneChangeIntentHandler?(timezoneOption.id)
         }
     }
 
