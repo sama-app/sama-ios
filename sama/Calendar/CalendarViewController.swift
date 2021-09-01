@@ -93,6 +93,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             guard let self = self else { return }
             self.timeline.targetTimezoneHoursDiff = self.eventsCoordinator.hoursOffsetWithOffset($0)
         }
+        panel.timezoneChangeIntentHandler = { [weak self] in
+            let controller = TimezonePickerViewController()
+            controller.optionPickHandler = { [weak panel] in
+                Sama.bi.track(event: "timezonepicked", parameters: ["value": $0.hoursFromGMT])
+                panel?.changeTimezone(to: $0)
+            }
+            self?.present(controller, animated: true, completion: nil)
+        }
         navCenter.pushBlock(panel, animated: false)
 
         NotificationCenter.default.addObserver(

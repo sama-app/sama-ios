@@ -1,32 +1,13 @@
 //
-//  TimeZonePickerPanel.swift
+//  TimezonePickerViewController.swift
 //  sama
 //
-//  Created by Viktoras Laukevičius on 6/9/21.
+//  Created by Viktoras Laukevičius on 9/1/21.
 //
 
 import UIKit
 
-struct TimeZoneOption {
-    let id: String
-    let title: String
-    let hoursFromGMT: Int
-    let isUsersTimezone: Bool
-
-    static func from(timeZone: TimeZone, usersTimezone: TimeZone) -> TimeZoneOption {
-        let id = timeZone.identifier
-        let hoursFromGMT = Int(round(Double(TimeZone(identifier: id)!.secondsFromGMT()) / 3600))
-        let sign = hoursFromGMT >= 0 ? "+" : ""
-        return TimeZoneOption(
-            id: id,
-            title: "\(id) \(sign)\(hoursFromGMT)",
-            hoursFromGMT: hoursFromGMT,
-            isUsersTimezone: timeZone.secondsFromGMT() == usersTimezone.secondsFromGMT()
-        )
-    }
-}
-
-class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITableViewDelegate {
+class TimezonePickerViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     var optionPickHandler: ((TimeZoneOption) -> Void)?
 
@@ -35,13 +16,25 @@ class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
         TimeZoneOption.from(timeZone: TimeZone(identifier: $0)!, usersTimezone: .current)
     }.sorted { $0.hoursFromGMT < $1.hoursFromGMT }
 
-    override func didLoad() {
-        let backBtn = addBackButton(action: #selector(onBackButton))
-        addPanelContentTableView(withLeftView: backBtn, withDelegate: self)
-    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addPanHandle()
+        view.backgroundColor = .neutralN
 
-    @objc private func onBackButton() {
-        navigation?.pop()
+        let contentView = UITableView()
+        contentView.register(HighlightableSimpleCell.self, forCellReuseIdentifier: "cell")
+        contentView.dataSource = self
+        contentView.delegate = self
+        contentView.separatorStyle = .none
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.showsVerticalScrollIndicator = false
+        view.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -85,7 +78,7 @@ class TimeZonePickerPanel: CalendarNavigationBlock, UITableViewDataSource, UITab
         } else if indexPath.row > 2 {
             optionPickHandler?(timezoneFromAll(forRow: indexPath.row))
         }
-        navigation?.pop()
+        dismiss(animated: true, completion: nil)
     }
 
     private func timezoneFromAll(forRow row: Int) -> TimeZoneOption {

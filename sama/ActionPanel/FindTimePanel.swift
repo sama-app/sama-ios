@@ -49,6 +49,7 @@ class FindTimePanel: CalendarNavigationBlock {
     var api: Api!
     var coordinator: EventsCoordinator!
     var targetTimezoneChangeHandler: ((Int) -> Void)?
+    var timezoneChangeIntentHandler: (() -> Void)?
 
     private var durationOption = DurationOption(text: "1 hour", duration: 60) {
         didSet {
@@ -91,6 +92,10 @@ class FindTimePanel: CalendarNavigationBlock {
         addMainActionButton(title: "Find Time", action: #selector(onFindTimeButton), topAnchor: text.bottomAnchor)
     }
 
+    func changeTimezone(to timeZone: TimeZoneOption) {
+        timezoneOption = timeZone
+    }
+
     private func onAction(_ action: FindTimeAction) {
         switch action {
         case .pickDuration:
@@ -101,12 +106,7 @@ class FindTimePanel: CalendarNavigationBlock {
             }
             navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
-            let block = TimeZonePickerPanel()
-            block.optionPickHandler = { [weak self] in
-                Sama.bi.track(event: "timezonepicked", parameters: ["value": $0.hoursFromGMT])
-                self?.timezoneOption = $0
-            }
-            navigation?.pushBlock(block, animated: true)
+            timezoneChangeIntentHandler?()
         }
     }
 
