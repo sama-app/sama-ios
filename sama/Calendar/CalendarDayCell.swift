@@ -49,10 +49,6 @@ final class CalendarDayCell: UICollectionViewCell {
         //super.draw(rect)
         setupHeaderIfNeeded()
 
-        UIColor.base.setFill()
-//        UIColor.clear.setFill()
-        UIRectFill(rect)
-
         UIColor.calendarGrid.setFill()
         UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
         for i in (1 ... 24) {
@@ -166,6 +162,13 @@ final class CalendarDayCell: UICollectionViewCell {
         dayF.dateFormat = "d"
         let wkF = DateFormatter()
         wkF.dateFormat = "E"
+
+        let weekday = Calendar.current.component(.weekday, from: date)
+        if (weekday == 1 || weekday == 7) {
+            backgroundColor = .secondaryPale
+        } else {
+            backgroundColor = .base
+        }
 
         l1?.text = dayF.string(from: date)
         l2?.text = wkF.string(from: date)
