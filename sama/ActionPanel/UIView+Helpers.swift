@@ -34,6 +34,24 @@ extension UIView {
     }
 
     @discardableResult
+    func addPanHandle() -> UIView {
+        let handle = UIView()
+        handle.translatesAutoresizingMaskIntoConstraints = false
+        handle.layer.cornerRadius = 2
+        handle.layer.masksToBounds = true
+        handle.backgroundColor = UIColor.secondary.withAlphaComponent(0.15)
+        addSubview(handle)
+
+        NSLayoutConstraint.activate([
+            handle.widthAnchor.constraint(equalToConstant: 42),
+            handle.heightAnchor.constraint(equalToConstant: 5),
+            handle.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            handle.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ])
+        return handle
+    }
+
+    @discardableResult
     func addMainActionButton(title: String, action: Selector, topAnchor: NSLayoutYAxisAnchor) -> MainActionButton {
         let actionBtn = MainActionButton.make(withTitle: title)
         actionBtn.addTarget(self, action: action, for: .touchUpInside)

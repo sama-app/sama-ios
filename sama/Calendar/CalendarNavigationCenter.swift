@@ -270,26 +270,13 @@ private final class CalendarBlockWrapper: UIView {
     private let shadow = CALayer()
     private let background = CALayer()
 
-    private let handle = UIView()
+    private var handle: UIView!
 
     init() {
         super.init(frame: .zero)
-
         layer.insertSublayer(shadow, at: 0)
         layer.insertSublayer(background, at: 1)
-
-        handle.translatesAutoresizingMaskIntoConstraints = false
-        handle.layer.cornerRadius = 2
-        handle.layer.masksToBounds = true
-        handle.backgroundColor = UIColor.secondary.withAlphaComponent(0.15)
-        addSubview(handle)
-
-        NSLayoutConstraint.activate([
-            handle.widthAnchor.constraint(equalToConstant: 42),
-            handle.heightAnchor.constraint(equalToConstant: 5),
-            handle.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            handle.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
+        handle = addPanHandle()
     }
 
     required init?(coder: NSCoder) {

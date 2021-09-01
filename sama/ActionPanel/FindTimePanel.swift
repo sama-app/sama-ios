@@ -48,7 +48,8 @@ class FindTimePanel: CalendarNavigationBlock {
 
     var api: Api!
     var coordinator: EventsCoordinator!
-    var targetTimezoneChangeHandler: ((Int) -> Void)?
+    var targetTimezoneChangeHandler: ((TimeZoneOption) -> Void)?
+    var timezoneChangeIntentHandler: ((String) -> Void)?
 
     private var durationOption = DurationOption(text: "1 hour", duration: 60) {
         didSet {
@@ -58,7 +59,7 @@ class FindTimePanel: CalendarNavigationBlock {
     private var timezoneOption = TimeZoneOption.from(timeZone: .current, usersTimezone: .current) {
         didSet {
             text.setup(withParts: parts)
-            targetTimezoneChangeHandler?(timezoneOption.hoursFromGMT)
+            targetTimezoneChangeHandler?(timezoneOption)
         }
     }
 
@@ -67,7 +68,7 @@ class FindTimePanel: CalendarNavigationBlock {
             ("Find me a time for a ", nil),
             (durationOption.text, .pickDuration),
             (" meeting with someone in", nil),
-            (timezoneOption.isUsersTimezone ? "my timezone" : timezoneOption.title, .pickTimezone),
+            (timezoneOption.isUsersTimezone ? "my timezone" : [timezoneOption.placeTitle, timezoneOption.offsetTitle].joined(separator: " "), .pickTimezone),
             (" ", nil)
         ])
     }
@@ -91,6 +92,10 @@ class FindTimePanel: CalendarNavigationBlock {
         addMainActionButton(title: "Find Time", action: #selector(onFindTimeButton), topAnchor: text.bottomAnchor)
     }
 
+    func changeTimezone(to timeZone: TimeZoneOption) {
+        timezoneOption = timeZone
+    }
+
     private func onAction(_ action: FindTimeAction) {
         switch action {
         case .pickDuration:
@@ -101,12 +106,7 @@ class FindTimePanel: CalendarNavigationBlock {
             }
             navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
-            let block = TimeZonePickerPanel()
-            block.optionPickHandler = { [weak self] in
-                Sama.bi.track(event: "timezonepicked", parameters: ["value": $0.hoursFromGMT])
-                self?.timezoneOption = $0
-            }
-            navigation?.pushBlock(block, animated: true)
+            timezoneChangeIntentHandler?(timezoneOption.id)
         }
     }
 

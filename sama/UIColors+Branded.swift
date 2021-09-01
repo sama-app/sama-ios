@@ -19,13 +19,16 @@ extension UIColor {
     static var primaryDarker = UIColor(red: 202/255.0, green: 90/255.0, blue: 64/255.0, alpha: 1)
 
     /// #E7B3A0
-    static var primaryPale = UIColor(red: 231/255.0, green: 179/255.0, blue: 160/255.0, alpha: 1)
+    static var primaryPale = UIColor(red: 210/255.0, green: 113/255.0, blue: 87/255.0, alpha: 0.5)
 
     /// #E4A998
-    static var primaryPaleDarker = UIColor(red: 228/255.0, green: 169/255.0, blue: 152/255.0, alpha: 1)
+    static var primaryPaleDarker = UIColor(red: 202/255.0, green: 90/255.0, blue: 64/255.0, alpha: 0.5)
 
     /// #6B5844
     static var secondary = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 1)
+
+    /// #6B5844 0.1
+    static var secondaryPale = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 0.1)
 
     /// #333230
     static var neutral1 = UIColor(red: 51/255.0, green: 50/255.0, blue: 48/255.0, alpha: 1)
