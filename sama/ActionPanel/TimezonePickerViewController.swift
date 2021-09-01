@@ -17,12 +17,36 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
         TimeZoneOption.from(timeZone: TimeZone(identifier: $0)!, usersTimezone: .current)
     }.sorted { $0.hoursFromGMT < $1.hoursFromGMT }
 
+    private let inputField = UITextField()
+    private let contentView = UITableView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .neutralN
 
-        let contentView = UITableView()
+        inputField.translatesAutoresizingMaskIntoConstraints = false
+        inputField.addTarget(self, action: #selector(onSearchTermChange), for: .editingChanged)
+        inputField.font = .brandedFont(ofSize: 20, weight: .regular)
+        inputField.placeholder = "Search cities"
+        inputField.autocorrectionType = .no
+        inputField.autocapitalizationType = .sentences
+        inputField.backgroundColor = .calendarGrid
+        inputField.layer.cornerRadius = 12
+        inputField.layer.masksToBounds = true
+
+        let searchIconView = UIImageView(image: UIImage(named: "search")!)
+        searchIconView.translatesAutoresizingMaskIntoConstraints = false
+        searchIconView.contentMode = .center
+        NSLayoutConstraint.activate([
+            searchIconView.widthAnchor.constraint(equalToConstant: 44),
+            searchIconView.heightAnchor.constraint(equalToConstant: 48)
+        ])
+        inputField.leftView = searchIconView
+        inputField.leftViewMode = .always
+
+        view.addSubview(inputField)
+
         contentView.register(CurrentTimezoneOptionCell.self, forCellReuseIdentifier: "currentCell")
         contentView.register(TimezoneOptionCell.self, forCellReuseIdentifier: "optionCell")
         contentView.register(TimezonesSectionHeaderCell.self, forCellReuseIdentifier: "sectionCell")
@@ -34,14 +58,32 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.showsVerticalScrollIndicator = false
         view.addSubview(contentView)
+
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            inputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            inputField.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            view.trailingAnchor.constraint(equalTo: inputField.trailingAnchor, constant: 16),
+            inputField.heightAnchor.constraint(equalToConstant: 48),
+            contentView.topAnchor.constraint(equalTo: inputField.bottomAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
 
         view.addPanHandle()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func onSearchTermChange() {
+    }
+
+    @objc private func onKeyboardChange(_ notification: Notification) {
+        let val = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        let sf = self.view.safeAreaInsets.bottom
+        let inset = self.view.window!.frame.size.height - val!.origin.y - sf
+        contentView.contentInset.bottom = max(inset, 0)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
