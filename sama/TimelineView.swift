@@ -7,12 +7,21 @@
 
 import UIKit
 
+struct TimeZonesDiff {
+    let targetTitle: String
+    let currentTitle: String
+    let hours: Int
+}
+
 final class TimelineView: UIView {
 
     var cellSize: CGSize = .zero
     var vOffset: CGFloat = 0
-    var targetTimezoneHoursDiff: Int = 0 {
+    var timezonesDiff: TimeZonesDiff? = nil {
         didSet {
+            headerUpperLabel.text = timezonesDiff?.targetTitle ?? ""
+            headerLowerLabel.text = timezonesDiff?.currentTitle ?? ""
+
             setNeedsDisplay()
             layoutIfNeeded()
         }
@@ -26,6 +35,9 @@ final class TimelineView: UIView {
 
     private var isHeaderSetup = false
     private var header: UIView?
+
+    private let headerUpperLabel = UILabel()
+    private let headerLowerLabel = UILabel()
 
     override func draw(_ rect: CGRect) {
         setupHeaderIfNeeded()
@@ -59,15 +71,8 @@ final class TimelineView: UIView {
 
         for i in (0 ... 23) {
             let cellRect = CGRect(x: 0, y: vOffset + (CGFloat(i) * cellSize.height), width: bounds.width - rightInset, height: cellSize.height)
-            if targetTimezoneHoursDiff == 0 {
-                i.hourToTime.draw(
-                    inRect: cellRect,
-                    yInset: baseInset,
-                    withFontHeight: textBoxH,
-                    attributes: defaultAttrs
-                )
-            } else {
-                (i + targetTimezoneHoursDiff).toHour.hourToTime.draw(
+            if let timezonesDiff = self.timezonesDiff {
+                (i + timezonesDiff.hours).toHour.hourToTime.draw(
                     inRect: cellRect,
                     yInset: baseInset,
                     withFontHeight: textBoxH,
@@ -78,6 +83,13 @@ final class TimelineView: UIView {
                     yInset: baseInset + textBoxH,
                     withFontHeight: textBoxH,
                     attributes: currentZoneAttrs
+                )
+            } else {
+                i.hourToTime.draw(
+                    inRect: cellRect,
+                    yInset: baseInset,
+                    withFontHeight: textBoxH,
+                    attributes: defaultAttrs
                 )
             }
         }
@@ -101,6 +113,27 @@ final class TimelineView: UIView {
         sepRht.backgroundColor = .calendarGrid
         v.addSubview(sepBtm)
         v.addSubview(sepRht)
+
+        let textsStack = UIStackView()
+        textsStack.translatesAutoresizingMaskIntoConstraints = false
+        textsStack.axis = .vertical
+        textsStack.alignment = .trailing
+
+        headerUpperLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerUpperLabel.font = .systemFont(ofSize: 10, weight: .regular)
+        headerUpperLabel.textColor = .neutral1
+        textsStack.addArrangedSubview(headerUpperLabel)
+
+        headerLowerLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerLowerLabel.font = .systemFont(ofSize: 10, weight: .regular)
+        headerLowerLabel.textColor = .secondary
+        textsStack.addArrangedSubview(headerLowerLabel)
+
+        v.addSubview(textsStack)
+        NSLayoutConstraint.activate([
+            v.trailingAnchor.constraint(equalTo: textsStack.trailingAnchor, constant: 8),
+            textsStack.centerYAnchor.constraint(equalTo: v.centerYAnchor)
+        ])
 
         addSubview(v)
 

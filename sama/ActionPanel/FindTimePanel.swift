@@ -48,7 +48,7 @@ class FindTimePanel: CalendarNavigationBlock {
 
     var api: Api!
     var coordinator: EventsCoordinator!
-    var targetTimezoneChangeHandler: ((Int) -> Void)?
+    var targetTimezoneChangeHandler: ((TimeZoneOption) -> Void)?
     var timezoneChangeIntentHandler: ((String) -> Void)?
 
     private var durationOption = DurationOption(text: "1 hour", duration: 60) {
@@ -59,7 +59,7 @@ class FindTimePanel: CalendarNavigationBlock {
     private var timezoneOption = TimeZoneOption.from(timeZone: .current, usersTimezone: .current) {
         didSet {
             text.setup(withParts: parts)
-            targetTimezoneChangeHandler?(timezoneOption.hoursFromGMT)
+            targetTimezoneChangeHandler?(timezoneOption)
         }
     }
 

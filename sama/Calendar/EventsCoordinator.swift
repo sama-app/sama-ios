@@ -113,8 +113,19 @@ class EventsCoordinator {
         self.container = container
     }
 
-    func hoursOffsetWithOffset(_ offset: Int) -> Int {
-        return offset - Int(round(Double(TimeZone.current.secondsFromGMT()) / 3600))
+    func timezonesDiffWithSelection(_ timezone: TimeZoneOption) -> TimeZonesDiff? {
+        let offset = timezone.hoursFromGMT
+        let current = TimeZone.current
+        let hoursDiff = offset - Int(round(Double(current.secondsFromGMT()) / 3600))
+        if hoursDiff != 0 {
+            return TimeZonesDiff(
+                targetTitle: timezone.offsetTitle,
+                currentTitle: TimeZoneOption.from(timeZone: current, usersTimezone: current).offsetTitle,
+                hours: hoursDiff
+            )
+        } else {
+            return nil
+        }
     }
 
     func setup(withCode code: String, durationMins: Int, properties props: [EventProperties]) {

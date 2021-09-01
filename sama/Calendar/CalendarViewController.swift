@@ -91,7 +91,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         panel.api = session.api
         panel.targetTimezoneChangeHandler = { [weak self] in
             guard let self = self else { return }
-            self.timeline.targetTimezoneHoursDiff = self.eventsCoordinator.hoursOffsetWithOffset($0)
+            self.timeline.timezonesDiff = self.eventsCoordinator.timezonesDiffWithSelection($0)
         }
         panel.timezoneChangeIntentHandler = { [weak self] in
             let controller = TimezonePickerViewController()
