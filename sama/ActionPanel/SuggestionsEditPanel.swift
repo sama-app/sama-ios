@@ -24,6 +24,8 @@ class SuggestionsEditPanel: CalendarNavigationBlock {
 
         let contentLabel = UILabel()
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentLabel.numberOfLines = 0
+        contentLabel.lineBreakMode = .byWordWrapping
         contentLabel.textColor = .secondary
         contentLabel.font = .systemFont(ofSize: 15, weight: .regular)
         contentLabel.text = "Title of a meeting that will be created after confirming time"
