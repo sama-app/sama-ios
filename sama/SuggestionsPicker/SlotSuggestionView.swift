@@ -52,7 +52,7 @@ class SlotSuggestionView: UIView {
             self.outShadow.shadowPath = UIBezierPath(roundedRect: innerFrame, cornerRadius: 8).cgPath
 
             inShadow.frame = innerFrame
-            let path = UIBezierPath(roundedRect: inShadow.bounds.insetBy(dx: 3, dy: 3), cornerRadius: 8)
+            let path = UIBezierPath(roundedRect: inShadow.bounds.insetBy(dx: 1, dy: 1), cornerRadius: 8)
             let cutout = UIBezierPath(roundedRect: inShadow.bounds, cornerRadius: 8).reversing()
             path.append(cutout)
             inShadow.shadowPath = path.cgPath
