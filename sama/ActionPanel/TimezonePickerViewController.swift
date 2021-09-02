@@ -31,7 +31,8 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
         inputField.translatesAutoresizingMaskIntoConstraints = false
         inputField.addTarget(self, action: #selector(onSearchTermChange), for: .editingChanged)
         inputField.font = .brandedFont(ofSize: 20, weight: .regular)
-        inputField.placeholder = "Search cities"
+        inputField.attributedPlaceholder = NSAttributedString(string: "Search cities", attributes: [.foregroundColor: UIColor.secondary70])
+        inputField.textColor = .secondary
         inputField.autocorrectionType = .no
         inputField.autocapitalizationType = .sentences
         inputField.backgroundColor = .calendarGrid
@@ -60,6 +61,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
         contentView.separatorStyle = .none
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.showsVerticalScrollIndicator = false
+        contentView.backgroundColor = .neutralN
         view.addSubview(contentView)
 
         NSLayoutConstraint.activate([
@@ -121,6 +123,10 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
             cell.selectionMarkView.isHidden = option.id != selectionId
             return cell
         }
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = .neutralN
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

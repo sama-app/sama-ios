@@ -28,7 +28,10 @@ extension UIColor {
     static var secondary = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 1)
 
     /// #6B5844 0.1
-    static var secondaryPale = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 0.1)
+    static var secondary10 = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 0.1)
+
+    /// #6B5844 0.7
+    static var secondary70 = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 0.7)
 
     /// #333230
     static var neutral1 = UIColor(red: 51/255.0, green: 50/255.0, blue: 48/255.0, alpha: 1)

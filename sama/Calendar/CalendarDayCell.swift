@@ -165,7 +165,7 @@ final class CalendarDayCell: UICollectionViewCell {
 
         let weekday = Calendar.current.component(.weekday, from: date)
         if (weekday == 1 || weekday == 7) {
-            backgroundColor = .secondaryPale
+            backgroundColor = .secondary10
         } else {
             backgroundColor = .base
         }
