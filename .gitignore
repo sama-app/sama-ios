@@ -29,6 +29,7 @@ sama/Environment/SamaKeys.swift
 sama/Assets.xcassets/AppIcon.appiconset/*
 sama/GoogleService-Info.plist
 sama/Resources/sama.xcconfig
+sama/sama.entitlements
 
 # building
 build-sama

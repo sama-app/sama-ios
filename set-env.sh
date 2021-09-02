@@ -9,6 +9,7 @@ if [ "$type" = "prod" ] || [ "$type" == "dev" ]; then
   mkdir -p "sama/Environment"
   cp -rf "env/$type/SamaKeys.swift" "sama/Environment/SamaKeys.swift"
   cp -rf "env/$type/AppIcon.appiconset" "sama/Assets.xcassets/AppIcon.appiconset"
+  cp -rf "env/$type/sama.entitlements" "sama/sama.entitlements"
   exit 0
 fi
 
