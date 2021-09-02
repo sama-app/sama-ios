@@ -65,6 +65,8 @@ class SuggestionsEditPanel: CalendarNavigationBlock {
     }
 
     @objc private func onConfirm() {
+        Sama.bi.track(event: "changetitle")
+
         backBtn.isEnabled = false
         inputField.isEnabled = false
         actionBtn.isEnabled = false

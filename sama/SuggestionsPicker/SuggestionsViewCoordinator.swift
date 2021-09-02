@@ -135,6 +135,8 @@ class SuggestionsViewCoordinator {
         api.request(for: MeetingProposalsRequest(code: meetingCode)) {
             switch $0 {
             case let .success(rawProposal):
+                Sama.bi.track(event: "viewincalendar", parameters: ["own": rawProposal.isOwnMeeting])
+
                 let proposal = self.transformer.transform(proposal: rawProposal, calendar: .current, refDate: self.refDate)
 
                 self.duration = proposal.duration
@@ -223,6 +225,8 @@ class SuggestionsViewCoordinator {
     }
 
     func confirm(recipientEmail: String?, completion: @escaping (Result<ConfirmationResult, Error>) -> Void) {
+        Sama.bi.track(event: "confirmslot")
+
         let slot = availableSlotProps[selectionIndex]
 
         let calendar = Calendar.current
