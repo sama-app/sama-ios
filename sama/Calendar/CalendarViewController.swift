@@ -68,20 +68,15 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.navCenter.popToRoot()
             self.setupCalendarScreenTopBar()
 
-            let blockIdx = self.calendar.indexPathsForVisibleItems.first.flatMap { indexPath -> Int in
-                let daysOffset = -self.session.currentDayIndex + indexPath.item
-                let blockIdx = Int(round(Double(daysOffset) / Double(self.session.blockSize)))
-                return blockIdx
-            } ?? 0
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                let range = ((blockIdx - 1) ... (blockIdx + 1))
-                self.session.invalidateAndLoadBlocks(range)
-            }
+            self.invalidateDataAndReloadDisplayedBlocks(timeout: 1.5)
         }
 
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
         session.loadInitial()
+
+        AppLifecycleService.shared.onWillEnterForeground = { [weak self] in
+            self?.invalidateDataAndReloadDisplayedBlocks(timeout: 0)
+        }
 
         navCenter.onActivePanelHeightChange = { [weak self] in
             self?.calendar.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
@@ -139,6 +134,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.navCenter.pushUnstyledBlock(picker, animated: true)
 
             self.setupMeetingInviteTopBar()
+        }
+    }
+
+    private func invalidateDataAndReloadDisplayedBlocks(timeout: TimeInterval) {
+        let blockIdx = self.calendar.indexPathsForVisibleItems.first.flatMap { indexPath -> Int in
+            let daysOffset = -self.session.currentDayIndex + indexPath.item
+            let blockIdx = Int(round(Double(daysOffset) / Double(self.session.blockSize)))
+            return blockIdx
+        } ?? 0
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
+            let range = ((blockIdx - 1) ... (blockIdx + 1))
+            self.session.invalidateAndLoadBlocks(range)
         }
     }
 

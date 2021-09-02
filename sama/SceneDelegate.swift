@@ -7,6 +7,12 @@
 
 import UIKit
 
+class AppLifecycleService {
+    static let shared = AppLifecycleService()
+
+    var onWillEnterForeground: (() -> Void)?
+}
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -48,8 +54,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
+        AppLifecycleService.shared.onWillEnterForeground?()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
