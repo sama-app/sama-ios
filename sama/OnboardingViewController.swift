@@ -47,49 +47,17 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     private func presentWelcomeBlock() {
-        let block = UIView()
-        block.translatesAutoresizingMaskIntoConstraints = false
-
+        let block = UIView.build()
         view.addSubview(block)
 
-        let text = UILabel()
-        text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Hi.\nI’m Sama.\nI will help you find the best time for a meeting."
-        text.textColor = .neutral1
-        text.font = .brandedFont(ofSize: 28, weight: .regular)
-        text.numberOfLines = 0
-        text.lineBreakMode = .byWordWrapping
-        block.addSubview(text)
-        NSLayoutConstraint.activate([
-            text.topAnchor.constraint(equalTo: block.topAnchor),
-            text.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40),
-            block.trailingAnchor.constraint(equalTo: text.trailingAnchor, constant: 40)
-        ])
+        let titleLabel = UILabel.onboardingTitle("Hi.\nI’m Sama.\nI will help you find the best time for a meeting.")
+        titleLabel.addAndPinTitle(to: block)
 
-        let actionBtn = UIButton(type: .system)
-        actionBtn.setTitle("Continue", for: .normal)
-        actionBtn.translatesAutoresizingMaskIntoConstraints = false
-        actionBtn.setTitleColor(.primary, for: .normal)
-        actionBtn.titleLabel?.font = .brandedFont(ofSize: 28, weight: .semibold)
-        actionBtn.addTarget(self, action: #selector(onNextBlock), for: .touchUpInside)
-        block.addSubview(actionBtn)
-        NSLayoutConstraint.activate([
-            block.bottomAnchor.constraint(equalTo: actionBtn.bottomAnchor, constant: 102),
-            actionBtn.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40)
-        ])
+        let actionBtn = UIButton.onboardingNextButton("Continue")
+        actionBtn.addTarget(self, action: #selector(presentSingleCalendarBlock), for: .touchUpInside)
+        actionBtn.addAndPinActionButton(to: block)
 
-        let leading = block.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: view.bounds.width)
-        NSLayoutConstraint.activate([
-            block.topAnchor.constraint(equalTo: illustration.bottomAnchor, constant: 56),
-            block.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-            leading,
-            block.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-
-        currentBlock = block
-        currentBlockLeadingConstraint = leading
+        slideInBlock(block)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -108,36 +76,58 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         UIApplication.shared.windows[0].rootViewController = viewController
     }
 
-    @objc private func onNextBlock() {
-        Sama.bi.track(event: "next")
-
+    @objc private func presentSingleCalendarBlock() {
         let block = UIView()
         block.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(block)
 
-        let text = UILabel()
-        text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Before I can help you, I need you to grant me access to your Google Calendar."
-        text.textColor = .neutral1
-        text.font = .brandedFont(ofSize: 28, weight: .regular)
-        text.numberOfLines = 0
-        text.lineBreakMode = .byWordWrapping
-        block.addSubview(text)
+        let titleLabel = UILabel.onboardingTitle("Before I can help you, I need you to grant me access to your Google Calendar.")
+        titleLabel.addAndPinTitle(to: block)
+
+        let infoLabel = UILabel.build()
+        infoLabel.font = .brandedFont(ofSize: 20, weight: .regular)
+        infoLabel.textColor = .secondary
+        infoLabel.text = "Currently I can only work with one Google account."
+        infoLabel.makeMultiline()
+        block.addSubview(infoLabel)
         NSLayoutConstraint.activate([
-            text.topAnchor.constraint(equalTo: block.topAnchor),
-            text.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40),
-            block.trailingAnchor.constraint(equalTo: text.trailingAnchor, constant: 40)
+            infoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
+            infoLabel.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40),
+            block.trailingAnchor.constraint(equalTo: infoLabel.trailingAnchor, constant: 40)
+        ])
+
+        let actionBtn = UIButton.onboardingNextButton("Continue")
+        actionBtn.addTarget(self, action: #selector(presentSignInBlock), for: .touchUpInside)
+        actionBtn.addAndPinActionButton(to: block)
+
+        slideInBlock(block)
+    }
+
+    @objc private func presentSignInBlock() {
+        let block = UIView.build()
+
+        view.addSubview(block)
+
+        let titleLabel = UILabel.onboardingTitle("Make sure you check these additional checkboxes.")
+        titleLabel.addAndPinTitle(to: block)
+
+        let permissionsImageView = UIImageView.build()
+        permissionsImageView.image = UIImage(named: "google-permissions")
+        block.addSubview(permissionsImageView)
+        NSLayoutConstraint.activate([
+            permissionsImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            permissionsImageView.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 28)
         ])
 
         let actionBtn = SignInGoogleButton(frame: .zero)
         actionBtn.addTarget(self, action: #selector(onConnectCalendar), for: .touchUpInside)
-        block.addSubview(actionBtn)
-        NSLayoutConstraint.activate([
-            block.bottomAnchor.constraint(equalTo: actionBtn.bottomAnchor, constant: 102),
-            actionBtn.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40)
-        ])
+        actionBtn.addAndPinActionButton(to: block)
 
+        slideInBlock(block)
+    }
+
+    private func slideInBlock(_ block: UIView) {
         let leading = block.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: view.bounds.width)
         NSLayoutConstraint.activate([
             block.topAnchor.constraint(equalTo: illustration.bottomAnchor, constant: 56),
@@ -159,6 +149,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         }, completion: { _ in prevBlock?.removeFromSuperview() })
 
         currentBlock = block
+        currentBlockLeadingConstraint = leading
     }
 
     @objc private func onConnectCalendar() {
@@ -208,5 +199,46 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             present(alert, animated: true, completion: nil)
         }
+    }
+}
+
+private extension UILabel {
+    class func onboardingTitle(_ title: String) -> UILabel {
+        let label = UILabel.build()
+        label.text = title
+        label.textColor = .neutral1
+        label.font = .brandedFont(ofSize: 28, weight: .regular)
+        label.makeMultiline()
+        return label
+    }
+}
+
+private extension UIButton {
+    class func onboardingNextButton(_ title: String) -> UIButton {
+        let actionBtn = UIButton(type: .system)
+        actionBtn.forAutoLayout()
+        actionBtn.setTitle(title, for: .normal)
+        actionBtn.setTitleColor(.primary, for: .normal)
+        actionBtn.titleLabel?.font = .brandedFont(ofSize: 28, weight: .semibold)
+        return actionBtn
+    }
+}
+
+private extension UIView {
+    func addAndPinTitle(to parent: UIView) {
+        parent.addSubview(self)
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: parent.topAnchor),
+            leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: 40),
+            parent.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 40)
+        ])
+    }
+
+    func addAndPinActionButton(to parent: UIView) {
+        parent.addSubview(self)
+        NSLayoutConstraint.activate([
+            parent.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 102),
+            leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: 40)
+        ])
     }
 }

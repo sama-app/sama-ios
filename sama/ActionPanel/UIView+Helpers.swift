@@ -9,6 +9,18 @@ import UIKit
 
 extension UIView {
 
+    class func build() -> Self {
+        let view = self.init()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }
+
+    @discardableResult
+    func forAutoLayout() -> Self {
+        translatesAutoresizingMaskIntoConstraints = false
+        return self
+    }
+
     @discardableResult
     func addBackButton(title: String? = nil, action: Selector) -> UIButton {
         let backBtn = UIButton(type: .system)
@@ -89,5 +101,12 @@ extension UIView {
             bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
         return contentView
+    }
+}
+
+extension UILabel {
+    func makeMultiline() {
+        numberOfLines = 0
+        lineBreakMode = .byWordWrapping
     }
 }
