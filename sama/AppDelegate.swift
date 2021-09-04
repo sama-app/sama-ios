@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseDynamicLinks
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -30,6 +31,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     // MARK: UISceneSession Lifecycle
+
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        LogBucket.shared.log("application(_:continue:restorationHandler)")
+        let handled = DynamicLinks.dynamicLinks().handleUniversalLink(userActivity.webpageURL!) { dynamiclink, error in
+            LogBucket.shared.log("inside application(_:continue:restorationHandler)")
+            LogBucket.shared.log("\(dynamiclink) \(error)")
+        }
+        return handled
+    }
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        return application(
+            app, open: url,
+            sourceApplication: options[.sourceApplication] as? String,
+            annotation: ""
+        )
+    }
+
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        LogBucket.shared.log("application(_:open:sourceApplication:annotation)")
+        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+            LogBucket.shared.log("inside application(_:open:sourceApplication:annotation)")
+            LogBucket.shared.log("\(dynamicLink.url)")
+            return true
+        }
+        return false
+    }
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.

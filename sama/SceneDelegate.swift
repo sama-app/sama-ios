@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseDynamicLinks
 
 class AppLifecycleService {
     static let shared = AppLifecycleService()
@@ -23,6 +24,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
+        LogBucket.shared.log("scene(_:willConnectTo:options)")
+        LogBucket.shared.log("\(connectionOptions.userActivities.first?.webpageURL)")
+        if let url = connectionOptions.userActivities.first?.webpageURL {
+            DynamicLinks.dynamicLinks().handleUniversalLink(url) { dynamiclink, error in
+                LogBucket.shared.log("inside scene(_:willConnectTo:options)")
+                LogBucket.shared.log("\(dynamiclink) \(error)")
+            }
+        }
+
         if let meetingInviteCode = connectionOptions.userActivities.first?.webpageURL?.path.split(separator: "/").first {
             MeetingInviteDeepLinkService.shared.setMeetingInviteCode(String(meetingInviteCode))
         }
@@ -31,6 +41,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        LogBucket.shared.log("scene(_:willConnectTo:options)")
+        LogBucket.shared.log("\(userActivity.webpageURL)")
+
         if let meetingInviteCode = userActivity.webpageURL?.path.split(separator: "/").first {
             MeetingInviteDeepLinkService.shared.setMeetingInviteCode(String(meetingInviteCode))
         }
