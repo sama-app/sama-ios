@@ -22,17 +22,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-
-        if let meetingInviteCode = connectionOptions.userActivities.first?.webpageURL?.path.split(separator: "/").first {
-            MeetingInviteDeepLinkService.shared.setMeetingInviteCode(String(meetingInviteCode))
+        if let url = connectionOptions.userActivities.first?.webpageURL {
+            MeetingInviteDeepLinkService.shared.handleUniversalLink(url)
         }
 
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        if let meetingInviteCode = userActivity.webpageURL?.path.split(separator: "/").first {
-            MeetingInviteDeepLinkService.shared.setMeetingInviteCode(String(meetingInviteCode))
+        if let url = userActivity.webpageURL {
+            MeetingInviteDeepLinkService.shared.handleUniversalLink(url)
         }
     }
 

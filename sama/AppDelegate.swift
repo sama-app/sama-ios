@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseDynamicLinks
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -30,6 +31,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     // MARK: UISceneSession Lifecycle
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url)?.url {
+            Sama.bi.track(event: "meetinginviteddl")
+            MeetingInviteDeepLinkService.shared.handleUniversalLink(dynamicLink)
+        }
+        return false
+    }
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.

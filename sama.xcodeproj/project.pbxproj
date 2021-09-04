@@ -71,6 +71,7 @@
 		E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0AC26413342009CAB88 /* samaUITests.swift */; };
 		E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
 		E7D5FE8226C971190047B6D3 /* SuggestionsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */; };
+		E7ED04A426E3B4E2001FCE0D /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = E7ED04A326E3B4E2001FCE0D /* FirebaseDynamicLinks */; };
 		E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
 		E7F2810226C4620E0051BB5B /* SuggestionsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */; };
 		E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
@@ -193,6 +194,7 @@
 				E71755102698AAEE003B5A32 /* FirebaseCrashlytics in Frameworks */,
 				E76E85E2264D195200FAC1DF /* FirebaseMessaging in Frameworks */,
 				E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				E7ED04A426E3B4E2001FCE0D /* FirebaseDynamicLinks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +433,7 @@
 				E76E85E1264D195200FAC1DF /* FirebaseMessaging */,
 				E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				E717550F2698AAEE003B5A32 /* FirebaseCrashlytics */,
+				E7ED04A326E3B4E2001FCE0D /* FirebaseDynamicLinks */,
 			);
 			productName = sama;
 			productReference = E7D3C08726413340009CAB88 /* Sama.app */;
@@ -978,6 +981,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		E7ED04A326E3B4E2001FCE0D /* FirebaseDynamicLinks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDynamicLinks;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
