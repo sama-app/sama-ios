@@ -33,11 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // MARK: UISceneSession Lifecycle
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        LogBucket.shared.log("application(_:open:options)")
         if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url)?.url {
-            LogBucket.shared.log("inside application(_:open:options)")
-            LogBucket.shared.log("\(dynamicLink)")
-
             MeetingInviteDeepLinkService.shared.handleUniversalLink(dynamicLink)
         }
         return false

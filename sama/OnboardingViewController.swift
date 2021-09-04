@@ -209,12 +209,4 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             present(alert, animated: true, completion: nil)
         }
     }
-
-    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
-            let alert = UIAlertController(title: nil, message: LogBucket.shared.stringify(), preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
-            present(alert, animated: true, completion: nil)
-        }
-    }
 }
