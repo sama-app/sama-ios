@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseDynamicLinks
 
 class AppLifecycleService {
     static let shared = AppLifecycleService()
@@ -26,15 +25,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         LogBucket.shared.log("scene(_:willConnectTo:options)")
         LogBucket.shared.log("\(connectionOptions.userActivities.first?.webpageURL)")
-        if let url = connectionOptions.userActivities.first?.webpageURL {
-            DynamicLinks.dynamicLinks().handleUniversalLink(url) { dynamiclink, error in
-                LogBucket.shared.log("inside scene(_:willConnectTo:options)")
-                LogBucket.shared.log("\(dynamiclink) \(error)")
-            }
-        }
 
-        if let meetingInviteCode = connectionOptions.userActivities.first?.webpageURL?.path.split(separator: "/").first {
-            MeetingInviteDeepLinkService.shared.setMeetingInviteCode(String(meetingInviteCode))
+        if let url = connectionOptions.userActivities.first?.webpageURL {
+            MeetingInviteDeepLinkService.shared.handleUniversalLink(url)
         }
 
         guard let _ = (scene as? UIWindowScene) else { return }
@@ -44,8 +37,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         LogBucket.shared.log("scene(_:willConnectTo:options)")
         LogBucket.shared.log("\(userActivity.webpageURL)")
 
-        if let meetingInviteCode = userActivity.webpageURL?.path.split(separator: "/").first {
-            MeetingInviteDeepLinkService.shared.setMeetingInviteCode(String(meetingInviteCode))
+        if let url = userActivity.webpageURL {
+            MeetingInviteDeepLinkService.shared.handleUniversalLink(url)
         }
     }
 
