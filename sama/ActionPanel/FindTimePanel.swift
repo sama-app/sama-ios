@@ -65,9 +65,9 @@ class FindTimePanel: CalendarNavigationBlock {
 
     private var parts: [FindTimePart] {
         return FindTimePart.make(from: [
-            ("Find me a time for a ", nil),
+            ("Find me a time for a\n", nil),
             (durationOption.text, .pickDuration),
-            (" meeting with someone in", nil),
+            ("   meeting in\n", nil),
             (timezoneOption.isUsersTimezone ? "my timezone" : [timezoneOption.placeTitle, timezoneOption.offsetTitle].joined(separator: " "), .pickTimezone),
             (" ", nil)
         ])
