@@ -79,6 +79,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         navCenter.onActivePanelHeightChange = { [weak self] in
+            self?.timelineScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
             self?.calendar.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
         }
         let panel = FindTimePanel()
