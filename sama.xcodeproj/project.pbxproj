@@ -51,6 +51,8 @@
 		E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C42684D58600398E41 /* AuthContainer.swift */; };
 		E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
 		E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
+		E7AD47F826E947DC00634F2B /* UIApplication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */; };
+		E7AD47F926E9485100634F2B /* UIApplication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */; };
 		E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */; };
 		E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFD2694708D00558BB9 /* SlotFinder.swift */; };
 		E7B470002694821200558BB9 /* SlotFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */; };
@@ -220,6 +222,7 @@
 		E79C90C42684D58600398E41 /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
 		E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
 		E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiDateTimeFormatter.swift; sourceTree = "<group>"; };
+		E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Helpers.swift"; sourceTree = "<group>"; };
 		E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundShadowView.swift; sourceTree = "<group>"; };
 		E7B46FFD2694708D00558BB9 /* SlotFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinder.swift; sourceTree = "<group>"; };
 		E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinderTests.swift; sourceTree = "<group>"; };
@@ -360,6 +363,14 @@
 			path = Api;
 			sourceTree = "<group>";
 		};
+		E7AD47F626E947C100634F2B /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		E7BA3DC02694A7EA00FC4F47 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -401,6 +412,7 @@
 			isa = PBXGroup;
 			children = (
 				E763A6D8269737F900082BCE /* Resources */,
+				E7AD47F626E947C100634F2B /* Utils */,
 				E79C90BF2684C37200398E41 /* Api */,
 				E7F5AD162670A56D00138E42 /* ActionPanel */,
 				E795793D266F5F40005B9F39 /* Calendar */,
@@ -695,6 +707,7 @@
 				E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
 				E72634CC26CADB380041886D /* SuggestionsPickerViewCell.swift in Sources */,
+				E7AD47F826E947DC00634F2B /* UIApplication+Helpers.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */,
 				E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */,
@@ -781,6 +794,7 @@
 				E7D481D426E6A8E6008B7CEE /* SuggestionsEditPanel.swift in Sources */,
 				E7D481D526E6A8E6008B7CEE /* TimezonePickerViewController.swift in Sources */,
 				E7D481D626E6A8E6008B7CEE /* CalendarBlocks.swift in Sources */,
+				E7AD47F926E9485100634F2B /* UIApplication+Helpers.swift in Sources */,
 				E7D481D726E6A8E6008B7CEE /* CalendarSession.swift in Sources */,
 				E7D481D826E6A8E6008B7CEE /* CalendarLayout.swift in Sources */,
 				E7D481D926E6A8E6008B7CEE /* CalendarViewController.swift in Sources */,

@@ -73,7 +73,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     private func startSession(with auth: AuthContainer) {
         let viewController = CalendarViewController()
         viewController.session = makeCalendarSession(with: auth)
-        UIApplication.shared.windows[0].rootViewController = viewController
+        UIApplication.shared.rootWindow?.rootViewController = viewController
     }
 
     @objc private func presentSingleCalendarBlock() {

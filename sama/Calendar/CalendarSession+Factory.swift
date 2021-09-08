@@ -13,7 +13,7 @@ func makeCalendarSession(with auth: AuthContainer) -> CalendarSession {
     api.forbiddenHandler = {
         if !isHandledForbidden {
             isHandledForbidden = true
-            UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
+            UIApplication.shared.rootWindow?.rootViewController = OnboardingViewController()
         }
     }
     let session = CalendarSession(api: api, currentDayIndex: 5000)
