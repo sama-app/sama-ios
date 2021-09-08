@@ -243,10 +243,21 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         view.addSubview(navCenter)
 
         navCenterBottomConstraint = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
-        NSLayoutConstraint.activate([
+
+        #if targetEnvironment(macCatalyst)
+        let horizontalConstraints = [
+            navCenter.widthAnchor.constraint(equalToConstant: 360),
+            navCenter.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ]
+        #else
+        let horizontalConstraints = [
             navCenter.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor)
+        ]
+        #endif
+
+        NSLayoutConstraint.activate(horizontalConstraints + [
             navCenter.topAnchor.constraint(equalTo: topBar.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor),
             navCenterBottomConstraint
         ])
     }
