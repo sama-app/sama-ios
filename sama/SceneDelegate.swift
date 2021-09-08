@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let window = scene as? UIWindowScene else { return }
 
-        let windowSize = CGSize(width: 1182, height: 960)
+        let windowSize = CGSize(width: 1177, height: 960)
         window.sizeRestrictions?.minimumSize = windowSize
         window.sizeRestrictions?.maximumSize = windowSize
 
