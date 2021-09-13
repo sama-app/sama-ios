@@ -13,15 +13,17 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
     var selectionId: String?
 
     private let myTimezone = TimeZoneOption.from(timeZone: .current, usersTimezone: .current)
-    private let allTimezones: [TimeZoneOption] = TimeZone.knownTimeZoneIdentifiers.map {
-        TimeZoneOption.from(timeZone: TimeZone(identifier: $0)!, usersTimezone: .current)
-    }.sorted { $0.hoursFromGMT < $1.hoursFromGMT }
+    private var allTimezones: [ListTimeZone] = []
+    private var topTimezones: [ListTimeZone] = []
 
-    private var searchResults: [TimeZoneOption] = []
+    private var searchResults: [ListTimeZone] = []
     private var isSearchActive = false
 
     private let inputField = UITextField()
     private let contentView = UITableView()
+
+    private var activeSearchTerm = ""
+    private var isBaseDataLoaded = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,19 +81,85 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
 
         NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardChange), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        loadBaseData()
+        reloadCurrentState()
     }
 
-    @objc private func onSearchTermChange() {
-        let term = (inputField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        if term.isEmpty {
+    private func loadBaseData() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let fileData = try! Data(contentsOf: Bundle.main.url(forResource: "timezones-source", withExtension: "json")!)
+            let list = try! JSONDecoder().decode([TimeZoneSource].self, from: fileData)
+            self.allTimezones = list.compactMap {
+                guard let timezone = TimeZone(identifier: $0.timezone) else { return nil }
+
+                let hoursFromGMT = Int(round(Double(timezone.secondsFromGMT()) / 3600))
+                let sign = (hoursFromGMT > 0) ? "+" : ""
+                let hoursTitle = (hoursFromGMT != 0) ? "\(hoursFromGMT)" : ""
+
+                return ListTimeZone(
+                    id: $0.city.lowercased(),
+                    city: $0.city,
+                    country: $0.country,
+                    offsetTitle: "GMT\(sign)\(hoursTitle)",
+                    secondsFromGMT: timezone.secondsFromGMT()
+                )
+            }
+
+            let topCities = [
+                "Dakar", "London", "Paris", "Cairo", "Moscow", "Baku", "Kabul", "Karachi", "Mumbai", "Kathmandu",
+                "Dhaka", "Yangon", "Jakarta", "Shanghai", "Tokyo", "Brisbane", "Sydney", "Auckland",
+                "Apia", "Praia", "Sao Paulo", "Santiago", "Manaus", "New York", "Mexico City", "Phoenix", "San Francisco",
+                "Anchorage", "Honolulu", "Pago Pago", "Nukualofa", "Apia", "Noumea", "Papeete"
+            ]
+            self.topTimezones = topCities.compactMap { name in
+                self.allTimezones.first { $0.city.lowercased() == name.lowercased() }
+            }.sorted {
+                abs($0.secondsFromGMT) < abs($1.secondsFromGMT)
+            }
+
+            self.isBaseDataLoaded = true
+            DispatchQueue.main.async {
+                self.reloadCurrentState()
+            }
+        }
+    }
+
+    private func reloadCurrentState() {
+        guard isBaseDataLoaded else {
+            isSearchActive = true
+            searchResults = []
+            contentView.reloadData()
+            return
+        }
+
+        let term = activeSearchTerm
+        guard !term.isEmpty else {
             isSearchActive = false
             searchResults = []
             contentView.reloadData()
-        } else {
-            isSearchActive = true
-            searchResults = allTimezones.filter { $0.placeTitle.lowercased().contains(term.lowercased()) }
-            contentView.reloadData()
+            return
         }
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            let results = self.allTimezones.filter {
+                return
+                    $0.city.lowercased().contains(term.lowercased()) ||
+                    $0.country.lowercased().starts(with: term.lowercased())
+            }.sorted { $0.getSortRank(forTerm: term) < $1.getSortRank(forTerm: term) }
+            DispatchQueue.main.async {
+                if self.activeSearchTerm == term {
+                    self.isSearchActive = true
+                    self.searchResults = results
+                    self.contentView.reloadData()
+                }
+            }
+        }
+    }
+
+    @objc private func onSearchTermChange() {
+        activeSearchTerm = (inputField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        reloadCurrentState()
     }
 
     @objc private func onKeyboardChange(_ notification: Notification) {
@@ -102,7 +170,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isSearchActive ? searchResults.count : allTimezones.count
+        return isSearchActive ? searchResults.count : topTimezones.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -118,7 +186,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "optionCell") as! TimezoneOptionCell
             let option = isSearchActive ? searchResults[indexPath.row] : timezoneFromAll(forRow: indexPath.row)
-            cell.nameLabel.text = option.placeTitle
+            cell.nameLabel.text = option.city
             cell.offsetLabel.text = option.offsetTitle
             cell.selectionMarkView.isHidden = option.id != selectionId
             return cell
@@ -146,19 +214,19 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isSearchActive {
-            optionPickHandler?(searchResults[indexPath.row])
+            optionPickHandler?(.from(searchResults[indexPath.row]))
         } else {
             if indexPath.row == 0 {
                 optionPickHandler?(myTimezone)
             } else if indexPath.row > 1 {
-                optionPickHandler?(timezoneFromAll(forRow: indexPath.row))
+                optionPickHandler?(.from(timezoneFromAll(forRow: indexPath.row)))
             }
         }
         dismiss(animated: true, completion: nil)
     }
 
-    private func timezoneFromAll(forRow row: Int) -> TimeZoneOption {
-        return allTimezones[row - 2]
+    private func timezoneFromAll(forRow row: Int) -> ListTimeZone {
+        return topTimezones[row - 2]
     }
 }
 
@@ -262,5 +330,42 @@ class CurrentTimezoneOptionCell: HighlightableSimpleCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private struct ListTimeZone {
+    let id: String
+    let city: String
+    let country: String
+    let offsetTitle: String
+    let secondsFromGMT: Int
+
+    func getSortRank(forTerm term: String) -> Int {
+        if city.lowercased().starts(with: term.lowercased()) {
+            return 1
+        } else if city.lowercased().contains(term.lowercased()) {
+            return 2
+        } else if country.lowercased().starts(with: term.lowercased()) {
+            return 3
+        } else {
+            return 9
+        }
+    }
+}
+
+private struct TimeZoneSource: Decodable {
+    let city: String
+    let country: String
+    let timezone: String
+}
+
+private extension TimeZoneOption {
+    static func from(_ entry: ListTimeZone) -> TimeZoneOption {
+        return make(
+            id: entry.city.lowercased(),
+            placeTitle: entry.city,
+            secsFromGMT: entry.secondsFromGMT,
+            usersTimezone: .current
+        )
     }
 }
