@@ -22,6 +22,7 @@
 		E72D774C26DD3AF100F751E9 /* SuggestionsEditPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72D774B26DD3AF100F751E9 /* SuggestionsEditPanel.swift */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
+		E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */ = {isa = PBXBuildFile; fileRef = E761E12C26EF8BD6003FB1BF /* timezones-source.json */; };
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E74C8A4326B7045B009D6D90 /* AuthResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */; };
 		E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4426B704DA009D6D90 /* AppAuthError.swift */; };
@@ -687,6 +688,7 @@
 				E7D4821226E6AE0C008B7CEE /* firebase in Resources */,
 				E7D4821326E6AE0F008B7CEE /* Assets.xcassets in Resources */,
 				E7D4821426E6AE13008B7CEE /* Main.storyboard in Resources */,
+				E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */,
 				E7D4821526E6AE1F008B7CEE /* sama.xcconfig in Resources */,
 				E7D4821626E6AE22008B7CEE /* GoogleService-Info.plist in Resources */,
 			);
