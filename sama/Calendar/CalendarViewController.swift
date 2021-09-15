@@ -130,7 +130,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
 
-            let picker = SuggestionsPickerView(parentWidth: self.view.frame.width)
+            let picker = SuggestionsPickerView(parentWidth: self.navCenter.frame.width)
             picker.coordinator = self.suggestionsViewCoordinator
             self.navCenter.pushUnstyledBlock(picker, animated: true)
 

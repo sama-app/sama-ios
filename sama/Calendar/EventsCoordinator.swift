@@ -304,7 +304,7 @@ class EventsCoordinator {
         eventView.isUserInteractionEnabled = true
 
         let dragRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDrag(_:)))
-        dragRecognizer.minimumPressDuration = 0.01
+        dragRecognizer.minimumPressDuration = 0.02
         eventView.addGestureRecognizer(dragRecognizer)
 
         let handleRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleEventDurationDrag(_:)))

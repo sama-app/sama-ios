@@ -52,9 +52,14 @@ class Sama {
 }
 
 private func getDefaultHeaders() -> [String: String] {
+    #if targetEnvironment(macCatalyst)
+    let systemName = "SamaMacCatalyst"
+    #else
+    let systemName = "SamaiOS"
+    #endif
     return [
         "Content-Type": "application/json",
-        "User-Agent": "SamaiOS/v\(getAppVersion()) (OS \(getOsVersion()))"
+        "User-Agent": "\(systemName)/v\(getAppVersion()) (OS \(getOsVersion()))"
     ]
 }
 
