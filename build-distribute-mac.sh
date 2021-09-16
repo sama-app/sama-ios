@@ -27,18 +27,19 @@ set -o pipefail && \
 # notarize
 
 appPath="$buildPath/Sama.app"
+appPreNotarizationZipPath="$buildPath/Sama-pre-notarization.zip"
 appZipPath="$buildPath/Sama.zip"
 notarizationRequestPath="$buildPath/notarization-request.plist"
 notarizationResultPath="$buildPath/notarization-result.plist"
 
-ditto -c -k --keepParent $appPath $appZipPath
+ditto -c -k --keepParent $appPath $appPreNotarizationZipPath
 
 xcrun altool \
  --notarize-app \
  --primary-bundle-id "com.meetsama.app.dev" \
  --apiKey "$APPSTORE_API_KEY" \
  --apiIssuer "$APPSTORE_API_ISSUER" \
- -f $appZipPath \
+ -f $appPreNotarizationZipPath \
  --output-format xml \
  > $notarizationRequestPath
 
@@ -49,13 +50,15 @@ while true; do
     --apiIssuer "$APPSTORE_API_ISSUER" \
     --output-format xml > $notarizationResultPath
   status=`/usr/libexec/PlistBuddy -c "Print :notarization-info:Status" $notarizationResultPath`
-  if [ status != "in progress" ]; then
-      break;
+  if [ "$status" != "in progress" ]; then
+    break;
   fi;
-  sleep 60
+  sleep 30
 done
 
 xcrun stapler staple $appPath
+
+ditto -c -k --keepParent $appPath $appZipPath
 
 # distribute
 # TODO
