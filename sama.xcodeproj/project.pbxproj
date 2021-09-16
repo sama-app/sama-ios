@@ -22,6 +22,7 @@
 		E72D774C26DD3AF100F751E9 /* SuggestionsEditPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72D774B26DD3AF100F751E9 /* SuggestionsEditPanel.swift */; };
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
+		E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */ = {isa = PBXBuildFile; fileRef = E761E12C26EF8BD6003FB1BF /* timezones-source.json */; };
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E74C8A4326B7045B009D6D90 /* AuthResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */; };
 		E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4426B704DA009D6D90 /* AppAuthError.swift */; };
@@ -52,6 +53,8 @@
 		E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C42684D58600398E41 /* AuthContainer.swift */; };
 		E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
 		E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
+		E7AD47F826E947DC00634F2B /* UIApplication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */; };
+		E7AD47F926E9485100634F2B /* UIApplication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */; };
 		E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */; };
 		E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFD2694708D00558BB9 /* SlotFinder.swift */; };
 		E7B470002694821200558BB9 /* SlotFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */; };
@@ -71,6 +74,79 @@
 		E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */; };
 		E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0AC26413342009CAB88 /* samaUITests.swift */; };
 		E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
+		E7D481CB26E6A8E5008B7CEE /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C02684C37A00398E41 /* Api.swift */; };
+		E7D481CC26E6A8E6008B7CEE /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C42684D58600398E41 /* AuthContainer.swift */; };
+		E7D481CD26E6A8E6008B7CEE /* FindTimePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD172670A57900138E42 /* FindTimePanel.swift */; };
+		E7D481CE26E6A8E6008B7CEE /* TimeZoneOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD192670A58A00138E42 /* TimeZoneOption.swift */; };
+		E7D481CF26E6A8E6008B7CEE /* DurationPickerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A66582674C7D100C88EA1 /* DurationPickerPanel.swift */; };
+		E7D481D026E6A8E6008B7CEE /* EventDatesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79B09D52677A05300ADD43D /* EventDatesPanel.swift */; };
+		E7D481D126E6A8E6008B7CEE /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665A2674CACB00C88EA1 /* UIView+Helpers.swift */; };
+		E7D481D226E6A8E6008B7CEE /* EventListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7036FD3267DF1B300EFFE4E /* EventListItemView.swift */; };
+		E7D481D326E6A8E6008B7CEE /* InvitationCopiedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71EE89D26DA927D00E0D2CA /* InvitationCopiedPanel.swift */; };
+		E7D481D426E6A8E6008B7CEE /* SuggestionsEditPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72D774B26DD3AF100F751E9 /* SuggestionsEditPanel.swift */; };
+		E7D481D526E6A8E6008B7CEE /* TimezonePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E787D1DB26DFBD3F00AE0652 /* TimezonePickerViewController.swift */; };
+		E7D481D626E6A8E6008B7CEE /* CalendarBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */; };
+		E7D481D726E6A8E6008B7CEE /* CalendarSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957940266F5F62005B9F39 /* CalendarSession.swift */; };
+		E7D481D826E6A8E6008B7CEE /* CalendarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957942266F5F7B005B9F39 /* CalendarLayout.swift */; };
+		E7D481D926E6A8E6008B7CEE /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957946266F629B005B9F39 /* CalendarViewController.swift */; };
+		E7D481DA26E6A8E6008B7CEE /* CalendarDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD82264EB61D00CD3759 /* CalendarDayCell.swift */; };
+		E7D481DB26E6A8E6008B7CEE /* CalendarNavigationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD14266FBFD900138E42 /* CalendarNavigationCenter.swift */; };
+		E7D481DC26E6A8E6008B7CEE /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79B09D72677A34A00ADD43D /* EventView.swift */; };
+		E7D481DD26E6A8E6008B7CEE /* ScrollLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7036FD1267D083D00EFFE4E /* ScrollLock.swift */; };
+		E7D481DE26E6A8E6008B7CEE /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
+		E7D481DF26E6A8E6008B7CEE /* SlotFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B46FFD2694708D00558BB9 /* SlotFinder.swift */; };
+		E7D481E026E6A8E6008B7CEE /* BlockedTimesForDaysTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */; };
+		E7D481E126E6A8E6008B7CEE /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
+		E7D481E226E6A8E6008B7CEE /* AuthDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C0CC26413952009CAB88 /* AuthDirections.swift */; };
+		E7D481E326E6A8E6008B7CEE /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
+		E7D481E426E6A8E6008B7CEE /* AuthResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */; };
+		E7D481E526E6A8E6008B7CEE /* AppAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4426B704DA009D6D90 /* AppAuthError.swift */; };
+		E7D481E626E6A8E6008B7CEE /* SuggestionsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */; };
+		E7D481E726E6A8E6008B7CEE /* SlotSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */; };
+		E7D481E826E6A8E6008B7CEE /* SuggestionsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */; };
+		E7D481E926E6A8E6008B7CEE /* SuggestionsPickerLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72634C426CADAC60041886D /* SuggestionsPickerLayout.swift */; };
+		E7D481EA26E6A8E6008B7CEE /* SuggestionsPickerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72634CB26CADB380041886D /* SuggestionsPickerViewCell.swift */; };
+		E7D481EB26E6A8E6008B7CEE /* MeetingInviteRecipientInputPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */; };
+		E7D481EC26E6A8E6008B7CEE /* SuggestionsPickCalendarSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758054326D2AAFF00E9DEAD /* SuggestionsPickCalendarSlider.swift */; };
+		E7D481ED26E6A8E6008B7CEE /* ProposedAvailableSlotsTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E790EEC526D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift */; };
+		E7D481EE26E6A8E6008B7CEE /* TimeConfirmedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71EE89B26D94DAF00E0D2CA /* TimeConfirmedPanel.swift */; };
+		E7D481EF26E6A8E6008B7CEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
+		E7D481F026E6A8E6008B7CEE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
+		E7D481F126E6A8E6008B7CEE /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
+		E7D481F226E6A8E6008B7CEE /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD872651931500CD3759 /* TimelineView.swift */; };
+		E7D481F326E6A8E6008B7CEE /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
+		E7D481F426E6A8E6008B7CEE /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
+		E7D481F526E6A8E6008B7CEE /* RoutingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957944266F628A005B9F39 /* RoutingViewController.swift */; };
+		E7D481F626E6A8E6008B7CEE /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7957948266F6457005B9F39 /* OnboardingViewController.swift */; };
+		E7D481F726E6A8E6008B7CEE /* UIFont+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */; };
+		E7D481F826E6A8E6008B7CEE /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */; };
+		E7D481F926E6A8E6008B7CEE /* MainActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665C2674F02C00C88EA1 /* MainActionButton.swift */; };
+		E7D481FA26E6A8E6008B7CEE /* HighlightableSimpleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A665E267536A400C88EA1 /* HighlightableSimpleCell.swift */; };
+		E7D481FB26E6A8E6008B7CEE /* Sama.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C22684C7A100398E41 /* Sama.swift */; };
+		E7D481FC26E6A8E6008B7CEE /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
+		E7D481FD26E6A8E6008B7CEE /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
+		E7D481FE26E6A8E6008B7CEE /* CALayer+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E710CFDA2685DD0C0060218C /* CALayer+Helpers.swift */; };
+		E7D481FF26E6A8E6008B7CEE /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
+		E7D4820026E6A8E6008B7CEE /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
+		E7D4820126E6A8E6008B7CEE /* BackgroundShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */; };
+		E7D4820226E6A8E6008B7CEE /* EmailComposeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */; };
+		E7D4820326E6A8E6008B7CEE /* Banalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B50CA626949C7400BBEFD9 /* Banalytics.swift */; };
+		E7D4820426E6A8E6008B7CEE /* AcknowledgementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */; };
+		E7D4820526E6A8E6008B7CEE /* SamaKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */; };
+		E7D4820626E6A8E6008B7CEE /* SignInGoogleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7978E9926BC5124001B199A /* SignInGoogleButton.swift */; };
+		E7D4820726E6A8E6008B7CEE /* LightTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758054126D2896E00E9DEAD /* LightTextField.swift */; };
+		E7D4820826E6A8E6008B7CEE /* MeetingInviteDeepLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FD55DB26D8B48100C81364 /* MeetingInviteDeepLinkService.swift */; };
+		E7D4820A26E6ADE6008B7CEE /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = E7D4820926E6ADE6008B7CEE /* FirebaseCrashlytics */; };
+		E7D4820C26E6ADEA008B7CEE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E7D4820B26E6ADEA008B7CEE /* FirebaseMessaging */; };
+		E7D4820E26E6ADF2008B7CEE /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = E7D4820D26E6ADF2008B7CEE /* FirebaseDynamicLinks */; };
+		E7D4820F26E6AE00008B7CEE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */; };
+		E7D4821026E6AE05008B7CEE /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
+		E7D4821126E6AE05008B7CEE /* Latinotype - Recoleta Alt SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */; };
+		E7D4821226E6AE0C008B7CEE /* firebase in Resources */ = {isa = PBXBuildFile; fileRef = E763A6DA2697383B00082BCE /* firebase */; };
+		E7D4821326E6AE0F008B7CEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09326413342009CAB88 /* Assets.xcassets */; };
+		E7D4821426E6AE13008B7CEE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
+		E7D4821526E6AE1F008B7CEE /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
+		E7D4821626E6AE22008B7CEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */; };
 		E7D5FE8226C971190047B6D3 /* SuggestionsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */; };
 		E7ED04A426E3B4E2001FCE0D /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = E7ED04A326E3B4E2001FCE0D /* FirebaseDynamicLinks */; };
 		E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
@@ -149,6 +225,7 @@
 		E79C90C42684D58600398E41 /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
 		E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
 		E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiDateTimeFormatter.swift; sourceTree = "<group>"; };
+		E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Helpers.swift"; sourceTree = "<group>"; };
 		E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundShadowView.swift; sourceTree = "<group>"; };
 		E7B46FFD2694708D00558BB9 /* SlotFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinder.swift; sourceTree = "<group>"; };
 		E7B46FFF2694821200558BB9 /* SlotFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinderTests.swift; sourceTree = "<group>"; };
@@ -173,6 +250,7 @@
 		E7D3C0AC26413342009CAB88 /* samaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = samaUITests.swift; sourceTree = "<group>"; };
 		E7D3C0AE26413342009CAB88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7D3C0CC26413952009CAB88 /* AuthDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDirections.swift; sourceTree = "<group>"; };
+		E7D481B726E6A87D008B7CEE /* Sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickerView.swift; sourceTree = "<group>"; };
 		E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarSession+Factory.swift"; sourceTree = "<group>"; };
 		E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsViewCoordinator.swift; sourceTree = "<group>"; };
@@ -211,6 +289,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7D481B426E6A87D008B7CEE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7D4820C26E6ADEA008B7CEE /* FirebaseMessaging in Frameworks */,
+				E7D4820A26E6ADE6008B7CEE /* FirebaseCrashlytics in Frameworks */,
+				E7D4820E26E6ADF2008B7CEE /* FirebaseDynamicLinks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +367,14 @@
 			path = Api;
 			sourceTree = "<group>";
 		};
+		E7AD47F626E947C100634F2B /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		E7BA3DC02694A7EA00FC4F47 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,6 +407,7 @@
 				E7D3C08726413340009CAB88 /* Sama.app */,
 				E7D3C09D26413342009CAB88 /* samaTests.xctest */,
 				E7D3C0A826413342009CAB88 /* samaUITests.xctest */,
+				E7D481B726E6A87D008B7CEE /* Sama.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -319,6 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				E763A6D8269737F900082BCE /* Resources */,
+				E7AD47F626E947C100634F2B /* Utils */,
 				E79C90BF2684C37200398E41 /* Api */,
 				E7F5AD162670A56D00138E42 /* ActionPanel */,
 				E795793D266F5F40005B9F39 /* Calendar */,
@@ -478,13 +576,35 @@
 			productReference = E7D3C0A826413342009CAB88 /* samaUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		E7D481B626E6A87D008B7CEE /* sama-mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7D481CA26E6A87F008B7CEE /* Build configuration list for PBXNativeTarget "sama-mac" */;
+			buildPhases = (
+				E7D481B326E6A87D008B7CEE /* Sources */,
+				E7D481B426E6A87D008B7CEE /* Frameworks */,
+				E7D481B526E6A87D008B7CEE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "sama-mac";
+			packageProductDependencies = (
+				E7D4820926E6ADE6008B7CEE /* FirebaseCrashlytics */,
+				E7D4820B26E6ADEA008B7CEE /* FirebaseMessaging */,
+				E7D4820D26E6ADF2008B7CEE /* FirebaseDynamicLinks */,
+			);
+			productName = "sama-mac";
+			productReference = E7D481B726E6A87D008B7CEE /* Sama.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		E7D3C07F26413340009CAB88 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					E7D3C08626413340009CAB88 = {
@@ -497,6 +617,9 @@
 					E7D3C0A726413342009CAB88 = {
 						CreatedOnToolsVersion = 12.4;
 						TestTargetID = E7D3C08626413340009CAB88;
+					};
+					E7D481B626E6A87D008B7CEE = {
+						CreatedOnToolsVersion = 12.5;
 					};
 				};
 			};
@@ -517,6 +640,7 @@
 			projectRoot = "";
 			targets = (
 				E7D3C08626413340009CAB88 /* sama */,
+				E7D481B626E6A87D008B7CEE /* sama-mac */,
 				E7D3C09C26413342009CAB88 /* samaTests */,
 				E7D3C0A726413342009CAB88 /* samaUITests */,
 			);
@@ -554,6 +678,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E7D481B526E6A87D008B7CEE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7D4820F26E6AE00008B7CEE /* LaunchScreen.storyboard in Resources */,
+				E7D4821126E6AE05008B7CEE /* Latinotype - Recoleta Alt SemiBold.otf in Resources */,
+				E7D4821026E6AE05008B7CEE /* Latinotype - Recoleta Alt Regular.otf in Resources */,
+				E7D4821226E6AE0C008B7CEE /* firebase in Resources */,
+				E7D4821326E6AE0F008B7CEE /* Assets.xcassets in Resources */,
+				E7D4821426E6AE13008B7CEE /* Main.storyboard in Resources */,
+				E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */,
+				E7D4821526E6AE1F008B7CEE /* sama.xcconfig in Resources */,
+				E7D4821626E6AE22008B7CEE /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -573,6 +713,7 @@
 				E7B46FFE2694708D00558BB9 /* SlotFinder.swift in Sources */,
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
 				E72634CC26CADB380041886D /* SuggestionsPickerViewCell.swift in Sources */,
+				E7AD47F826E947DC00634F2B /* UIApplication+Helpers.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */,
 				E7957945266F628A005B9F39 /* RoutingViewController.swift in Sources */,
@@ -640,6 +781,76 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D3C0AD26413342009CAB88 /* samaUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7D481B326E6A87D008B7CEE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7D481CB26E6A8E5008B7CEE /* Api.swift in Sources */,
+				E7D481CC26E6A8E6008B7CEE /* AuthContainer.swift in Sources */,
+				E7D481CD26E6A8E6008B7CEE /* FindTimePanel.swift in Sources */,
+				E7D481CE26E6A8E6008B7CEE /* TimeZoneOption.swift in Sources */,
+				E7D481CF26E6A8E6008B7CEE /* DurationPickerPanel.swift in Sources */,
+				E7D481D026E6A8E6008B7CEE /* EventDatesPanel.swift in Sources */,
+				E7D481D126E6A8E6008B7CEE /* UIView+Helpers.swift in Sources */,
+				E7D481D226E6A8E6008B7CEE /* EventListItemView.swift in Sources */,
+				E7D481D326E6A8E6008B7CEE /* InvitationCopiedPanel.swift in Sources */,
+				E7D481D426E6A8E6008B7CEE /* SuggestionsEditPanel.swift in Sources */,
+				E7D481D526E6A8E6008B7CEE /* TimezonePickerViewController.swift in Sources */,
+				E7D481D626E6A8E6008B7CEE /* CalendarBlocks.swift in Sources */,
+				E7AD47F926E9485100634F2B /* UIApplication+Helpers.swift in Sources */,
+				E7D481D726E6A8E6008B7CEE /* CalendarSession.swift in Sources */,
+				E7D481D826E6A8E6008B7CEE /* CalendarLayout.swift in Sources */,
+				E7D481D926E6A8E6008B7CEE /* CalendarViewController.swift in Sources */,
+				E7D481DA26E6A8E6008B7CEE /* CalendarDayCell.swift in Sources */,
+				E7D481DB26E6A8E6008B7CEE /* CalendarNavigationCenter.swift in Sources */,
+				E7D481DC26E6A8E6008B7CEE /* EventView.swift in Sources */,
+				E7D481DD26E6A8E6008B7CEE /* ScrollLock.swift in Sources */,
+				E7D481DE26E6A8E6008B7CEE /* EventsCoordinator.swift in Sources */,
+				E7D481DF26E6A8E6008B7CEE /* SlotFinder.swift in Sources */,
+				E7D481E026E6A8E6008B7CEE /* BlockedTimesForDaysTransformer.swift in Sources */,
+				E7D481E126E6A8E6008B7CEE /* CalendarSession+Factory.swift in Sources */,
+				E7D481E226E6A8E6008B7CEE /* AuthDirections.swift in Sources */,
+				E7D481E326E6A8E6008B7CEE /* AuthToken.swift in Sources */,
+				E7D481E426E6A8E6008B7CEE /* AuthResultHandler.swift in Sources */,
+				E7D481E526E6A8E6008B7CEE /* AppAuthError.swift in Sources */,
+				E7D481E626E6A8E6008B7CEE /* SuggestionsViewCoordinator.swift in Sources */,
+				E7D481E726E6A8E6008B7CEE /* SlotSuggestionView.swift in Sources */,
+				E7D481E826E6A8E6008B7CEE /* SuggestionsPickerView.swift in Sources */,
+				E7D481E926E6A8E6008B7CEE /* SuggestionsPickerLayout.swift in Sources */,
+				E7D481EA26E6A8E6008B7CEE /* SuggestionsPickerViewCell.swift in Sources */,
+				E7D481EB26E6A8E6008B7CEE /* MeetingInviteRecipientInputPanel.swift in Sources */,
+				E7D481EC26E6A8E6008B7CEE /* SuggestionsPickCalendarSlider.swift in Sources */,
+				E7D481ED26E6A8E6008B7CEE /* ProposedAvailableSlotsTransformer.swift in Sources */,
+				E7D481EE26E6A8E6008B7CEE /* TimeConfirmedPanel.swift in Sources */,
+				E7D481EF26E6A8E6008B7CEE /* AppDelegate.swift in Sources */,
+				E7D481F026E6A8E6008B7CEE /* SceneDelegate.swift in Sources */,
+				E7D481F126E6A8E6008B7CEE /* RemoteNotificationsTokenSync.swift in Sources */,
+				E7D481F226E6A8E6008B7CEE /* TimelineView.swift in Sources */,
+				E7D481F326E6A8E6008B7CEE /* UIColors+Branded.swift in Sources */,
+				E7D481F426E6A8E6008B7CEE /* UIView+NSLayoutConstraint.swift in Sources */,
+				E7D481F526E6A8E6008B7CEE /* RoutingViewController.swift in Sources */,
+				E7D481F626E6A8E6008B7CEE /* OnboardingViewController.swift in Sources */,
+				E7D481F726E6A8E6008B7CEE /* UIFont+Branded.swift in Sources */,
+				E7D481F826E6A8E6008B7CEE /* ProfileViewController.swift in Sources */,
+				E7D481F926E6A8E6008B7CEE /* MainActionButton.swift in Sources */,
+				E7D481FA26E6A8E6008B7CEE /* HighlightableSimpleCell.swift in Sources */,
+				E7D481FB26E6A8E6008B7CEE /* Sama.swift in Sources */,
+				E7D481FC26E6A8E6008B7CEE /* DateFormatter+Factory.swift in Sources */,
+				E7D481FD26E6A8E6008B7CEE /* ApiDateTimeFormatter.swift in Sources */,
+				E7D481FE26E6A8E6008B7CEE /* CALayer+Helpers.swift in Sources */,
+				E7D481FF26E6A8E6008B7CEE /* Calendar+Convenience.swift in Sources */,
+				E7D4820026E6A8E6008B7CEE /* ToastMessageView.swift in Sources */,
+				E7D4820126E6A8E6008B7CEE /* BackgroundShadowView.swift in Sources */,
+				E7D4820226E6A8E6008B7CEE /* EmailComposeCoordinator.swift in Sources */,
+				E7D4820326E6A8E6008B7CEE /* Banalytics.swift in Sources */,
+				E7D4820426E6A8E6008B7CEE /* AcknowledgementsViewController.swift in Sources */,
+				E7D4820526E6A8E6008B7CEE /* SamaKeys.swift in Sources */,
+				E7D4820626E6A8E6008B7CEE /* SignInGoogleButton.swift in Sources */,
+				E7D4820726E6A8E6008B7CEE /* LightTextField.swift in Sources */,
+				E7D4820826E6A8E6008B7CEE /* MeetingInviteDeepLinkService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -802,9 +1013,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = sama/sama.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development: Viktoras Laukevicius (JYP88Y74BY)";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 6QTT2B2N75;
 				INFOPLIST_FILE = sama/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -824,9 +1033,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = sama/sama.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: Viktoras Laukevicius (6QTT2B2N75)";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 6QTT2B2N75;
 				INFOPLIST_FILE = sama/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -918,6 +1125,52 @@
 			};
 			name = Release;
 		};
+		E7D481C826E6A87F008B7CEE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E7BFB364269AC59800EA6AFD /* sama.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = sama/sama.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = sama/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app.dev;
+				PRODUCT_NAME = Sama;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E7D481C926E6A87F008B7CEE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E7BFB364269AC59800EA6AFD /* sama.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = sama/sama.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = sama/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app.dev;
+				PRODUCT_NAME = Sama;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -957,6 +1210,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		E7D481CA26E6A87F008B7CEE /* Build configuration list for PBXNativeTarget "sama-mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7D481C826E6A87F008B7CEE /* Debug */,
+				E7D481C926E6A87F008B7CEE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -985,6 +1247,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		E7D4820926E6ADE6008B7CEE /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		E7D4820B26E6ADEA008B7CEE /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		E7D4820D26E6ADF2008B7CEE /* FirebaseDynamicLinks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E76E85E0264D195200FAC1DF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDynamicLinks;
 		};
 		E7ED04A326E3B4E2001FCE0D /* FirebaseDynamicLinks */ = {
 			isa = XCSwiftPackageProductDependency;

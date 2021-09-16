@@ -26,7 +26,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             MeetingInviteDeepLinkService.shared.handleUniversalLink(url)
         }
 
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let window = scene as? UIWindowScene else { return }
+
+        let windowSize = CGSize(width: 1177, height: 960)
+        window.sizeRestrictions?.minimumSize = windowSize
+        window.sizeRestrictions?.maximumSize = windowSize
+
+        #if targetEnvironment(macCatalyst)
+        if let titlebar = window.titlebar {
+            titlebar.titleVisibility = .hidden
+            titlebar.toolbar = nil
+        }
+        #endif
     }
 
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {

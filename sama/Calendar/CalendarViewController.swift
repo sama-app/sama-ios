@@ -79,6 +79,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         navCenter.onActivePanelHeightChange = { [weak self] in
+            self?.timelineScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
             self?.calendar.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: $0, right: 0)
         }
         let panel = FindTimePanel()
@@ -129,7 +130,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                 }
             }
 
-            let picker = SuggestionsPickerView(parentWidth: self.view.frame.width)
+            let picker = SuggestionsPickerView(parentWidth: self.navCenter.frame.width)
             picker.coordinator = self.suggestionsViewCoordinator
             self.navCenter.pushUnstyledBlock(picker, animated: true)
 
@@ -242,10 +243,21 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         view.addSubview(navCenter)
 
         navCenterBottomConstraint = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
-        NSLayoutConstraint.activate([
+
+        #if targetEnvironment(macCatalyst)
+        let horizontalConstraints = [
+            navCenter.widthAnchor.constraint(equalToConstant: 360),
+            navCenter.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ]
+        #else
+        let horizontalConstraints = [
             navCenter.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor)
+        ]
+        #endif
+
+        NSLayoutConstraint.activate(horizontalConstraints + [
             navCenter.topAnchor.constraint(equalTo: topBar.bottomAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor),
             navCenterBottomConstraint
         ])
     }

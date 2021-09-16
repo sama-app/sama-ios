@@ -24,10 +24,10 @@ class RoutingViewController: UIViewController {
     private func startSession(with auth: AuthContainer) {
         let viewController = CalendarViewController()
         viewController.session = makeCalendarSession(with: auth)
-        UIApplication.shared.windows[0].rootViewController = viewController
+        UIApplication.shared.rootWindow?.rootViewController = viewController
     }
 
     private func presentOnboarding() {
-        UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
+        UIApplication.shared.rootWindow?.rootViewController = OnboardingViewController()
     }
 }

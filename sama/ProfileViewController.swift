@@ -149,9 +149,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         case .logout:
             Sama.bi.track(event: "logout")
             AuthContainer.clear()
-            dismiss(animated: true, completion: {
-                UIApplication.shared.windows[0].rootViewController = OnboardingViewController()
-            })
+            UIApplication.shared.rootWindow?.rootViewController = OnboardingViewController()
         case .privacy:
             Sama.bi.track(event: "privacy")
             openBrowser(with: "https://www.meetsama.com/privacy")

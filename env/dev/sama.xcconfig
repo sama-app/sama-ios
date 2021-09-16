@@ -1,3 +1,8 @@
 PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.app.dev
+DEVELOPMENT_TEAM = 6QTT2B2N75
+CODE_SIGN_IDENTITY[config=Debug][sdk=*][arch=*] = Apple Development: Viktoras Laukevicius (JYP88Y74BY)
+CODE_SIGN_IDENTITY[config=Release][sdk=*][arch=*] = Apple Distribution: Viktoras Laukevicius (6QTT2B2N75)
 PROVISIONING_PROFILE_SPECIFIER[config=Debug][sdk=*][arch=*] = sama_dev_dev
 PROVISIONING_PROFILE_SPECIFIER[config=Release][sdk=*][arch=*] = sama_dev_appstore
+PROVISIONING_PROFILE_SPECIFIER[config=Debug][sdk=macosx*][arch=*] = sama_dev_dev_mac
+PROVISIONING_PROFILE_SPECIFIER[config=Release][sdk=macosx*][arch=*] = sama_dev_appstore_mac

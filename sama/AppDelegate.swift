@@ -7,7 +7,9 @@
 
 import UIKit
 import Firebase
+#if !targetEnvironment(macCatalyst)
 import FirebaseDynamicLinks
+#endif
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -23,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseApp.configure()
         #if DEBUG
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
+        #endif
+        #if DEBUG && !targetEnvironment(macCatalyst)
         Analytics.setAnalyticsCollectionEnabled(false)
         #endif
         Messaging.messaging().delegate = self
@@ -33,10 +37,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // MARK: UISceneSession Lifecycle
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        #if !targetEnvironment(macCatalyst)
         if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url)?.url {
             Sama.bi.track(event: "meetinginviteddl")
             MeetingInviteDeepLinkService.shared.handleUniversalLink(dynamicLink)
         }
+        #endif
         return false
     }
 

@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if !targetEnvironment(macCatalyst)
 import FirebaseDynamicLinks
+#endif
 
 class MeetingInviteDeepLinkService {
     static let shared = MeetingInviteDeepLinkService()
@@ -31,9 +33,11 @@ class MeetingInviteDeepLinkService {
         if url.host == URL(string: SamaKeys.baseUri)?.host {
             parseAndSetMeetingInviteCode(url)
         } else {
+            #if !targetEnvironment(macCatalyst)
             DynamicLinks.dynamicLinks().handleUniversalLink(url) { dynamicLink, _ in
                 dynamicLink?.url.flatMap { self.parseAndSetMeetingInviteCode($0) }
             }
+            #endif
         }
     }
 

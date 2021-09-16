@@ -73,7 +73,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     private func startSession(with auth: AuthContainer) {
         let viewController = CalendarViewController()
         viewController.session = makeCalendarSession(with: auth)
-        UIApplication.shared.windows[0].rootViewController = viewController
+        UIApplication.shared.rootWindow?.rootViewController = viewController
     }
 
     @objc private func presentSingleCalendarBlock() {
@@ -171,13 +171,17 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
                 let token = try AuthResultHandler().handle(callbackUrl: callbackUrl, error: err)
                 let auth = AuthContainer.makeAndStore(with: token)
 
-                self.startSession(with: auth)
+                DispatchQueue.main.async {
+                    self.startSession(with: auth)
+                }
             } catch let err {
                 Crashlytics.crashlytics().record(error: err)
                 if let authErr = err as? ASWebAuthenticationSessionError, authErr.code == .canceledLogin {
                     // cancelled
                 } else {
-                    self.presentError(err)
+                    DispatchQueue.main.async {
+                        self.presentError(err)
+                    }
                 }
             }
         }

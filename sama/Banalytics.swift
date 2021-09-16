@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if !targetEnvironment(macCatalyst)
 import FirebaseAnalytics
+#endif
 
 struct Banalytics {
     func track(event: String, parameters: [String: Any] = [:]) {
@@ -14,6 +16,8 @@ struct Banalytics {
         print("[Sama BI] \(event)")
         #endif
 
+        #if !targetEnvironment(macCatalyst)
         Analytics.logEvent(event, parameters: parameters)
+        #endif
     }
 }
