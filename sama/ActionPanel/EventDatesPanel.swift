@@ -118,7 +118,7 @@ class EventDatesPanel: CalendarNavigationBlock {
     private func searchSlots() {
         let data = EventSearchRequestData(
             durationMinutes: options.duration.duration,
-            timeZone: options.timezone.id,
+            timeZone: options.timezone.zoneId,
             suggestionSlotCount: 3
         )
         api.request(for: MeetingInitiationRequest(body: data)) {

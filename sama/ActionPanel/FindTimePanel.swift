@@ -106,7 +106,7 @@ class FindTimePanel: CalendarNavigationBlock {
             }
             navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
-            timezoneChangeIntentHandler?(timezoneOption.id)
+            timezoneChangeIntentHandler?(timezoneOption.itemId)
         }
     }
 
