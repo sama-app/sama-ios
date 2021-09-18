@@ -16,11 +16,13 @@ struct Environment {
     struct UI {
         let calenarHeaderHeight: CGFloat = 48
         let calendarHeaderRightSeparatorHeight: CGFloat = 40
-        #if targetEnvironment(macCatalyst)
-        let columns = ColumnsSetting(count: 7, centerOffset: -3)
-        #else
-        let columns = ColumnsSetting(count: 5, centerOffset: -2)
-        #endif
+        var columns: ColumnsSetting {
+            if Ui.isWideScreen() {
+                return ColumnsSetting(count: 7, centerOffset: -3)
+            } else {
+                return ColumnsSetting(count: 5, centerOffset: -2)
+            }
+        }
     }
 
     let productId = "meetsama"

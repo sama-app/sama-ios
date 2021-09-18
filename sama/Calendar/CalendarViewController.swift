@@ -196,8 +196,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private func setupViews() {
         let timelineWidth: CGFloat = 56
+        // on iPad screen rotates after app is launched and if device is in landscape
+        // view.frame.width will give landscape width
+        let viewWidth = min(view.frame.width, view.frame.height)
         cellSize = CGSize(
-            width: (view.frame.width - timelineWidth) / CGFloat(Sama.env.ui.columns.count),
+            width: (viewWidth - timelineWidth) / CGFloat(Sama.env.ui.columns.count),
             height: 65
         )
 
@@ -244,17 +247,18 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         navCenterBottomConstraint = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: navCenter.bottomAnchor)
 
-        #if targetEnvironment(macCatalyst)
-        let horizontalConstraints = [
-            navCenter.widthAnchor.constraint(equalToConstant: 360),
-            navCenter.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ]
-        #else
-        let horizontalConstraints = [
-            navCenter.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor)
-        ]
-        #endif
+        let horizontalConstraints: [NSLayoutConstraint]
+        if Ui.isWideScreen() {
+            horizontalConstraints = [
+                navCenter.widthAnchor.constraint(equalToConstant: 360),
+                navCenter.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            ]
+        } else {
+            horizontalConstraints = [
+                navCenter.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: navCenter.trailingAnchor)
+            ]
+        }
 
         NSLayoutConstraint.activate(horizontalConstraints + [
             navCenter.topAnchor.constraint(equalTo: topBar.bottomAnchor),
