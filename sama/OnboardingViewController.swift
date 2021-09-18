@@ -8,6 +8,7 @@
 import UIKit
 import AuthenticationServices
 import FirebaseCrashlytics
+import SafariServices
 
 struct GoogleAuthRequest: ApiRequest {
     typealias T = EmptyBody
@@ -17,7 +18,7 @@ struct GoogleAuthRequest: ApiRequest {
     let method = HttpMethod.post
 }
 
-class OnboardingViewController: UIViewController, ASWebAuthenticationPresentationContextProviding {
+class OnboardingViewController: UIViewController, ASWebAuthenticationPresentationContextProviding, UITextViewDelegate {
 
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
 
@@ -86,7 +87,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         titleLabel.addAndPinTitle(to: block)
 
         let infoLabel = UILabel.build()
-        infoLabel.font = .brandedFont(ofSize: 20, weight: .regular)
+        infoLabel.font = .systemFont(ofSize: 15, weight: .regular)
         infoLabel.textColor = .secondary
         infoLabel.text = "Currently I can only work with one Google account."
         infoLabel.makeMultiline()
@@ -95,6 +96,22 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             infoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
             infoLabel.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40),
             block.trailingAnchor.constraint(equalTo: infoLabel.trailingAnchor, constant: 40)
+        ])
+
+        let termsLabel = UITextView.build()
+        termsLabel.textContainer.lineFragmentPadding = 0
+        termsLabel.linkTextAttributes = [.foregroundColor: UIColor.primary]
+        termsLabel.attributedText = termsAndPrivacyText()
+        termsLabel.isSelectable = true
+        termsLabel.isEditable = false
+        termsLabel.isScrollEnabled = false
+        termsLabel.backgroundColor = .clear
+        termsLabel.delegate = self
+        block.addSubview(termsLabel)
+        NSLayoutConstraint.activate([
+            termsLabel.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 8),
+            termsLabel.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40),
+            block.trailingAnchor.constraint(equalTo: termsLabel.trailingAnchor, constant: 40)
         ])
 
         let actionBtn = UIButton.onboardingNextButton("Continue")
@@ -193,6 +210,18 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         return view.window!
     }
 
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        switch URL.absoluteString {
+        case "terms":
+            openBrowser(with: Sama.env.termsUrl)
+        case "privacy":
+            openBrowser(with: Sama.env.privacyUrl)
+        default:
+            break
+        }
+        return false
+    }
+
     private func presentError(_ error: Error) {
         if let authErr = error as? AppAuthError, authErr.code == .insufficientPermissions {
             let alert = UIAlertController(title: "Insufficient permissions", message: "Sama app required calendar read and write permissions", preferredStyle: .alert)
@@ -203,6 +232,11 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             present(alert, animated: true, completion: nil)
         }
+    }
+
+    private func openBrowser(with url: String) {
+        let controller = SFSafariViewController(url: URL(string: url)!)
+        present(controller, animated: true, completion: nil)
     }
 }
 
@@ -245,4 +279,25 @@ private extension UIView {
             leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: 40)
         ])
     }
+}
+
+private func termsAndPrivacyText() -> NSAttributedString {
+    let text = NSMutableAttributedString()
+
+    let defaultAttrs: (String?) -> [NSAttributedString.Key: Any] = { link in
+        var attrs: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 15, weight: .regular),
+            .foregroundColor: UIColor.secondary
+        ]
+        attrs[.link] = link
+        return attrs
+    }
+
+    text.append(NSAttributedString(string: "By continuing you agree to our ", attributes: defaultAttrs(nil)))
+    text.append(NSAttributedString(string: "Terms of Use", attributes: defaultAttrs("terms")))
+    text.append(NSAttributedString(string: " and ", attributes: defaultAttrs(nil)))
+    text.append(NSAttributedString(string: "Privacy Policy", attributes: defaultAttrs("privacy")))
+    text.append(NSAttributedString(string: ".", attributes: defaultAttrs(nil)))
+
+    return text
 }

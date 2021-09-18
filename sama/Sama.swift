@@ -25,6 +25,8 @@ struct Environment {
 
     let productId = "meetsama"
     let baseUri = SamaKeys.baseUri
+    let termsUrl = "https://www.meetsama.com/terms"
+    let privacyUrl = "https://www.meetsama.com/privacy"
 
     let ui = UI()
 }
