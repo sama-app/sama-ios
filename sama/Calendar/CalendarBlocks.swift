@@ -8,7 +8,7 @@
 import Foundation
 
 struct CalendarBlocks: Decodable {
-    let blocks: [CalendarBlock]
+    let events: [CalendarBlock]
 }
 
 struct CalendarBlock: Decodable {

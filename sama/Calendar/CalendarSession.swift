@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CalendarBlocksRequest: ApiRequest {
+struct CalendarEventsRequest: ApiRequest {
     typealias T = EmptyBody
     typealias U = CalendarBlocks
     let uri = "/calendar/blocks"
@@ -116,7 +116,7 @@ final class CalendarSession: CalendarContextProvider {
         let start = calendar.date(byAdding: .day, value: daysBack, to: refDate)!
         let end = calendar.date(byAdding: .day, value: daysForward, to: start)!
 
-        let req = CalendarBlocksRequest(query: [
+        let req = CalendarEventsRequest(query: [
             URLQueryItem(name: "startDate", value: dateF.string(from: start)),
             URLQueryItem(name: "endDate", value: dateF.string(from: end)),
             URLQueryItem(name: "timezone", value: "UTC")
