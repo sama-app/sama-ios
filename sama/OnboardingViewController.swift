@@ -37,7 +37,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         view.addSubview(illustration)
         NSLayoutConstraint.activate([
             illustration.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            illustration.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24)
+            illustration.constraintLeadingToParent(inset: -16)
         ])
         presentWelcomeBlock()
     }
@@ -93,10 +93,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         infoLabel.makeMultiline()
         block.addSubview(infoLabel)
         NSLayoutConstraint.activate([
-            infoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            infoLabel.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40),
-            block.trailingAnchor.constraint(equalTo: infoLabel.trailingAnchor, constant: 40)
-        ])
+            infoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16)
+        ] + infoLabel.constraintHorizontally())
 
         let termsLabel = UITextView.build()
         termsLabel.textContainer.lineFragmentPadding = 0
@@ -109,10 +107,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         termsLabel.delegate = self
         block.addSubview(termsLabel)
         NSLayoutConstraint.activate([
-            termsLabel.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 8),
-            termsLabel.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 40),
-            block.trailingAnchor.constraint(equalTo: termsLabel.trailingAnchor, constant: 40)
-        ])
+            termsLabel.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 8)
+        ] + termsLabel.constraintHorizontally())
 
         let actionBtn = UIButton.onboardingNextButton("Continue")
         actionBtn.addTarget(self, action: #selector(presentSignInBlock), for: .touchUpInside)
@@ -134,7 +130,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         block.addSubview(permissionsImageView)
         NSLayoutConstraint.activate([
             permissionsImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            permissionsImageView.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: 28)
+            permissionsImageView.constraintLeadingToParent(inset: -12)
         ])
 
         let actionBtn = SignInGoogleButton(frame: .zero)
@@ -267,17 +263,35 @@ private extension UIView {
         parent.addSubview(self)
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: parent.topAnchor),
-            leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: 40),
-            parent.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 40)
-        ])
+        ] + constraintHorizontally())
     }
 
     func addAndPinActionButton(to parent: UIView) {
         parent.addSubview(self)
         NSLayoutConstraint.activate([
             parent.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 102),
-            leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: 40)
+            constraintLeadingToParent(inset: 0)
         ])
+    }
+
+    func constraintLeadingToParent(inset: CGFloat) -> NSLayoutConstraint {
+        return Ui.isWideScreen() ?
+        leadingAnchor.constraint(equalTo: superview!.centerXAnchor, constant: -147.5 + inset) :
+        leadingAnchor.constraint(equalTo: superview!.leadingAnchor, constant: 40 + inset)
+    }
+
+    func constraintHorizontally() -> [NSLayoutConstraint] {
+        if Ui.isWideScreen() {
+            return [
+                leadingAnchor.constraint(equalTo: superview!.centerXAnchor, constant: -147.5),
+                widthAnchor.constraint(equalToConstant: 295)
+            ]
+        } else {
+            return [
+                leadingAnchor.constraint(equalTo: superview!.leadingAnchor, constant: 40),
+                superview!.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 40)
+            ]
+        }
     }
 }
 
