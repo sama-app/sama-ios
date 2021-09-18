@@ -43,6 +43,7 @@ struct UpdateTimeZoneRequest: ApiRequest {
 final class CalendarSession: CalendarContextProvider {
 
     var reloadHandler: () -> Void = {}
+    var presentError: (ApiError) -> Void = { _ in }
     let currentDayIndex: Int
     let blockSize = 5
 
@@ -132,10 +133,11 @@ final class CalendarSession: CalendarContextProvider {
                 DispatchQueue.main.async {
                     self.reloadHandler()
                 }
-            case .failure:
+            case let .failure(err):
                 for idx in blockIndices {
                     self.isBlockBusy[idx] = false
                 }
+                self.presentError(err)
             }
         }
     }

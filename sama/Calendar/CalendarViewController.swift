@@ -53,6 +53,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             calendar: calendar,
             container: slotPickerContainer
         )
+        eventsCoordinator.presentError = { [weak self] in self?.presentError($0) }
         suggestionsViewCoordinator = SuggestionsViewCoordinator(
             api: session.api,
             currentDayIndex: session.currentDayIndex,
@@ -70,8 +71,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
             self.invalidateDataAndReloadDisplayedBlocks(timeout: 1.5)
         }
+        suggestionsViewCoordinator.presentError = { [weak self] in self?.presentError($0) }
 
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
+        session.presentError = { [weak self] in self?.presentError($0) }
         session.loadInitial()
 
         AppLifecycleService.shared.onWillEnterForeground = { [weak self] in
@@ -84,7 +87,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         let panel = FindTimePanel()
         panel.coordinator = eventsCoordinator
-        panel.api = session.api
         panel.targetTimezoneChangeHandler = { [weak self] in
             guard let self = self else { return }
             self.timeline.timezonesDiff = self.eventsCoordinator.timezonesDiffWithSelection($0)
@@ -119,14 +121,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.presentedViewController?.dismiss(animated: true, completion: nil)
 
             self.suggestionsViewCoordinator.present(code: code) {
-                if let httpErr = ($0 as? ApiError)?.httpError, httpErr.details?.reason == "already_confirmed" {
+                if let httpErr = $0.httpError, httpErr.details?.reason == "already_confirmed" {
                     let alert = UIAlertController(title: nil, message: "Time for this meeting has already been confirmed.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 } else {
-                    let alert = UIAlertController(title: nil, message: "Unexpected error occurred", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
+                    self.presentError($0)
                 }
             }
 
@@ -135,6 +135,51 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.navCenter.pushUnstyledBlock(picker, animated: true)
 
             self.setupMeetingInviteTopBar()
+        }
+    }
+
+    private func presentError(_ err: ApiError) {
+        switch err {
+        case let .http(httpErr):
+            if (500 ..< 600).contains(httpErr.code) {
+                let alert = UIAlertController(
+                    title: "Sama servers cannot be reached",
+                    message: "Sama servers are currently not responding. Please try again later",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                present(alert, animated: true, completion: nil)
+            } else {
+                let alert = UIAlertController(
+                    title: "Unexpected error occurred",
+                    message: "App received unexpected server error",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                present(alert, animated: true, completion: nil)
+            }
+        case let .network(err):
+            if err.isOffline {
+                let alert = UIAlertController(
+                    title: "Your internet connection appears to be offline",
+                    message: "It looks like you are not connected to the internet.",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                present(alert, animated: true, completion: nil)
+            } else {
+                let alert = UIAlertController(
+                    title: "Unexpected error occurred",
+                    message: "App received unexpected network error",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                present(alert, animated: true, completion: nil)
+            }
+        case .parsing, .unknown:
+            let alert = UIAlertController(title: nil, message: "Unexpected error occurred", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
         }
     }
 
