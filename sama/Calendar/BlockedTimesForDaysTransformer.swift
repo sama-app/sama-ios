@@ -20,7 +20,7 @@ struct BlockedTimesForDaysTransformer {
         for i in range {
             let date = self.calendar.date(byAdding: .day, value: i, to: self.refDate)!
             result[self.currentDayIndex + i] = self.filterAndTransform(
-                blocks: model.blocks,
+                blocks: model.events,
                 for: date
             ).insetOverlapping()
         }

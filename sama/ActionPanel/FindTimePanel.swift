@@ -46,7 +46,6 @@ struct FindTimePart {
 
 class FindTimePanel: CalendarNavigationBlock {
 
-    var api: Api!
     var coordinator: EventsCoordinator!
     var targetTimezoneChangeHandler: ((TimeZoneOption) -> Void)?
     var timezoneChangeIntentHandler: ((String) -> Void)?
@@ -106,7 +105,7 @@ class FindTimePanel: CalendarNavigationBlock {
             }
             navigation?.pushBlock(block, animated: true)
         case .pickTimezone:
-            timezoneChangeIntentHandler?(timezoneOption.id)
+            timezoneChangeIntentHandler?(timezoneOption.itemId)
         }
     }
 
@@ -120,7 +119,6 @@ class FindTimePanel: CalendarNavigationBlock {
             timezone: timezoneOption,
             duration: durationOption
         )
-        block.api = api
         navigation?.pushBlock(block, animated: true)
     }
 }

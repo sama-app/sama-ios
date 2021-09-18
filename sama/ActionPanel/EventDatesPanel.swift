@@ -26,36 +26,9 @@ struct EventSearchOptions {
     let duration: DurationOption
 }
 
-struct EventSearchRequestData: Encodable {
-    let durationMinutes: Int
-    let timeZone: String
-    let suggestionSlotCount: Int
-}
-
-struct MeetingSuggestedSlot: Decodable {
-    let startDateTime: String
-    let endDateTime: String
-}
-
-struct MeetingInitiationResult: Decodable {
-    let meetingIntentCode: String
-    let durationMinutes: Int
-    let suggestedSlots: [MeetingSuggestedSlot]
-}
-
-struct MeetingInitiationRequest: ApiRequest {
-    typealias T = EventSearchRequestData
-    typealias U = MeetingInitiationResult
-    let uri = "/meeting/initiate"
-    let logKey = "/meeting/initiate"
-    let method: HttpMethod = .post
-    var body: EventSearchRequestData
-}
-
 class EventDatesPanel: CalendarNavigationBlock {
 
     var options: EventSearchOptions!
-    var api: Api!
     var coordinator: EventsCoordinator!
 
     private let apiDateF = ApiDateTimeFormatter()
@@ -116,12 +89,10 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     private func searchSlots() {
-        let data = EventSearchRequestData(
-            durationMinutes: options.duration.duration,
-            timeZone: options.timezone.id,
-            suggestionSlotCount: 3
-        )
-        api.request(for: MeetingInitiationRequest(body: data)) {
+        coordinator.initiateMeeting(
+            duration: options.duration.duration,
+            timeZoneId: options.timezone.zoneId
+        ) {
             switch $0 {
             case let .success(result):
                 self.setupInitiation(with: result)

@@ -64,6 +64,8 @@
 		E7B8970E2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8970D2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift */; };
 		E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */; };
 		E7BA3DC22694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = E7BA3DC12694A7EA00FC4F47 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		E7BD94D526F600E300FDB867 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BD94D426F600E300FDB867 /* UiUtils.swift */; };
+		E7BD94D626F600E300FDB867 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BD94D426F600E300FDB867 /* UiUtils.swift */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
 		E7BFB365269AC59800EA6AFD /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
 		E7BFB368269AEB6500EA6AFD /* SamaKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */; };
@@ -234,6 +236,7 @@
 		E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTimesForDaysTransformer.swift; sourceTree = "<group>"; };
 		E7B8970D2694D00700A9BD17 /* BlockedTimesForDaysTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTimesForDaysTransformerTests.swift; sourceTree = "<group>"; };
 		E7B8F7DC2694683300E4954F /* EmailComposeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposeCoordinator.swift; sourceTree = "<group>"; };
+		E7BD94D426F600E300FDB867 /* UiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiUtils.swift; sourceTree = "<group>"; };
 		E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		E7BFB364269AC59800EA6AFD /* sama.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = sama.xcconfig; sourceTree = "<group>"; };
 		E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamaKeys.swift; sourceTree = "<group>"; };
@@ -455,6 +458,7 @@
 				E7978E9926BC5124001B199A /* SignInGoogleButton.swift */,
 				E758054126D2896E00E9DEAD /* LightTextField.swift */,
 				E7FD55DB26D8B48100C81364 /* MeetingInviteDeepLinkService.swift */,
+				E7BD94D426F600E300FDB867 /* UiUtils.swift */,
 			);
 			path = sama;
 			sourceTree = "<group>";
@@ -756,6 +760,7 @@
 				E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */,
 				E794D32F26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift in Sources */,
 				E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */,
+				E7BD94D526F600E300FDB867 /* UiUtils.swift in Sources */,
 				E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */,
 				E7B8970C2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift in Sources */,
 				E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */,
@@ -843,6 +848,7 @@
 				E7D481FE26E6A8E6008B7CEE /* CALayer+Helpers.swift in Sources */,
 				E7D481FF26E6A8E6008B7CEE /* Calendar+Convenience.swift in Sources */,
 				E7D4820026E6A8E6008B7CEE /* ToastMessageView.swift in Sources */,
+				E7BD94D626F600E300FDB867 /* UiUtils.swift in Sources */,
 				E7D4820126E6A8E6008B7CEE /* BackgroundShadowView.swift in Sources */,
 				E7D4820226E6A8E6008B7CEE /* EmailComposeCoordinator.swift in Sources */,
 				E7D4820326E6A8E6008B7CEE /* Banalytics.swift in Sources */,
@@ -1023,7 +1029,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Sama;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1043,7 +1049,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Sama;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

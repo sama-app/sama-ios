@@ -102,7 +102,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
                     city: $0.city,
                     country: $0.country,
                     offsetTitle: "GMT\(sign)\(hoursTitle)",
-                    secondsFromGMT: timezone.secondsFromGMT()
+                    zoneDef: timezone
                 )
             }
 
@@ -115,7 +115,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
             self.topTimezones = topCities.compactMap { name in
                 self.allTimezones.first { $0.city.lowercased() == name.lowercased() }
             }.sorted {
-                abs($0.secondsFromGMT) < abs($1.secondsFromGMT)
+                abs($0.zoneDef.secondsFromGMT()) < abs($1.zoneDef.secondsFromGMT())
             }
 
             self.isBaseDataLoaded = true
@@ -179,7 +179,7 @@ class TimezonePickerViewController: UIViewController, UITableViewDataSource, UIT
             let cell = tableView.dequeueReusableCell(withIdentifier: "currentCell") as! CurrentTimezoneOptionCell
             cell.nameLabel.text = "My Timezone"
             cell.offsetLabel.text = [myTimezone.placeTitle, myTimezone.offsetTitle].joined(separator: ", ")
-            cell.selectionMarkView.isHidden = myTimezone.id != selectionId
+            cell.selectionMarkView.isHidden = myTimezone.itemId != selectionId
             return cell
         case (false, 1):
             return tableView.dequeueReusableCell(withIdentifier: "sectionCell")!
@@ -338,7 +338,7 @@ private struct ListTimeZone {
     let city: String
     let country: String
     let offsetTitle: String
-    let secondsFromGMT: Int
+    let zoneDef: TimeZone
 
     func getSortRank(forTerm term: String) -> Int {
         if city.lowercased().starts(with: term.lowercased()) {
@@ -362,9 +362,10 @@ private struct TimeZoneSource: Decodable {
 private extension TimeZoneOption {
     static func from(_ entry: ListTimeZone) -> TimeZoneOption {
         return make(
-            id: entry.city.lowercased(),
+            itemId: entry.id,
+            zoneId: entry.zoneDef.identifier,
             placeTitle: entry.city,
-            secsFromGMT: entry.secondsFromGMT,
+            secsFromGMT: entry.zoneDef.secondsFromGMT(),
             usersTimezone: .current
         )
     }

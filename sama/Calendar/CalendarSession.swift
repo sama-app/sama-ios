@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CalendarBlocksRequest: ApiRequest {
+struct CalendarEventsRequest: ApiRequest {
     typealias T = EmptyBody
     typealias U = CalendarBlocks
     let uri = "/calendar/blocks"
@@ -28,9 +28,22 @@ struct RegisterDeviceRequest: ApiRequest {
     let body: RegisterDeviceData
 }
 
+struct UpdateTimeZoneBody: Encodable {
+    let timeZone: String
+}
+
+struct UpdateTimeZoneRequest: ApiRequest {
+    typealias U = EmptyBody
+    let uri = "/user/me/update-time-zone"
+    let logKey = "/user/me/update-time-zone"
+    let method: HttpMethod = .post
+    let body: UpdateTimeZoneBody
+}
+
 final class CalendarSession: CalendarContextProvider {
 
     var reloadHandler: () -> Void = {}
+    var presentError: (ApiError) -> Void = { _ in }
     let currentDayIndex: Int
     let blockSize = 5
 
@@ -49,6 +62,8 @@ final class CalendarSession: CalendarContextProvider {
     }()
 
     private let transformer: BlockedTimesForDaysTransformer
+
+    private var lastTimeZoneUpdate = Date(timeIntervalSince1970: 0)
 
     init(api: Api, currentDayIndex: Int) {
         self.api = api
@@ -80,7 +95,18 @@ final class CalendarSession: CalendarContextProvider {
         RemoteNotificationsTokenSync.shared.syncToken()
     }
 
+    private func updateTimeZoneIfNeeded() {
+        let timestamp = Date()
+        guard timestamp.timeIntervalSince(lastTimeZoneUpdate) > 24 * 60 * 60 else { return }
+        lastTimeZoneUpdate = timestamp
+
+        let req = UpdateTimeZoneRequest(body: UpdateTimeZoneBody(timeZone: TimeZone.current.identifier))
+        api.request(for: req) { _ in }
+    }
+
     private func loadCalendar(blockIndices: ClosedRange<Int>) {
+        updateTimeZoneIfNeeded()
+
         for idx in blockIndices {
             isBlockBusy[idx] = true
         }
@@ -91,7 +117,7 @@ final class CalendarSession: CalendarContextProvider {
         let start = calendar.date(byAdding: .day, value: daysBack, to: refDate)!
         let end = calendar.date(byAdding: .day, value: daysForward, to: start)!
 
-        let req = CalendarBlocksRequest(query: [
+        let req = CalendarEventsRequest(query: [
             URLQueryItem(name: "startDate", value: dateF.string(from: start)),
             URLQueryItem(name: "endDate", value: dateF.string(from: end)),
             URLQueryItem(name: "timezone", value: "UTC")
@@ -107,10 +133,11 @@ final class CalendarSession: CalendarContextProvider {
                 DispatchQueue.main.async {
                     self.reloadHandler()
                 }
-            case .failure:
+            case let .failure(err):
                 for idx in blockIndices {
                     self.isBlockBusy[idx] = false
                 }
+                self.presentError(err)
             }
         }
     }

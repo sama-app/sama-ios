@@ -152,10 +152,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             UIApplication.shared.rootWindow?.rootViewController = OnboardingViewController()
         case .privacy:
             Sama.bi.track(event: "privacy")
-            openBrowser(with: "https://www.meetsama.com/privacy")
+            openBrowser(with: Sama.env.privacyUrl)
         case .terms:
             Sama.bi.track(event: "terms")
-            openBrowser(with: "https://www.meetsama.com/terms")
+            openBrowser(with: Sama.env.termsUrl)
         case .acknowledgements:
             Sama.bi.track(event: "acknowledgements")
             let controller = AcknowledgementsViewController()

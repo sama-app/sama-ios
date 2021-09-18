@@ -67,6 +67,7 @@ class SuggestionsViewCoordinator {
     var onLoad: ((SuggestionsViewCoordinator) -> Void)?
     var onChange: ((Int, ProposedAvailableSlot) -> Void)?
     var onLock: ((Bool) -> Void)?
+    var presentError: (ApiError) -> Void = { _ in }
 
     var onReset: (() -> Void)?
 
@@ -129,7 +130,7 @@ class SuggestionsViewCoordinator {
         self.container = container
     }
 
-    func present(code: String, onError: @escaping (Error) -> Void) {
+    func present(code: String, onError: @escaping (ApiError) -> Void) {
         meetingCode = code
         refDate = Date()
         api.request(for: MeetingProposalsRequest(code: meetingCode)) {
@@ -265,6 +266,7 @@ class SuggestionsViewCoordinator {
             case .success:
                 completion(.success(result))
             case let .failure(err):
+                self.presentError(err)
                 completion(.failure(err))
             }
         }

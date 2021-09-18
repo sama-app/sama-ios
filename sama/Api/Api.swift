@@ -41,8 +41,12 @@ struct ApiHttpError {
     let details: ApiErrorDetails?
 }
 
+struct ApiNetworkError {
+    let isOffline: Bool
+}
+
 enum ApiError: Error {
-    case network
+    case network(ApiNetworkError)
     case http(ApiHttpError)
     case parsing
     case unknown
@@ -182,8 +186,9 @@ class Api {
     }
 
     private func getResultFrom<T>(_ data: Data?, resp: URLResponse?, err: Error?) -> Result<T, ApiError> where T: Decodable {
-        if err != nil {
-            return .failure(.network)
+        if let networkErr = err {
+            let isOffline = networkErr._domain == NSURLErrorDomain && networkErr._code == NSURLErrorNotConnectedToInternet
+            return .failure(.network(ApiNetworkError(isOffline: isOffline)))
         }
         guard let httpResp = resp as? HTTPURLResponse else {
             return .failure(.unknown)

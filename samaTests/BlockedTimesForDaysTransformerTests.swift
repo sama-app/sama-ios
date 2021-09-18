@@ -35,7 +35,7 @@ class BlockedTimesForDaysTransformerTests: XCTestCase {
 
     func test_transformsModel() {
         let model = CalendarBlocks(
-            blocks: [
+            events: [
                 CalendarBlock(title: "SAMA Standup #1", startDateTime: "2021-07-07T09:30:00Z", endDateTime: "2021-07-07T10:30:00Z"),
                 CalendarBlock(title: "SAMA Standup #2", startDateTime: "2021-07-09T09:30:00Z", endDateTime: "2021-07-09T10:30:00Z"),
             ]
