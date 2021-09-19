@@ -10,6 +10,7 @@ import Firebase
 #if !targetEnvironment(macCatalyst)
 import FirebaseDynamicLinks
 #endif
+import CoreSpotlight
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -30,6 +31,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Analytics.setAnalyticsCollectionEnabled(false)
         #endif
         Messaging.messaging().delegate = self
+
+        if #available(iOS 14.0, *) {
+            let attrs = CSSearchableItemAttributeSet(contentType: .application)
+            attrs.title = "Sama"
+            attrs.contentDescription = "AI calendar scheduling assistant"
+            attrs.keywords = ["calendar", "scheduling", "assistant", "AI"]
+            let item = CSSearchableItem(
+                uniqueIdentifier: "root-app",
+                domainIdentifier: "com.meetsama.sama",
+                attributeSet: attrs
+            )
+            CSSearchableIndex.default().indexSearchableItems([item], completionHandler: nil)
+        }
 
         return true
     }
