@@ -8,7 +8,7 @@
     <string>F299X48S2K</string>
     <key>provisioningProfiles</key>
     <dict>
-        <key>com.meetsama.app</key>
+        <key>com.meetsama.sama</key>
         <string>sama_appstore</string>
     </dict>
 </dict>
