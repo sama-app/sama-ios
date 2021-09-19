@@ -32,6 +32,8 @@ final class CalendarNavigationCenter: UIView {
 
     private var pan: UIPanGestureRecognizer!
 
+    private var isAlphaAnimating = Ui.isWideScreen()
+
     init() {
         super.init(frame: .zero)
         pan = UIPanGestureRecognizer(target: self, action: #selector(onPan))
@@ -110,10 +112,14 @@ final class CalendarNavigationCenter: UIView {
         stackLeadingConstraint.last?.constant = -bounds.width
 
         if animated {
-            fullBlock.alpha = 0
+            if isAlphaAnimating {
+                fullBlock.alpha = 0
+            }
             UIView.animate(withDuration: 0.3, animations: {
-                fullBlock.alpha = 1
-                prevBlock?.alpha = 0
+                if self.isAlphaAnimating {
+                    fullBlock.alpha = 1
+                    prevBlock?.alpha = 0
+                }
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             })
@@ -172,8 +178,10 @@ final class CalendarNavigationCenter: UIView {
         bottomConstraints.removeLast()
 
         UIView.animate(withDuration: 0.3, animations: {
-            presentBlock?.alpha = 1
-            currentBlock?.alpha = 0
+            if self.isAlphaAnimating {
+                presentBlock?.alpha = 1
+                currentBlock?.alpha = 0
+            }
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }, completion: {
@@ -202,8 +210,10 @@ final class CalendarNavigationCenter: UIView {
         bottomConstraints = [bottomConstraints.first!]
 
         UIView.animate(withDuration: 0.3, animations: {
-            presentBlock?.alpha = 1
-            currentBlock?.alpha = 0
+            if self.isAlphaAnimating {
+                presentBlock?.alpha = 1
+                currentBlock?.alpha = 0
+            }
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }, completion: {
