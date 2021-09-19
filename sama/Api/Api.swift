@@ -125,7 +125,7 @@ class Api {
                         self.auth?.update(token: updatedToken)
                         self.request(for: request, isRefreshHandled: true, completion: completion)
                     case .failure:
-                        let errOut = NSError(domain: "com.meetsama.app.api.token_refresh", code: 1000, userInfo: [:])
+                        let errOut = NSError(domain: "com.meetsama.sama.api.token_refresh", code: 1000, userInfo: [:])
                         Crashlytics.crashlytics().record(error: errOut)
 
                         if result.error?.httpCode == 400 {

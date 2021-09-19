@@ -18,7 +18,7 @@ struct AppAuthError: Error {
     }
 
     let code: Code
-    var _domain: String { "com.meetsama.app.auth" }
+    var _domain: String { "com.meetsama.sama.auth" }
     var _code: Int { code.rawValue }
     init(_ code: Code) {
         self.code = code
