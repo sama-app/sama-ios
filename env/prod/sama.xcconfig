@@ -1,4 +1,4 @@
-PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.sama.app
+PRODUCT_BUNDLE_IDENTIFIER = com.meetsama.sama
 DEVELOPMENT_TEAM = F299X48S2K
 CODE_SIGN_IDENTITY[config=Debug][sdk=*][arch=*] = Apple Development: Viktoras Laukevicius (F6445YN9RH)
 CODE_SIGN_IDENTITY[config=Release][sdk=*][arch=*] = Apple Distribution: Trys Treciosios UAB (F299X48S2K)
