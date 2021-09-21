@@ -47,6 +47,16 @@ final class CalendarSession: CalendarContextProvider {
     let currentDayIndex: Int
     let blockSize = 5
 
+    var firstFocusDayIndex: Int {
+        let weekday = Calendar.current.component(.weekday, from: refDate)
+        if weekday == 1 || weekday == 7 {
+            return currentDayIndex + Sama.env.ui.columns.centerOffset
+        } else {
+            // 2 monday num
+            return currentDayIndex - (weekday - 2)
+        }
+    }
+
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
     let api: Api

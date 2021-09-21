@@ -229,7 +229,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             let hr = CGFloat(ceil(Date().timeIntervalSince(Calendar.current.startOfDay(for: Date())) / 3600))
             let y = vOffset + cellSize.height * (hr + 1) - calendar.bounds.height / 2
             calendar.contentOffset = CGPoint(
-                x: cellSize.width * CGFloat(session.currentDayIndex),
+                x: cellSize.width * CGFloat(session.firstFocusDayIndex),
                 y: y
             )
             DispatchQueue.main.async {
