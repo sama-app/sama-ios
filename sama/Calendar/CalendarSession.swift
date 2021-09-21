@@ -10,8 +10,8 @@ import Foundation
 struct CalendarEventsRequest: ApiRequest {
     typealias T = EmptyBody
     typealias U = CalendarBlocks
-    let uri = "/calendar/blocks"
-    let logKey = "/calendar/blocks"
+    let uri = "/calendar/events"
+    let logKey = "/calendar/events"
     let method: HttpMethod = .get
     let query: [URLQueryItem]
 }
