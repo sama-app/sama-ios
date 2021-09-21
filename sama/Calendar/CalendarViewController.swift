@@ -306,6 +306,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             navCenter.topAnchor.constraint(equalTo: topBar.bottomAnchor),
             navCenterBottomConstraint
         ])
+        navCenter.layoutIfNeeded()
     }
 
     private var navBarItems: [UIView] = []
