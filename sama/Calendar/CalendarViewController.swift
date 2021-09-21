@@ -241,11 +241,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private func setupViews() {
         let timelineWidth: CGFloat = 56
-        // on iPad screen rotates after app is launched and if device is in landscape
-        // view.frame.width will give landscape width
-        let viewWidth = min(view.frame.width, view.frame.height)
         cellSize = CGSize(
-            width: (viewWidth - timelineWidth) / CGFloat(Sama.env.ui.columns.count),
+            width: (view.frame.width - timelineWidth) / CGFloat(Sama.env.ui.columns.count),
             height: 65
         )
 
