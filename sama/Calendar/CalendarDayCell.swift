@@ -45,9 +45,16 @@ final class CalendarDayCell: UICollectionViewCell {
     private var l1: UILabel?
     private var l2: UILabel?
 
+    private var isGreyedOut = false
+
     override func draw(_ rect: CGRect) {
         //super.draw(rect)
         setupHeaderIfNeeded()
+
+        UIColor.base.setFill()
+        UIRectFillUsingBlendMode(rect, .normal)
+        (isGreyedOut ? UIColor.secondary10 : UIColor.base).setFill()
+        UIRectFillUsingBlendMode(rect, .normal)
 
         UIColor.calendarGrid.setFill()
         UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
@@ -164,11 +171,7 @@ final class CalendarDayCell: UICollectionViewCell {
         wkF.dateFormat = "E"
 
         let weekday = Calendar.current.component(.weekday, from: date)
-        if (weekday == 1 || weekday == 7) {
-            backgroundColor = .secondary10
-        } else {
-            backgroundColor = .base
-        }
+        isGreyedOut = (weekday == 1 || weekday == 7)
 
         l1?.text = dayF.string(from: date)
         l2?.text = wkF.string(from: date)
