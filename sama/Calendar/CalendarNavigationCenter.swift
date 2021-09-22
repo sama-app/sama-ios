@@ -206,6 +206,7 @@ final class CalendarNavigationCenter: UIView {
             stack.suffix(from: 1).forEach { $0.removeFromSuperview() }
         }
 
+        stack = [stack.first!]
         stackLeadingConstraint = [stackLeadingConstraint.first!]
         bottomConstraints = [bottomConstraints.first!]
 
