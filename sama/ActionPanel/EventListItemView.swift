@@ -42,7 +42,7 @@ class EventListItemView: UIView {
             focusButton.leadingAnchor.constraint(equalTo: leadingAnchor),
         ])
 
-        let refDate = calendar.startOfDay(for: Date())
+        let refDate = calendar.startOfDay(for: CalendarDateUtils.shared.uiRefDate)
 
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +62,7 @@ class EventListItemView: UIView {
             let subtitleLabel = UILabel()
 
             subtitleLabel.text = [
-                calendar.relativeFormatted(from: refDate, to: startDay),
+                calendar.relativeFormatted(from: CalendarDateUtils.shared.dateNow, to: startDay),
                 timeFormatter.string(from: startDate),
                 "in your timezone"
             ].joined(separator: " ")

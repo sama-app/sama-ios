@@ -226,7 +226,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if isFirstLoad {
-            let hr = CGFloat(ceil(Date().timeIntervalSince(Calendar.current.startOfDay(for: Date())) / 3600))
+            let startOfDay = Calendar.current.startOfDay(for: CalendarDateUtils.shared.dateNow)
+            let absHours = CalendarDateUtils.shared.dateNow.timeIntervalSince(startOfDay) / 3600
+            let hr = CGFloat(ceil(absHours))
             let y = vOffset + cellSize.height * (hr + 1) - calendar.bounds.height / 2
             calendar.contentOffset = CGPoint(
                 x: cellSize.width * CGFloat(session.firstFocusDayIndex),
@@ -483,7 +485,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         cell.blockedTimes = session.blocksForDayIndex[indexPath.item] ?? []
         let daysOffset = -session.currentDayIndex + indexPath.item
         let date = Calendar.current.date(byAdding: .day, value: daysOffset, to: session.refDate)!
-        cell.isCurrentDay = Calendar.current.isDate(date, inSameDayAs: Date())
+        cell.isCurrentDay = Calendar.current.isDate(date, inSameDayAs: CalendarDateUtils.shared.dateNow)
         cell.date = date
         cell.setNeedsDisplay()
 

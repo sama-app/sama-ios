@@ -89,7 +89,7 @@ class TimeConfirmedPanel: CalendarNavigationBlock {
             ]
 
             let dateText = [
-                calendar.weekdayRelativeFormatted(from: Date(), to: model.startDate) + ",",
+                calendar.weekdayRelativeFormatted(from: CalendarDateUtils.shared.dateNow, to: model.startDate) + ",",
                 dayFormatter.string(from: model.startDate),
                 timeFormatter.string(from: model.startDate),
                 "-",

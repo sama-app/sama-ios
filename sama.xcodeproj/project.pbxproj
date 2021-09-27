@@ -28,6 +28,8 @@
 		E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4426B704DA009D6D90 /* AppAuthError.swift */; };
 		E758054226D2896E00E9DEAD /* LightTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758054126D2896E00E9DEAD /* LightTextField.swift */; };
 		E758054426D2AAFF00E9DEAD /* SuggestionsPickCalendarSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758054326D2AAFF00E9DEAD /* SuggestionsPickCalendarSlider.swift */; };
+		E75A0DD527023D0C00EBF8B5 /* CalendarUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75A0DD427023D0C00EBF8B5 /* CalendarUtils.swift */; };
+		E75A0DD627023D5300EBF8B5 /* CalendarUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75A0DD427023D0C00EBF8B5 /* CalendarUtils.swift */; };
 		E761E12D26EF8BD6003FB1BF /* timezones-source.json in Resources */ = {isa = PBXBuildFile; fileRef = E761E12C26EF8BD6003FB1BF /* timezones-source.json */; };
 		E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A5C52643E16D00135A2F /* AuthToken.swift */; };
 		E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */; };
@@ -202,6 +204,7 @@
 		E74C8A4426B704DA009D6D90 /* AppAuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAuthError.swift; sourceTree = "<group>"; };
 		E758054126D2896E00E9DEAD /* LightTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightTextField.swift; sourceTree = "<group>"; };
 		E758054326D2AAFF00E9DEAD /* SuggestionsPickCalendarSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickCalendarSlider.swift; sourceTree = "<group>"; };
+		E75A0DD427023D0C00EBF8B5 /* CalendarUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarUtils.swift; sourceTree = "<group>"; };
 		E761E12C26EF8BD6003FB1BF /* timezones-source.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "timezones-source.json"; sourceTree = "<group>"; };
 		E763A5C52643E16D00135A2F /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
 		E763A6D6269733EE00082BCE /* AcknowledgementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsViewController.swift; sourceTree = "<group>"; };
@@ -357,6 +360,7 @@
 				E7B46FFD2694708D00558BB9 /* SlotFinder.swift */,
 				E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */,
 				E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */,
+				E75A0DD427023D0C00EBF8B5 /* CalendarUtils.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -727,6 +731,7 @@
 				E70A665F267536A400C88EA1 /* HighlightableSimpleCell.swift in Sources */,
 				E70A665B2674CACB00C88EA1 /* UIView+Helpers.swift in Sources */,
 				E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */,
+				E75A0DD527023D0C00EBF8B5 /* CalendarUtils.swift in Sources */,
 				E71EE89C26D94DAF00E0D2CA /* TimeConfirmedPanel.swift in Sources */,
 				E7FD55DC26D8B48100C81364 /* MeetingInviteDeepLinkService.swift in Sources */,
 				E7957941266F5F62005B9F39 /* CalendarSession.swift in Sources */,
@@ -815,6 +820,7 @@
 				E7D481DD26E6A8E6008B7CEE /* ScrollLock.swift in Sources */,
 				E7D481DE26E6A8E6008B7CEE /* EventsCoordinator.swift in Sources */,
 				E7D481DF26E6A8E6008B7CEE /* SlotFinder.swift in Sources */,
+				E75A0DD627023D5300EBF8B5 /* CalendarUtils.swift in Sources */,
 				E7D481E026E6A8E6008B7CEE /* BlockedTimesForDaysTransformer.swift in Sources */,
 				E7D481E126E6A8E6008B7CEE /* CalendarSession+Factory.swift in Sources */,
 				E7D481E226E6A8E6008B7CEE /* AuthDirections.swift in Sources */,

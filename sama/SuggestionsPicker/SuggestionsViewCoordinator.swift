@@ -79,7 +79,7 @@ class SuggestionsViewCoordinator {
     private let calendar: UIScrollView
     private let container: UIView
 
-    private var refDate = Date()
+    private let refDate = CalendarDateUtils.shared.uiRefDate
     private var meetingCode: String = ""
     private(set) var duration: Decimal = 1
     private(set) var availableSlotProps: [ProposedAvailableSlot] = []
@@ -132,7 +132,6 @@ class SuggestionsViewCoordinator {
 
     func present(code: String, onError: @escaping (ApiError) -> Void) {
         meetingCode = code
-        refDate = Date()
         api.request(for: MeetingProposalsRequest(code: meetingCode)) {
             switch $0 {
             case let .success(rawProposal):

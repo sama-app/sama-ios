@@ -32,7 +32,7 @@ class EventDatesPanel: CalendarNavigationBlock {
     var coordinator: EventsCoordinator!
 
     private let apiDateF = ApiDateTimeFormatter()
-    private let refDate = Date()
+    private let refDate = CalendarDateUtils.shared.uiRefDate
     private let calendar = Calendar.current
 
     private var actionButton: MainActionButton!

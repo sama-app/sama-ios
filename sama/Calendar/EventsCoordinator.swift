@@ -115,7 +115,7 @@ class EventsCoordinator {
     private let finder = SlotFinder()
 
     private var minTarget: RescheduleTarget {
-        let comps = Calendar.current.dateComponents([.hour, .minute], from: Date())
+        let comps = Calendar.current.dateComponents([.hour, .minute], from: CalendarDateUtils.shared.dateNow)
         let ab = Int(floor(Double(comps.minute!) / Double(minsBase))) + 1
         let minsNormalized = NSDecimalNumber(value: ab * minsBase).dividing(by: NSDecimalNumber(value: 60))
         let start = NSDecimalNumber(value: comps.hour!).adding(minsNormalized).decimalValue
@@ -221,7 +221,7 @@ class EventsCoordinator {
 
     func proposeSlots(with completion: @escaping (Result<MeetingProposalResult, ApiError>) -> Void) {
         let calendar = Calendar.current
-        let refDate = calendar.startOfDay(for: Date())
+        let refDate = calendar.startOfDay(for: CalendarDateUtils.shared.uiRefDate)
         let formatter = ApiDateTimeFormatter.formatter
 
         let slots: [ProposedSlot] = eventProperties.map { ev in

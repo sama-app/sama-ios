@@ -48,7 +48,7 @@ final class CalendarSession: CalendarContextProvider {
     let blockSize = 5
 
     var firstFocusDayIndex: Int {
-        let weekday = Calendar.current.component(.weekday, from: refDate)
+        let weekday = Calendar.current.component(.weekday, from: CalendarDateUtils.shared.dateNow)
         if weekday == 1 || weekday == 7 {
             return currentDayIndex + Sama.env.ui.columns.centerOffset
         } else {
@@ -60,7 +60,7 @@ final class CalendarSession: CalendarContextProvider {
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
     let api: Api
-    let refDate = Date()
+    let refDate = CalendarDateUtils.shared.uiRefDate
     private let calendar = Calendar.current
 
     private var isBlockBusy: [Int: Bool] = [:]
@@ -106,7 +106,7 @@ final class CalendarSession: CalendarContextProvider {
     }
 
     private func updateTimeZoneIfNeeded() {
-        let timestamp = Date()
+        let timestamp = CalendarDateUtils.shared.dateNow
         guard timestamp.timeIntervalSince(lastTimeZoneUpdate) > 24 * 60 * 60 else { return }
         lastTimeZoneUpdate = timestamp
 

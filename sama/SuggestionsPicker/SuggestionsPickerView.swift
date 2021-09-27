@@ -125,7 +125,7 @@ class SuggestionsPickerView: UICollectionView, UICollectionViewDataSource, UICol
         }
         cell.enable()
 
-        let refDate = calendar.startOfDay(for: Date())
+        let refDate = calendar.startOfDay(for: CalendarDateUtils.shared.uiRefDate)
         let startDay = calendar.date(byAdding: .day, value: item.daysOffset, to: refDate)!
         let startDate = startDay.addingTimeInterval(3600 * (item.pickStart as NSDecimalNumber).doubleValue)
         let endDate = startDate.addingTimeInterval(3600 * (data.duration as NSDecimalNumber).doubleValue)
