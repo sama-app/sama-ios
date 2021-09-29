@@ -25,6 +25,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var isFirstLoad: Bool = true
     private var isCalendarReady = false
 
+    private var lastCalendarAutoUpdate = CalendarDateUtils.shared.dateNow
+
     private var scrollLock: ScrollLock?
 
     private var eventsCoordinator: EventsCoordinator!
@@ -78,7 +80,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         session.loadInitial()
 
         AppLifecycleService.shared.onWillEnterForeground = { [weak self] in
-            self?.invalidateDataAndReloadDisplayedBlocks(timeout: 0)
+            guard let self = self else { return }
+            if CalendarDateUtils.shared.dateNow.timeIntervalSince(self.lastCalendarAutoUpdate) > 30 {
+                self.lastCalendarAutoUpdate = CalendarDateUtils.shared.dateNow
+                self.invalidateDataAndReloadDisplayedBlocks(timeout: 0)
+            }
         }
 
         navCenter.onActivePanelHeightChange = { [weak self] in

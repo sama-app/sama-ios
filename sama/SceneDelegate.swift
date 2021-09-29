@@ -37,6 +37,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             titlebar.titleVisibility = .hidden
             titlebar.toolbar = nil
         }
+
+        NotificationCenter.default.addObserver(forName: .init(rawValue: "NSWindowDidBecomeMainNotification"), object: nil, queue: nil) { _ in
+            AppLifecycleService.shared.onWillEnterForeground?()
+        }
         #endif
     }
 
