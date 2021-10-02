@@ -18,14 +18,29 @@ struct GoogleAuthRequest: ApiRequest {
     let method = HttpMethod.post
 }
 
+struct MarketingPreferencesUpdateData: Encodable {
+    let newsletterSubscriptionEnabled: Bool
+}
+
+struct MarketingPreferencesUpdateRequest: ApiRequest {
+    typealias U = EmptyBody
+    let uri = "/user/me/update-marketing-preferences"
+    let logKey = "/user/me/update-marketing-preferences"
+    let method: HttpMethod = .post
+    let body: MarketingPreferencesUpdateData
+}
+
 class OnboardingViewController: UIViewController, ASWebAuthenticationPresentationContextProviding, UITextViewDelegate {
 
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
 
     private var currentBlock: UIView?
     private var currentBlockLeadingConstraint: NSLayoutConstraint?
+    private var emailNotificationConsentBtns: [UIButton] = []
 
     private let api = Sama.makeUnauthApi()
+
+    private var capturedToken: AuthToken?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,12 +84,6 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         })
-    }
-
-    private func startSession(with auth: AuthContainer) {
-        let viewController = CalendarViewController()
-        viewController.session = makeCalendarSession(with: auth)
-        UIApplication.shared.rootWindow?.rootViewController = viewController
     }
 
     @objc private func presentSingleCalendarBlock() {
@@ -140,6 +149,64 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         slideInBlock(block)
     }
 
+    @objc private func presentEmailNotificationConsent() {
+        let block = UIView.build()
+
+        view.addSubview(block)
+
+        let titleLabel = UILabel.onboardingTitle("I can let you know about latest realeses and tips by email.")
+        titleLabel.addAndPinTitle(to: block)
+
+        let acceptBtn = UIButton.onboardingNextButton("Yes, let me know!")
+        acceptBtn.addTarget(self, action: #selector(acceptEmailNotification), for: .touchUpInside)
+        block.addSubview(acceptBtn)
+
+        let denyBtn = UIButton.onboardingNextButton("No thanks.")
+        denyBtn.addTarget(self, action: #selector(denyEmailNotification), for: .touchUpInside)
+        denyBtn.addAndPinActionButton(to: block)
+
+        emailNotificationConsentBtns = [acceptBtn, denyBtn]
+
+        NSLayoutConstraint.activate([
+            acceptBtn.constraintLeadingToParent(inset: 0),
+            denyBtn.topAnchor.constraint(equalTo: acceptBtn.bottomAnchor, constant: 32)
+        ])
+
+        slideInBlock(block)
+    }
+
+    @objc private func acceptEmailNotification() {
+        startCalendarSession(isEmailNotificationsEnabled: true)
+    }
+
+    @objc private func denyEmailNotification() {
+        startCalendarSession(isEmailNotificationsEnabled: false)
+    }
+
+    private func startCalendarSession(isEmailNotificationsEnabled: Bool) {
+        guard let token = capturedToken else { return }
+
+        let auth = AuthContainer.makeAndStore(with: token)
+        let session = makeCalendarSession(with: auth)
+
+        let req = MarketingPreferencesUpdateRequest(
+            body: MarketingPreferencesUpdateData(newsletterSubscriptionEnabled: isEmailNotificationsEnabled)
+        )
+
+        emailNotificationConsentBtns.forEach { $0.isEnabled = false }
+        session.api.request(for: req) {
+            switch $0 {
+            case .success:
+                let viewController = CalendarViewController()
+                viewController.session = session
+                UIApplication.shared.rootWindow?.rootViewController = viewController
+            case let .failure(err):
+                self.emailNotificationConsentBtns.forEach { $0.isEnabled = true }
+                self.presentError(err)
+            }
+        }
+    }
+
     private func slideInBlock(_ block: UIView) {
         let leading = block.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: view.bounds.width)
         NSLayoutConstraint.activate([
@@ -182,10 +249,10 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
             do {
                 let token = try AuthResultHandler().handle(callbackUrl: callbackUrl, error: err)
-                let auth = AuthContainer.makeAndStore(with: token)
 
                 DispatchQueue.main.async {
-                    self.startSession(with: auth)
+                    self.capturedToken = token
+                    self.presentEmailNotificationConsent()
                 }
             } catch let err {
                 Crashlytics.crashlytics().record(error: err)
