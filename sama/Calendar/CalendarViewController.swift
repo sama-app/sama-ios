@@ -128,7 +128,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.presentedViewController?.dismiss(animated: true, completion: nil)
 
             self.suggestionsViewCoordinator.present(code: code) {
-                if let httpErr = $0.httpError, httpErr.details?.reason == "already_confirmed" {
+                if let httpErr = $0.httpError, httpErr.code == 404 {
+                    let alert = UIAlertController(title: nil, message: "This meeting does not exist or has expired.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                } else if let httpErr = $0.httpError, httpErr.details?.reason == "already_confirmed" {
                     let alert = UIAlertController(title: nil, message: "Time for this meeting has already been confirmed.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
