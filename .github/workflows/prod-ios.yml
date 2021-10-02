@@ -1,9 +1,9 @@
-name: prod
+name: prod-ios
 
 on:
   push:
     tags:
-      - "*"
+      - 'ios-*.*.*'
 
 jobs:
   build:
@@ -31,15 +31,11 @@ jobs:
 
       - name: Set build number
         run: |
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${GITHUB_REF#refs/*/}" "sama/Info.plist"
+          tag=${GITHUB_REF#refs/*/}
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${tag#*-}" "sama/Info.plist"
+          ver=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "sama/Info.plist")
+          echo $ver
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ github.run_number }}" "sama/Info.plist"
 
       - name: Set environment
         run: ./set-env.sh prod
-
-      - name: Build and distribute
-        env:
-          EXPORT_OPTIONS_PLIST: "env/prod/exportOptions.plist"
-          APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
-          APPSTORE_API_ISSUER: ${{ secrets.APPSTORE_API_ISSUER }}
-        run: ./build-distribute.sh
