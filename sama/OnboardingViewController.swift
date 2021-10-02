@@ -42,6 +42,9 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
 
     private var capturedToken: AuthToken?
 
+    private var didClickConnectCal = false
+    private var didClickNotUsingGCal = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -51,7 +54,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         illustration.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(illustration)
         NSLayoutConstraint.activate([
-            illustration.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            illustration.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34),
             illustration.constraintLeadingToParent(inset: -16)
         ])
         presentWelcomeBlock()
@@ -144,7 +147,17 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
 
         let actionBtn = SignInGoogleButton(frame: .zero)
         actionBtn.addTarget(self, action: #selector(onConnectCalendar), for: .touchUpInside)
-        actionBtn.addAndPinActionButton(to: block)
+        block.addSubview(actionBtn)
+
+        let notUsingGCalBtn = UIButton.onboardingNextButton("I don’t use Google Calendar.")
+        notUsingGCalBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+        notUsingGCalBtn.addTarget(self, action: #selector(onNotUsingGCalCase), for: .touchUpInside)
+        notUsingGCalBtn.addAndPinActionButton(to: block)
+
+        NSLayoutConstraint.activate([
+            actionBtn.constraintLeadingToParent(inset: 0),
+            notUsingGCalBtn.topAnchor.constraint(equalTo: actionBtn.bottomAnchor, constant: 16)
+        ])
 
         slideInBlock(block)
     }
@@ -213,7 +226,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             block.topAnchor.constraint(equalTo: illustration.bottomAnchor, constant: 56),
             block.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             leading,
-            block.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            block.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
         view.setNeedsLayout()
@@ -232,8 +245,35 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         currentBlockLeadingConstraint = leading
     }
 
+    @objc private func onNotUsingGCalCase() {
+        didClickNotUsingGCal = true
+
+        if !didClickConnectCal {
+            Sama.bi.track(event: "notusinggcal")
+        } else {
+            Sama.bi.track(event: "notusinggcal-after-connectcal")
+        }
+
+        let alert = UIAlertController(
+            title: "Sorry, other email services will be coming soon!",
+            message: "Follow us to get product updates.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Follow on Twitter", style: .default, handler: { _ in
+            UIApplication.shared.open(URL(string: "https://twitter.com/meetsama_")!, options: [:], completionHandler: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
     @objc private func onConnectCalendar() {
-        Sama.bi.track(event: "connectcal")
+        didClickConnectCal = true
+
+        if !didClickNotUsingGCal {
+            Sama.bi.track(event: "connectcal")
+        } else {
+            Sama.bi.track(event: "connectcal-after-notusinggcal")
+        }
 
         api.request(for: GoogleAuthRequest()) {
             switch $0 {
