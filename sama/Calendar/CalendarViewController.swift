@@ -76,6 +76,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         suggestionsViewCoordinator.presentError = { [weak self] in self?.presentError($0) }
 
         session.reloadHandler = { [weak self] in self?.calendar.reloadData() }
+        session.userIdUpdateHandler = { Sama.bi.setUserId($0) }
         session.presentError = { [weak self] in self?.presentError($0) }
         session.loadInitial()
 

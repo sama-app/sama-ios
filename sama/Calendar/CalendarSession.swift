@@ -40,9 +40,21 @@ struct UpdateTimeZoneRequest: ApiRequest {
     let body: UpdateTimeZoneBody
 }
 
+struct DomainUser: Decodable {
+    let userId: String
+}
+
+struct UserDetailsRequest: ApiRequest {
+    typealias U = DomainUser
+    let uri = "/user/me/"
+    let logKey = "/user/me/"
+    let method: HttpMethod = .get
+}
+
 final class CalendarSession: CalendarContextProvider {
 
     var reloadHandler: () -> Void = {}
+    var userIdUpdateHandler: ((String) -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
     let currentDayIndex: Int
     let blockSize = 5
@@ -74,6 +86,7 @@ final class CalendarSession: CalendarContextProvider {
     private let transformer: BlockedTimesForDaysTransformer
 
     private var lastTimeZoneUpdate = Date(timeIntervalSince1970: 0)
+    private var isUserUpdated = false
 
     init(api: Api, currentDayIndex: Int) {
         self.api = api
@@ -114,8 +127,23 @@ final class CalendarSession: CalendarContextProvider {
         api.request(for: req) { _ in }
     }
 
+    private func updateUserIfNeeded() {
+        guard !isUserUpdated else { return }
+        isUserUpdated = true
+
+        api.request(for: UserDetailsRequest()) {
+            switch $0 {
+            case let .success(user):
+                self.userIdUpdateHandler?(user.userId)
+            case .failure:
+                self.isUserUpdated = false
+            }
+        }
+    }
+
     private func loadCalendar(blockIndices: ClosedRange<Int>) {
         updateTimeZoneIfNeeded()
+        updateUserIfNeeded()
 
         for idx in blockIndices {
             isBlockBusy[idx] = true

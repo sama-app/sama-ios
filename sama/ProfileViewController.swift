@@ -148,6 +148,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             emailCoordinator.compose(with: EmailProperties(toEmail: "help@meetsama.com", subject: "Sama app issue"))
         case .logout:
             Sama.bi.track(event: "logout")
+            Sama.bi.setUserId(nil)
             AuthContainer.clear()
             UIApplication.shared.rootWindow?.rootViewController = OnboardingViewController()
         case .privacy:
