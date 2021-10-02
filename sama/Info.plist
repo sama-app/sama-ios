@@ -89,5 +89,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.business</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>2021 Sama</string>
 </dict>
 </plist>
