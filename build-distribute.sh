@@ -12,6 +12,7 @@ set -o pipefail && \
  -project sama.xcodeproj \
  -scheme sama \
  -configuration Release \
+ -clonedSourcePackagesDirPath SourcePackages \
  -archivePath $archivePath \
  archive CODE_SIGN_STYLE=Manual \
  | xcpretty
