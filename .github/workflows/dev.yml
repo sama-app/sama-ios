@@ -37,8 +37,12 @@ jobs:
       - name: Set environment
         run: ./set-env.sh dev
 
-      - restore_cache:
-        key: spm-cache
+      - name: Cache SPM
+        uses: actions/cache@v2
+        with:
+          path: SourcePackages
+          key: ${{ runner.os }}-spm-${{ hashFiles('sama.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: ${{ runner.os }}-spm-
 
       - name: Build and distribute
         env:
@@ -46,8 +50,3 @@ jobs:
           APPSTORE_API_KEY: ${{ secrets.APPSTORE_API_KEY }}
           APPSTORE_API_ISSUER: ${{ secrets.APPSTORE_API_ISSUER }}
         run: ./build-distribute.sh
-
-      - save_cache:
-        paths:
-          - SourcePackages/
-        key: spm-cache
