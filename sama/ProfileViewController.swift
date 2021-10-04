@@ -142,7 +142,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch item {
         case .feedback:
             Sama.bi.track(event: "feedback")
-            emailCoordinator.compose(with: EmailProperties(toEmail: "hello@meetsama.com", subject: "Sama app feedback"))
+            openBrowser(with: "https://sama.nolt.io")
         case .support:
             Sama.bi.track(event: "help")
             emailCoordinator.compose(with: EmailProperties(toEmail: "help@meetsama.com", subject: "Sama app issue"))
