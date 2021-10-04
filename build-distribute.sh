@@ -22,6 +22,7 @@ set -o pipefail && \
  -exportOptionsPlist $EXPORT_OPTIONS_PLIST \
  -exportPath $buildPath \
  | xcpretty
+
 # distribute
 xcrun altool \
  --upload-app \
