@@ -30,8 +30,8 @@ jobs:
 
       - name: Set build number
         run: |
-          shortVersion=$(git describe --tags --abbrev=0)
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $shortVersion" "sama/Info.plist"
+          tag=$(git describe --tags --abbrev=0)
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${tag#*-}" "sama/Info.plist"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ github.run_number }}" "sama/Info.plist"
 
       - name: Set environment
