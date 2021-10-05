@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string>
+    <key>teamID</key>
+    <string>F299X48S2K</string>
+    <key>signingStyle</key>
+	<string>manual</string>
+    <key>installerSigningCertificate</key>
+    <string>1128AFC04144AAA7D8F7C216767AFAEA8CAD2CC6</string>
+    <key>signingCertificate</key>
+	<string>64291B705181AE4982086A7FFB2658DAA02F27F7</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.meetsama.sama</key>
+        <string>sama_appstore_mac</string>
+    </dict>
+</dict>
+</plist>

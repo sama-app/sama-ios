@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>destination</key>
+	<string>export</string>
+	<key>method</key>
+	<string>developer-id</string>
+	<key>signingCertificate</key>
+	<string>98B3C8B88523E531AB7C617D18DDFBBC794D36B1</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>teamID</key>
+	<string>6QTT2B2N75</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.meetsama.app</key>
+        <string>sama_id_signed</string>
+    </dict>
+</dict>
+</plist>
