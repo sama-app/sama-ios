@@ -167,7 +167,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
 
         view.addSubview(block)
 
-        let titleLabel = UILabel.onboardingTitle("I can let you know about latest realeses and tips by email.")
+        let titleLabel = UILabel.onboardingTitle("I can let you know about latest releases and tips by email.")
         titleLabel.addAndPinTitle(to: block)
 
         let acceptBtn = UIButton.onboardingNextButton("Yes, let me know!")
