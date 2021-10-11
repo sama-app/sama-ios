@@ -111,6 +111,7 @@ class EventsCoordinator {
             oldValue?.repositionLink.invalidate()
         }
     }
+    private var scrollOffsetAnimation: ScrollOffsetAnimation!
 
     private let finder = SlotFinder()
 
@@ -382,6 +383,17 @@ class EventsCoordinator {
         }
     }
 
+    @objc private func animateContentOffset() {
+        let animDuration = CGFloat(scrollOffsetAnimation.duration)
+        let timeDiff = min(CGFloat(Date().timeIntervalSince(scrollOffsetAnimation.srcTimestamp)), animDuration)
+        let offsetFromTime = (timeDiff * scrollOffsetAnimation.offset) / animDuration
+        self.calendar.contentOffset.x = scrollOffsetAnimation.srcOffsetX + offsetFromTime
+        if Date().timeIntervalSince(scrollOffsetAnimation.srcTimestamp) > (TimeInterval(animDuration) + 0.1) {
+            scrollOffsetAnimation.displayLink.invalidate()
+            dragState.isAllowed = true
+        }
+    }
+
     @objc private func changeEventPos() {
         guard let recognizer = dragUi?.recognizer else { return }
 
@@ -397,12 +409,17 @@ class EventsCoordinator {
             switch change {
             case let .horizontal(step):
                 dragState.isAllowed = false
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.calendar.contentOffset.x += CGFloat(step) * self.cellSize.width
-                    self.calendar.layoutIfNeeded()
-                }, completion: { _ in
-                    self.dragState.isAllowed = true
-                })
+
+                let displayLink = CADisplayLink(target: self, selector: #selector(animateContentOffset))
+                displayLink.add(to: RunLoop.current, forMode: .common)
+
+                scrollOffsetAnimation = ScrollOffsetAnimation(
+                    displayLink: displayLink,
+                    srcTimestamp: Date(),
+                    srcOffsetX: self.calendar.contentOffset.x,
+                    offset: CGFloat(step) * self.cellSize.width,
+                    duration: 0.3
+                )
             case let .vertical(points):
                 self.calendar.contentOffset.y = yOffsetNormalized(calendar.contentOffset.y + points)
             }
@@ -655,6 +672,14 @@ private struct DragState {
 private struct DragUI {
     let repositionLink: CADisplayLink
     let recognizer: UIGestureRecognizer
+}
+
+private struct ScrollOffsetAnimation {
+    let displayLink: CADisplayLink
+    let srcTimestamp: Date
+    let srcOffsetX: CGFloat
+    let offset: CGFloat
+    let duration: TimeInterval
 }
 
 struct RescheduleTarget {
