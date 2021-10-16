@@ -17,12 +17,36 @@ class CalendarTopBar: UIView {
             viewSwitchBtn.setImage(calendarViewImage, for: .normal)
         }
     }
+    var isSingleDayStyle = false {
+        didSet {
+            if isSingleDayStyle {
+                monthTitle.font = .brandedFont(ofSize: 20, weight: .semibold)
+                weekdayTitle.isHidden = false
+            } else {
+                monthTitle.font = .brandedFont(ofSize: 24, weight: .regular)
+                weekdayTitle.isHidden = true
+            }
+            redrawDisplayedDate()
+        }
+    }
+    var displayedDate = Date() {
+        didSet {
+            redrawDisplayedDate()
+        }
+    }
 
     private lazy var monthTitle: UILabel = {
         let title = UILabel(frame: .zero)
         title.translatesAutoresizingMaskIntoConstraints = false
         title.textColor = .neutral1
         title.font = .brandedFont(ofSize: 24, weight: .regular)
+        return title
+    }()
+    private lazy var weekdayTitle: UILabel = {
+        let title = UILabel(frame: .zero)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textColor = .secondary
+        title.font = .systemFont(ofSize: 12, weight: .regular)
         return title
     }()
     private lazy var viewSwitchBtn: UIButton = {
@@ -33,6 +57,12 @@ class CalendarTopBar: UIView {
         )
     }()
 
+    private lazy var ordinalNumberFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.locale = Locale(identifier: "en-GB")
+        f.numberStyle = .ordinal
+        return f
+    }()
     private var navBarItems: [UIView] = []
 
     override init(frame: CGRect) {
@@ -45,10 +75,19 @@ class CalendarTopBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func changeDisplayedDate(_ date: Date) {
-        let monthNumber = Calendar.current.component(.month, from: date)
+    private func redrawDisplayedDate() {
+        let monthNumber = Calendar.current.component(.month, from: displayedDate)
         let monthIndex = monthNumber - 1
-        monthTitle.text = Calendar.current.monthSymbols[monthIndex]
+        let monthName = Calendar.current.monthSymbols[monthIndex]
+
+        if isSingleDayStyle {
+            let dayNum = Calendar.current.component(.day, from: displayedDate)
+            let dayName = ordinalNumberFormatter.string(from: NSNumber(value: dayNum))!
+            monthTitle.text = "\(monthName) \(dayName)"
+            weekdayTitle.text = weekdayFormatter.string(from: displayedDate)
+        } else {
+            monthTitle.text = monthName
+        }
     }
 
     func setupCalendarScreenTopBar() {
@@ -64,10 +103,15 @@ class CalendarTopBar: UIView {
             iconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8)
         ])
 
-        addSubview(monthTitle)
+        weekdayTitle.isHidden = true
+        let dateViewsStack = UIStackView(arrangedSubviews: [monthTitle, weekdayTitle])
+        dateViewsStack.axis = .vertical
+        dateViewsStack.spacing = -3
+        dateViewsStack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(dateViewsStack)
         NSLayoutConstraint.activate([
-            monthTitle.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
-            monthTitle.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 8)
+            dateViewsStack.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            dateViewsStack.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 8)
         ])
 
         let profileBtn = UIButton.navigationBarButton(

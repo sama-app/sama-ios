@@ -287,6 +287,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         topBar.pinLeadingAndTrailing(top: 0, and: [topBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44)])
 
         topBar.calendarViewImage = calendarViewImage
+        topBar.isSingleDayStyle = columnsDisplay.view == .single
+
         topBar.setupCalendarScreenTopBar()
 
         topBar.handleProfileIntent = { [weak self] in self?.present(ProfileViewController(), animated: true, completion: nil) }
@@ -409,7 +411,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         if let indexPath = leftMostColumn {
             let daysOffset = -session.currentDayIndex + indexPath.item
             let date = Calendar.current.date(byAdding: .day, value: daysOffset, to: session.refDate)!
-            topBar.changeDisplayedDate(date)
+            topBar.displayedDate = date
         }
     }
 
@@ -477,6 +479,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
 
         topBar.calendarViewImage = calendarViewImage
+        topBar.isSingleDayStyle = columnsDisplay.view == .single
 
         cellSize = calculatedCellSize
 
