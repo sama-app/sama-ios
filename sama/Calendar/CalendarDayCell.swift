@@ -32,24 +32,27 @@ final class CalendarDayCell: UICollectionViewCell {
     var headerInset: CGFloat = 0 {
         didSet {
             CALayer.performWithoutImplicitAnimations {
-                for v in headerViews {
-                    v.frame.origin.y = headerInset
-                }
+                headerView.frame.origin.y = headerInset
             }
         }
     }
 
-    private var isHeaderSetUp = false
-    private var headerViews: [UIView] = []
-
-    private var l1: UILabel?
-    private var l2: UILabel?
+    private let headerView = CalendarDayHeader(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
 
     private var isGreyedOut = false
 
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        addSubview(headerView)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func draw(_ rect: CGRect) {
-        //super.draw(rect)
-        setupHeaderIfNeeded()
+        headerView.frame.size.width = cellSize.width
 
         UIColor.base.setFill()
         UIRectFillUsingBlendMode(rect, .normal)
@@ -102,66 +105,14 @@ final class CalendarDayCell: UICollectionViewCell {
         }
     }
 
-    private func setupHeaderIfNeeded() {
-        guard !isHeaderSetUp else { return }
-        isHeaderSetUp = true
-
-        let cellHeight = Sama.env.ui.calenarHeaderHeight
-
-//        let v: [(String, String)] = (0 ..< days).map {
-//            let date = calendar.date(byAdding: .day, value: $0, to: dt)!
-//            return (
-//                dayF.string(from: date),
-//                wkF.string(from: date)
-//            )
-//        }
-
-//        for (i, o) in v.enumerated() {
-            let v = UIView(frame: CGRect(x: 0, y: headerInset, width: cellSize.width, height: cellHeight))
-            v.backgroundColor = .base
-
-            let sepBtm = UIView(frame: CGRect(x: 0, y: v.frame.height - 1, width: cellSize.width, height: 1))
-            sepBtm.backgroundColor = .calendarGrid
-            let sepRhtHeight = Sama.env.ui.calendarHeaderRightSeparatorHeight
-            let sepRht = UIView(frame: CGRect(x: cellSize.width - 1, y: cellHeight - sepRhtHeight, width: 1, height: sepRhtHeight))
-            sepRht.backgroundColor = .calendarGrid
-            v.addSubview(sepBtm)
-            v.addSubview(sepRht)
-
-            addSubview(v)
-
-            let l1 = UILabel()
-            l1.translatesAutoresizingMaskIntoConstraints = false
-            l1.font = .systemFont(ofSize: 15, weight: .bold)
-//            l1.text = o.0
-            l1.textAlignment = .center
-            l1.layer.cornerRadius = 12
-            l1.layer.masksToBounds = true
-
-            let l2 = UILabel()
-            l2.font = .systemFont(ofSize: 12)
-            l2.translatesAutoresizingMaskIntoConstraints = false
-//            l2.text = o.1
-            l2.textColor = .neutral2
-
-            let sv = UIStackView(arrangedSubviews: [l1, l2])
-            sv.axis = .vertical
-            sv.alignment = .center
-            sv.translatesAutoresizingMaskIntoConstraints = false
-            v.addSubview(sv)
-
-            NSLayoutConstraint.activate([
-                l1.widthAnchor.constraint(equalToConstant: 24),
-                l1.heightAnchor.constraint(equalToConstant: 24),
-                v.centerXAnchor.constraint(equalTo: sv.centerXAnchor),
-                v.centerYAnchor.constraint(equalTo: sv.centerYAnchor)
-            ])
-
-        self.l1 = l1
-        self.l2 = l2
-            headerViews.append(v)
-//        }
-        setInfo()
+    func showDateInHeader(_ isVisible: Bool) {
+        if isVisible {
+            headerView.frame.size.height = Sama.env.ui.calenarHeaderHeight
+            headerView.container.isHidden = false
+        } else {
+            headerView.frame.size.height = Sama.env.ui.calenarNoHeaderHeight
+            headerView.container.isHidden = true
+        }
     }
 
     private func setInfo() {
@@ -173,15 +124,15 @@ final class CalendarDayCell: UICollectionViewCell {
         let weekday = Calendar.current.component(.weekday, from: date)
         isGreyedOut = (weekday == 1 || weekday == 7)
 
-        l1?.text = dayF.string(from: date)
-        l2?.text = wkF.string(from: date)
+        headerView.upperLabel.text = dayF.string(from: date)
+        headerView.lowerLabel.text = wkF.string(from: date)
 
         if isCurrentDay {
-            l1?.backgroundColor = .primary
-            l1?.textColor = .neutralN
+            headerView.upperLabel.backgroundColor = .primary
+            headerView.upperLabel.textColor = .neutralN
         } else {
-            l1?.backgroundColor = .clear
-            l1?.textColor = .neutral1
+            headerView.upperLabel.backgroundColor = .clear
+            headerView.upperLabel.textColor = .neutral1
         }
     }
 }

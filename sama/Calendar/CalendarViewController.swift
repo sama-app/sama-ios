@@ -395,7 +395,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         changeDisplayedMonth()
     }
 
-    private func changeDisplayedMonth() {
+    private func getVisibleColumnIndices() -> [Int] {
         let indexPathsAndOffsets = calendar.indexPathsForVisibleItems.reduce([] as [(IndexPath, CGFloat)]) { result, indexPath in
             if let cell = calendar.cellForItem(at: indexPath) {
                 return result + [(indexPath, cell.frame.midX - calendar.contentOffset.x)]
@@ -403,13 +403,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                 return result
             }
         }
-        let leftMostColumn = indexPathsAndOffsets
+        return indexPathsAndOffsets
             .filter { (_, offset) in offset > 0 }
             .sorted(by: { $0.1 < $1.1 })
-            .first?.0
+            .map { $0.0.item }
+    }
 
-        if let indexPath = leftMostColumn {
-            let daysOffset = -session.currentDayIndex + indexPath.item
+    private func changeDisplayedMonth() {
+        let leftMostColumnIdx = getVisibleColumnIndices().first
+
+        if let index = leftMostColumnIdx {
+            let daysOffset = -session.currentDayIndex + index
             let date = Calendar.current.date(byAdding: .day, value: daysOffset, to: session.refDate)!
             topBar.displayedDate = date
         }
@@ -460,6 +464,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         cell.isCurrentDay = Calendar.current.isDate(date, inSameDayAs: CalendarDateUtils.shared.dateNow)
         cell.date = date
         cell.setNeedsDisplay()
+        cell.showDateInHeader(columnsDisplay.view != .single)
 
         if isCalendarReady {
             session.loadIfAvailableBlock(at: Int(round(Double(daysOffset) / Double(session.blockSize))))
@@ -490,10 +495,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         suggestionsViewCoordinator.cellSize = cellSize
 
         let y = calendar.contentOffset.y
+        let xIdx = getVisibleColumnIndices().contains(5000) ? 5000 : getVisibleColumnIndices().first!
+
         calendar.setCollectionViewLayout(makeCalendarLayout(), animated: false)
         calendar.reloadData()
         calendar.contentOffset = CGPoint(
-            x: cellSize.width * CGFloat(session.firstFocusDayIndex(centerOffset: columnsDisplay.centerOffset)),
+            x: cellSize.width * CGFloat(xIdx),
             y: y
         )
         DispatchQueue.main.async {
