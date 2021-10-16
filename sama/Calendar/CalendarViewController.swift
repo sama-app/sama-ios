@@ -46,6 +46,23 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private var columnsDisplay: ColumnsSetting!
 
+    private let timelineWidth: CGFloat = 56
+
+    private var calculatedCellSize: CGSize {
+        CGSize(
+            width: (view.frame.width - timelineWidth) / CGFloat(columnsDisplay.count),
+            height: 65
+        )
+    }
+    private var calendarViewImage: UIImage {
+        switch columnsDisplay.view {
+        case .single:
+            return UIImage(named: "calendar-view-day")!
+        case .five, .seven:
+            return UIImage(named: "calendar-view-five-day")!
+        }
+    }
+
     private lazy var monthTitle: UILabel = {
         let title = UILabel(frame: .zero)
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -282,11 +299,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func setupViews() {
-        let timelineWidth: CGFloat = 56
-        cellSize = CGSize(
-            width: (view.frame.width - timelineWidth) / CGFloat(columnsDisplay.count),
-            height: 65
-        )
+        cellSize = calculatedCellSize
 
         let contentVPadding = Sama.env.ui.calenarHeaderHeight
         let contentHeight = cellSize.height * 24 + contentVPadding * 2
@@ -388,7 +401,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             action: #selector(onProfileButton)
         )
         topBar.addSubview(profileBtn)
-        viewSwitchBtn.setImage(UIImage(named: "calendar-view-five-day"), for: .normal)
+        viewSwitchBtn.setImage(calendarViewImage, for: .normal)
         topBar.addSubview(viewSwitchBtn)
         NSLayoutConstraint.activate([
             viewSwitchBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
@@ -488,9 +501,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
+    private func makeCalendarLayout() -> CalendarLayout {
+        return CalendarLayout(size: CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset))
+    }
+
     private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
-        let layout = CalendarLayout(size: CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset))
-        calendar = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        calendar = UICollectionView(frame: .zero, collectionViewLayout: makeCalendarLayout())
         calendar.isDirectionalLockEnabled = true
         calendar.dataSource = self
         calendar.delegate = self
@@ -538,6 +554,32 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     @objc private func onViewSwitch() {
+        if columnsDisplay.view == .single {
+            if Ui.isWideScreen() {
+                columnsDisplay = ColumnsSetting(view: .seven, count: 7, centerOffset: -3)
+            } else {
+                columnsDisplay = ColumnsSetting(view: .five, count: 5, centerOffset: -2)
+            }
+        } else {
+            columnsDisplay = ColumnsSetting(view: .single, count: 1, centerOffset: 0)
+        }
+
+        viewSwitchBtn.setImage(calendarViewImage, for: .normal)
+
+        cellSize = calculatedCellSize
+
+        eventsCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        eventsCoordinator.cellSize = cellSize
+
+        suggestionsViewCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        suggestionsViewCoordinator.cellSize = cellSize
+
+        let y = calendar.contentOffset.y
+        calendar.setCollectionViewLayout(makeCalendarLayout(), animated: false)
+        calendar.contentOffset = CGPoint(
+            x: cellSize.width * CGFloat(session.firstFocusDayIndex(centerOffset: columnsDisplay.centerOffset)),
+            y: y
+        )
     }
 
     @objc private func onProfileButton() {
