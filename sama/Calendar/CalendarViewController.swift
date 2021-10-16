@@ -64,21 +64,21 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             api: session.api,
             currentDayIndex: session.currentDayIndex,
             context: session,
-            cellSize: cellSize,
             calendar: calendar,
             container: slotPickerContainer
         )
         eventsCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        eventsCoordinator.cellSize = cellSize
         eventsCoordinator.presentError = { [weak self] in self?.presentError($0) }
         suggestionsViewCoordinator = SuggestionsViewCoordinator(
             api: session.api,
             currentDayIndex: session.currentDayIndex,
             context: session,
-            cellSize: cellSize,
             calendar: calendar,
             container: slotPickerContainer
         )
         suggestionsViewCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        suggestionsViewCoordinator.cellSize = cellSize
         suggestionsViewCoordinator.onReset = { [weak self] in
             guard let self = self else { return }
 

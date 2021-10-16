@@ -69,6 +69,11 @@ class SuggestionsViewCoordinator {
     var onLock: ((Bool) -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
     var columnsCenterOffset = 0
+    var cellSize: CGSize = .zero {
+        didSet {
+            repositionEventViews()
+        }
+    }
 
     var onReset: (() -> Void)?
 
@@ -76,7 +81,6 @@ class SuggestionsViewCoordinator {
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
-    private let cellSize: CGSize
     private let calendar: UIScrollView
     private let container: UIView
 
@@ -122,11 +126,10 @@ class SuggestionsViewCoordinator {
         return touchableCalendarHeight / 2
     }
 
-    init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
+    init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, calendar: UIScrollView, container: UIView) {
         self.api = api
         self.currentDayIndex = currentDayIndex
         self.context = context
-        self.cellSize = cellSize
         self.calendar = calendar
         self.container = container
     }
