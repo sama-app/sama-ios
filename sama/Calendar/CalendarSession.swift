@@ -59,16 +59,6 @@ final class CalendarSession: CalendarContextProvider {
     let currentDayIndex: Int
     let blockSize = 5
 
-    var firstFocusDayIndex: Int {
-        let weekday = Calendar.current.component(.weekday, from: CalendarDateUtils.shared.dateNow)
-        if weekday == 1 || weekday == 7 {
-            return currentDayIndex + Sama.env.ui.columns.centerOffset
-        } else {
-            // 2 monday num
-            return currentDayIndex - (weekday - 2)
-        }
-    }
-
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
     let api: Api
@@ -92,6 +82,16 @@ final class CalendarSession: CalendarContextProvider {
         self.api = api
         self.currentDayIndex = currentDayIndex
         self.transformer = BlockedTimesForDaysTransformer(currentDayIndex: currentDayIndex, refDate: refDate, calendar: calendar)
+    }
+
+    func firstFocusDayIndex(centerOffset: Int) -> Int {
+        let weekday = Calendar.current.component(.weekday, from: CalendarDateUtils.shared.dateNow)
+        if weekday == 1 || weekday == 7 {
+            return currentDayIndex + centerOffset
+        } else {
+            // 2 monday num
+            return currentDayIndex - (weekday - 2)
+        }
     }
 
     func loadInitial() {

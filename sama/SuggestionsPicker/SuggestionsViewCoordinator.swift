@@ -68,6 +68,7 @@ class SuggestionsViewCoordinator {
     var onChange: ((Int, ProposedAvailableSlot) -> Void)?
     var onLock: ((Bool) -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
+    var columnsCenterOffset = 0
 
     var onReset: (() -> Void)?
 
@@ -390,7 +391,7 @@ class SuggestionsViewCoordinator {
         let timestamp = NSDecimalNumber(decimal: props.start).adding(NSDecimalNumber(decimal: props.duration).dividing(by: NSDecimalNumber(value: 2)))
         let y = CGFloat(truncating: timestamp) * cellSize.height - touchableCalendarMidY
         calendar.setContentOffset(CGPoint(
-            x: CGFloat(currentDayIndex + props.daysOffset + Sama.env.ui.columns.centerOffset) * cellSize.width,
+            x: CGFloat(currentDayIndex + props.daysOffset + columnsCenterOffset) * cellSize.width,
             y: y
         ), animated: true)
     }

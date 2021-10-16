@@ -9,6 +9,11 @@ import UIKit
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    struct ColumnsSetting {
+        let count: Int
+        let centerOffset: Int
+    }
+
     var session: CalendarSession!
 
     private var topBar: UIView!
@@ -32,6 +37,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var eventsCoordinator: EventsCoordinator!
     private var suggestionsViewCoordinator: SuggestionsViewCoordinator!
 
+    private var columnsDisplay: ColumnsSetting!
+
     private lazy var monthTitle: UILabel = {
         let title = UILabel(frame: .zero)
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -46,6 +53,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
+        if Ui.isWideScreen() {
+            columnsDisplay = ColumnsSetting(count: 7, centerOffset: -3)
+        } else {
+            columnsDisplay = ColumnsSetting(count: 5, centerOffset: -2)
+        }
+
         self.setupViews()
         eventsCoordinator = EventsCoordinator(
             api: session.api,
@@ -55,6 +68,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             calendar: calendar,
             container: slotPickerContainer
         )
+        eventsCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
         eventsCoordinator.presentError = { [weak self] in self?.presentError($0) }
         suggestionsViewCoordinator = SuggestionsViewCoordinator(
             api: session.api,
@@ -64,6 +78,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             calendar: calendar,
             container: slotPickerContainer
         )
+        suggestionsViewCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
         suggestionsViewCoordinator.onReset = { [weak self] in
             guard let self = self else { return }
 
@@ -242,7 +257,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             let hr = CGFloat(ceil(absHours))
             let y = vOffset + cellSize.height * (hr + 1) - calendar.bounds.height / 2
             calendar.contentOffset = CGPoint(
-                x: cellSize.width * CGFloat(session.firstFocusDayIndex),
+                x: cellSize.width * CGFloat(session.firstFocusDayIndex(centerOffset: columnsDisplay.centerOffset)),
                 y: y
             )
             DispatchQueue.main.async {
@@ -255,7 +270,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private func setupViews() {
         let timelineWidth: CGFloat = 56
         cellSize = CGSize(
-            width: (view.frame.width - timelineWidth) / CGFloat(Sama.env.ui.columns.count),
+            width: (view.frame.width - timelineWidth) / CGFloat(columnsDisplay.count),
             height: 65
         )
 

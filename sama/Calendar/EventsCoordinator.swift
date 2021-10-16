@@ -78,6 +78,7 @@ class EventsCoordinator {
     var onChanges: (() -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
     var api: Api
+    var columnsCenterOffset = 0
 
     private var constraints = EventConstraints(duration: 0.25, min: RescheduleTarget(daysOffset: 0, start: 0))
     private var intentCode = ""
@@ -342,7 +343,7 @@ class EventsCoordinator {
         let timestamp = NSDecimalNumber(decimal: props.start).adding(NSDecimalNumber(decimal: props.duration).dividing(by: NSDecimalNumber(value: 2)))
         let y = CGFloat(truncating: timestamp) * cellSize.height - touchableCalendarMidY
         calendar.setContentOffset(CGPoint(
-            x: CGFloat(currentDayIndex + props.daysOffset + Sama.env.ui.columns.centerOffset) * cellSize.width,
+            x: CGFloat(currentDayIndex + props.daysOffset + columnsCenterOffset) * cellSize.width,
             y: y
         ), animated: true)
     }
