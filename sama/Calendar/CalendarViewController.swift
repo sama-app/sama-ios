@@ -318,6 +318,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         timeline = TimelineView(frame: CGRect(origin: .zero, size: timelineSize))
         timeline.cellSize = cellSize
         timeline.vOffset = contentVPadding
+        timeline.showInfoInHeader(true)
         timelineScrollView.contentSize = timelineSize
         timelineScrollView.addSubview(timeline)
 
@@ -493,6 +494,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         suggestionsViewCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
         suggestionsViewCoordinator.cellSize = cellSize
+
+        timeline.showInfoInHeader(columnsDisplay.view != .single)
 
         let y = calendar.contentOffset.y
         let xIdx = getVisibleColumnIndices().contains(5000) ? 5000 : getVisibleColumnIndices().first!

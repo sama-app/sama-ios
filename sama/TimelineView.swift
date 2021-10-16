@@ -19,8 +19,8 @@ final class TimelineView: UIView {
     var vOffset: CGFloat = 0
     var timezonesDiff: TimeZonesDiff? = nil {
         didSet {
-            headerUpperLabel.text = timezonesDiff?.targetTitle ?? ""
-            headerLowerLabel.text = timezonesDiff?.currentTitle ?? ""
+            headerView.upperLabel.text = timezonesDiff?.targetTitle ?? ""
+            headerView.lowerLabel.text = timezonesDiff?.currentTitle ?? ""
 
             setNeedsDisplay()
             layoutIfNeeded()
@@ -29,18 +29,23 @@ final class TimelineView: UIView {
 
     var headerInset: CGFloat = 0 {
         didSet {
-            header?.frame.origin.y = headerInset
+            headerView.frame.origin.y = headerInset
         }
     }
 
-    private var isHeaderSetup = false
-    private var header: UIView?
+    private let headerView = TimelineHeader(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
 
-    private let headerUpperLabel = UILabel()
-    private let headerLowerLabel = UILabel()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(headerView)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func draw(_ rect: CGRect) {
-        setupHeaderIfNeeded()
+        headerView.frame.size.width = bounds.width
 
         UIColor.base.setFill()
         UIRectFill(rect)
@@ -98,46 +103,14 @@ final class TimelineView: UIView {
         UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
     }
 
-    private func setupHeaderIfNeeded() {
-        guard !isHeaderSetup else { return }
-        isHeaderSetup = true
-
-        let cellHeight = Sama.env.ui.calenarHeaderHeight
-        let v = UIView(frame: CGRect(x: 0, y: headerInset, width: bounds.width, height: cellHeight))
-        v.backgroundColor = .base
-
-        let sepBtm = UIView(frame: CGRect(x: 0, y: v.frame.height - 1, width: bounds.width, height: 1))
-        sepBtm.backgroundColor = .calendarGrid
-        let sepRhtHeight = Sama.env.ui.calendarHeaderRightSeparatorHeight
-        let sepRht = UIView(frame: CGRect(x: bounds.width - 1, y: v.frame.height - sepRhtHeight, width: 1, height: sepRhtHeight))
-        sepRht.backgroundColor = .calendarGrid
-        v.addSubview(sepBtm)
-        v.addSubview(sepRht)
-
-        let textsStack = UIStackView()
-        textsStack.translatesAutoresizingMaskIntoConstraints = false
-        textsStack.axis = .vertical
-        textsStack.alignment = .trailing
-
-        headerUpperLabel.translatesAutoresizingMaskIntoConstraints = false
-        headerUpperLabel.font = .systemFont(ofSize: 10, weight: .regular)
-        headerUpperLabel.textColor = .neutral1
-        textsStack.addArrangedSubview(headerUpperLabel)
-
-        headerLowerLabel.translatesAutoresizingMaskIntoConstraints = false
-        headerLowerLabel.font = .systemFont(ofSize: 10, weight: .regular)
-        headerLowerLabel.textColor = .secondary
-        textsStack.addArrangedSubview(headerLowerLabel)
-
-        v.addSubview(textsStack)
-        NSLayoutConstraint.activate([
-            v.trailingAnchor.constraint(equalTo: textsStack.trailingAnchor, constant: 8),
-            textsStack.centerYAnchor.constraint(equalTo: v.centerYAnchor)
-        ])
-
-        addSubview(v)
-
-        header = v
+    func showInfoInHeader(_ isVisible: Bool) {
+        if isVisible {
+            headerView.frame.size.height = Sama.env.ui.calenarHeaderHeight
+            headerView.container.isHidden = false
+        } else {
+            headerView.frame.size.height = Sama.env.ui.calenarNoHeaderHeight
+            headerView.container.isHidden = true
+        }
     }
 }
 

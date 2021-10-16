@@ -25,6 +25,7 @@
 		E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */ = {isa = PBXBuildFile; fileRef = E761E12C26EF8BD6003FB1BF /* timezones-source.json */; };
 		E739294D271B20CF0097745F /* CalendarTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294C271B20CF0097745F /* CalendarTopBar.swift */; };
 		E739294F271B5BD30097745F /* CalendarDayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294E271B5BD30097745F /* CalendarDayHeader.swift */; };
+		E7392951271B65CC0097745F /* TimelineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7392950271B65CC0097745F /* TimelineHeader.swift */; };
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E74C8A4326B7045B009D6D90 /* AuthResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */; };
 		E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4426B704DA009D6D90 /* AppAuthError.swift */; };
@@ -203,6 +204,7 @@
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
 		E739294C271B20CF0097745F /* CalendarTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTopBar.swift; sourceTree = "<group>"; };
 		E739294E271B5BD30097745F /* CalendarDayHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayHeader.swift; sourceTree = "<group>"; };
+		E7392950271B65CC0097745F /* TimelineHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineHeader.swift; sourceTree = "<group>"; };
 		E7480392269390A600573DE2 /* Calendar+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Convenience.swift"; sourceTree = "<group>"; };
 		E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResultHandler.swift; sourceTree = "<group>"; };
 		E74C8A4426B704DA009D6D90 /* AppAuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAuthError.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				E75A0DD427023D0C00EBF8B5 /* CalendarUtils.swift */,
 				E739294C271B20CF0097745F /* CalendarTopBar.swift */,
 				E739294E271B5BD30097745F /* CalendarDayHeader.swift */,
+				E7392950271B65CC0097745F /* TimelineHeader.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -778,6 +781,7 @@
 				E7B8970C2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift in Sources */,
 				E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */,
 				E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */,
+				E7392951271B65CC0097745F /* TimelineHeader.swift in Sources */,
 				E758054426D2AAFF00E9DEAD /* SuggestionsPickCalendarSlider.swift in Sources */,
 				E7957943266F5F7B005B9F39 /* CalendarLayout.swift in Sources */,
 				E7F5AD0F266FB03700138E42 /* UIFont+Branded.swift in Sources */,
