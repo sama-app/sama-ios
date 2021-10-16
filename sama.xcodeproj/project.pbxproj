@@ -23,6 +23,7 @@
 		E732E959266256A9008A8B82 /* UIColors+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E958266256A9008A8B82 /* UIColors+Branded.swift */; };
 		E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */; };
 		E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */ = {isa = PBXBuildFile; fileRef = E761E12C26EF8BD6003FB1BF /* timezones-source.json */; };
+		E739294D271B20CF0097745F /* CalendarTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294C271B20CF0097745F /* CalendarTopBar.swift */; };
 		E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7480392269390A600573DE2 /* Calendar+Convenience.swift */; };
 		E74C8A4326B7045B009D6D90 /* AuthResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */; };
 		E74C8A4526B704DA009D6D90 /* AppAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74C8A4426B704DA009D6D90 /* AppAuthError.swift */; };
@@ -199,6 +200,7 @@
 		E72D774B26DD3AF100F751E9 /* SuggestionsEditPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsEditPanel.swift; sourceTree = "<group>"; };
 		E732E958266256A9008A8B82 /* UIColors+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Branded.swift"; sourceTree = "<group>"; };
 		E732E95D266280EA008A8B82 /* UIView+NSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+NSLayoutConstraint.swift"; sourceTree = "<group>"; };
+		E739294C271B20CF0097745F /* CalendarTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTopBar.swift; sourceTree = "<group>"; };
 		E7480392269390A600573DE2 /* Calendar+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Convenience.swift"; sourceTree = "<group>"; };
 		E74C8A4226B7045B009D6D90 /* AuthResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResultHandler.swift; sourceTree = "<group>"; };
 		E74C8A4426B704DA009D6D90 /* AppAuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAuthError.swift; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				E7B8970B2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift */,
 				E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */,
 				E75A0DD427023D0C00EBF8B5 /* CalendarUtils.swift */,
+				E739294C271B20CF0097745F /* CalendarTopBar.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -758,6 +761,7 @@
 				E74C8A4326B7045B009D6D90 /* AuthResultHandler.swift in Sources */,
 				E79B09D62677A05300ADD43D /* EventDatesPanel.swift in Sources */,
 				E7F2810226C4620E0051BB5B /* SuggestionsViewCoordinator.swift in Sources */,
+				E739294D271B20CF0097745F /* CalendarTopBar.swift in Sources */,
 				E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */,
 				E7D3C0CD26413952009CAB88 /* AuthDirections.swift in Sources */,
 				E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */,

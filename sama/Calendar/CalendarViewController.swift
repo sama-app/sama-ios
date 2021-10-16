@@ -23,7 +23,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     var session: CalendarSession!
 
-    private var topBar: UIView!
+    private var topBar: CalendarTopBar!
     private var calendar: UICollectionView!
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
@@ -63,21 +63,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
-    private lazy var monthTitle: UILabel = {
-        let title = UILabel(frame: .zero)
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.textColor = .neutral1
-        title.font = .brandedFont(ofSize: 24, weight: .regular)
-        return title
-    }()
-    private lazy var viewSwitchBtn: UIButton = {
-        return UIButton.navigationBarButton(
-            image: UIImage(named: "calendar-view-five-day")!,
-            target: self,
-            action: #selector(onViewSwitch)
-        )
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -90,7 +75,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             columnsDisplay = ColumnsSetting(view: .five, count: 5, centerOffset: -2)
         }
 
-        self.setupViews()
+        setupTopBar()
+        setupViews()
+
         eventsCoordinator = EventsCoordinator(
             api: session.api,
             currentDayIndex: session.currentDayIndex,
@@ -115,7 +102,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
             self.view.endEditing(true)
             self.navCenter.popToRoot()
-            self.setupCalendarScreenTopBar()
+            self.topBar.setupCalendarScreenTopBar()
 
             self.invalidateDataAndReloadDisplayedBlocks(timeout: 1.5)
         }
@@ -191,7 +178,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             picker.coordinator = self.suggestionsViewCoordinator
             self.navCenter.pushUnstyledBlock(picker, animated: true)
 
-            self.setupMeetingInviteTopBar()
+            self.topBar.setupMeetingInviteTopBar()
         }
     }
 
@@ -271,10 +258,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
-    @objc private func onMeetingInviteClose() {
-        suggestionsViewCoordinator.reset()
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Sama.bi.track(event: "home")
@@ -298,6 +281,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         isFirstLoad = false
     }
 
+    private func setupTopBar() {
+        topBar = CalendarTopBar(frame: .zero)
+        view.addSubview(topBar)
+        topBar.pinLeadingAndTrailing(top: 0, and: [topBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44)])
+
+        topBar.calendarViewImage = calendarViewImage
+        topBar.setupCalendarScreenTopBar()
+
+        topBar.handleProfileIntent = { [weak self] in self?.present(ProfileViewController(), animated: true, completion: nil) }
+        topBar.handleMeetingInviteClose = { [weak self] in self?.suggestionsViewCoordinator.reset() }
+        topBar.handleCalendarViewSwitch = { [weak self] in self?.switchCalendarView() }
+    }
+
     private func setupViews() {
         cellSize = calculatedCellSize
 
@@ -305,8 +301,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let contentHeight = cellSize.height * 24 + contentVPadding * 2
         let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
         vOffset = contentVPadding
-
-        setupTopBar()
 
         timelineScrollView = UIScrollView(frame: .zero)
         timelineScrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -364,85 +358,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         navCenter.layoutIfNeeded()
     }
 
-    private var navBarItems: [UIView] = []
-
-    func setupTopBar() {
-        topBar = UIView(frame: .zero)
-        topBar.translatesAutoresizingMaskIntoConstraints = false
-        topBar.backgroundColor = .base
-        view.addSubview(topBar)
-        topBar.pinLeadingAndTrailing(top: 0, and: [topBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44)])
-
-        setupCalendarScreenTopBar()
-    }
-
-    private func setupCalendarScreenTopBar() {
-        navBarItems.forEach { $0.removeFromSuperview() }
-
-        let iconView = UIImageView(image: UIImage(named: "main-illustration")!)
-        iconView.translatesAutoresizingMaskIntoConstraints = false
-        topBar.addSubview(iconView)
-        NSLayoutConstraint.activate([
-            iconView.widthAnchor.constraint(equalToConstant: 40),
-            iconView.heightAnchor.constraint(equalToConstant: 40),
-            iconView.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
-            iconView.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 8)
-        ])
-
-        topBar.addSubview(monthTitle)
-        NSLayoutConstraint.activate([
-            monthTitle.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
-            monthTitle.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 8)
-        ])
-
-        let profileBtn = UIButton.navigationBarButton(
-            image: UIImage(named: "profile")!,
-            target: self,
-            action: #selector(onProfileButton)
-        )
-        topBar.addSubview(profileBtn)
-        viewSwitchBtn.setImage(calendarViewImage, for: .normal)
-        topBar.addSubview(viewSwitchBtn)
-        NSLayoutConstraint.activate([
-            viewSwitchBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
-            profileBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
-            topBar.trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6),
-            profileBtn.leadingAnchor.constraint(equalTo: viewSwitchBtn.trailingAnchor)
-        ])
-
-        navBarItems = [iconView, monthTitle, profileBtn]
-    }
-
-    private func setupMeetingInviteTopBar() {
-        navBarItems.forEach { $0.removeFromSuperview() }
-
-        let title = UILabel(frame: .zero)
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.textColor = .neutral1
-        title.font = .brandedFont(ofSize: 20, weight: .regular)
-        title.text = "Meeting Invite"
-        topBar.addSubview(title)
-        NSLayoutConstraint.activate([
-            title.centerXAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerXAnchor),
-            title.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor)
-        ])
-
-        let closeBtn = UIButton(type: .system)
-        closeBtn.translatesAutoresizingMaskIntoConstraints = false
-        closeBtn.tintColor = .primary
-        closeBtn.setTitle("Close", for: .normal)
-        closeBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
-        closeBtn.addTarget(self, action: #selector(onMeetingInviteClose), for: .touchUpInside)
-        topBar.addSubview(closeBtn)
-        NSLayoutConstraint.activate([
-            closeBtn.heightAnchor.constraint(equalToConstant: 44),
-            closeBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
-            closeBtn.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 16)
-        ])
-
-        navBarItems = [title, closeBtn]
-    }
-
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let i = round(scrollView.contentOffset.x / cellSize.width)
         let dir = targetContentOffset.pointee.x - scrollView.contentOffset.x
@@ -494,10 +409,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         if let indexPath = leftMostColumn {
             let daysOffset = -session.currentDayIndex + indexPath.item
             let date = Calendar.current.date(byAdding: .day, value: daysOffset, to: session.refDate)!
-
-            let monthNumber = Calendar.current.component(.month, from: date)
-            let monthIndex = monthNumber - 1
-            monthTitle.text = Calendar.current.monthSymbols[monthIndex]
+            topBar.changeDisplayedDate(date)
         }
     }
 
@@ -553,7 +465,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return cell
     }
 
-    @objc private func onViewSwitch() {
+    private func switchCalendarView() {
         if columnsDisplay.view == .single {
             if Ui.isWideScreen() {
                 columnsDisplay = ColumnsSetting(view: .seven, count: 7, centerOffset: -3)
@@ -564,7 +476,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             columnsDisplay = ColumnsSetting(view: .single, count: 1, centerOffset: 0)
         }
 
-        viewSwitchBtn.setImage(calendarViewImage, for: .normal)
+        topBar.calendarViewImage = calendarViewImage
 
         cellSize = calculatedCellSize
 
@@ -580,10 +492,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             x: cellSize.width * CGFloat(session.firstFocusDayIndex(centerOffset: columnsDisplay.centerOffset)),
             y: y
         )
-    }
-
-    @objc private func onProfileButton() {
-        present(ProfileViewController(), animated: true, completion: nil)
     }
 }
 
