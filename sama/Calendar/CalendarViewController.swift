@@ -491,10 +491,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         let y = calendar.contentOffset.y
         calendar.setCollectionViewLayout(makeCalendarLayout(), animated: false)
+        calendar.reloadData()
         calendar.contentOffset = CGPoint(
             x: cellSize.width * CGFloat(session.firstFocusDayIndex(centerOffset: columnsDisplay.centerOffset)),
             y: y
         )
+        DispatchQueue.main.async {
+            self.scrollViewDidScroll(self.calendar)
+        }
     }
 }
 

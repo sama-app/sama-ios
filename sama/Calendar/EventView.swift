@@ -92,6 +92,9 @@ class EventView: UIView {
         background.masksToBounds = true
         layer.insertSublayer(background, at: 1)
 
+        CATransaction.begin()
+        CATransaction.setValue(true, forKey: kCATransactionDisableActions)
+
         handle.backgroundColor = UIColor.primary.cgColor
         handle.bounds = CGRect(x: 0, y: 0, width: 36, height: 8)
         handle.cornerRadius = 4
@@ -105,5 +108,7 @@ class EventView: UIView {
         handleMiddle.position = CGPoint(x: handleView.bounds.midX, y: handleView.bounds.midY)
         handleMiddle.masksToBounds = true
         handleMiddle.isHidden = isLocked
+
+        CATransaction.commit()
     }
 }
