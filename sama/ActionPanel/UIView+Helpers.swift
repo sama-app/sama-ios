@@ -110,3 +110,18 @@ extension UILabel {
         lineBreakMode = .byWordWrapping
     }
 }
+
+extension UIButton {
+    class func navigationBarButton(image: UIImage, target: Any, action: Selector) -> UIButton {
+        let btn = UIButton(type: .system)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .secondary
+        btn.setImage(image, for: .normal)
+        btn.addTarget(target, action: action, for: .touchUpInside)
+        NSLayoutConstraint.activate([
+            btn.widthAnchor.constraint(equalToConstant: 44),
+            btn.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        return btn
+    }
+}

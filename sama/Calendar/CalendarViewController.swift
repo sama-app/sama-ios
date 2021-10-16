@@ -9,7 +9,14 @@ import UIKit
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    enum ColumnsView {
+        case single
+        case five
+        case seven
+    }
+
     struct ColumnsSetting {
+        let view: ColumnsView
         let count: Int
         let centerOffset: Int
     }
@@ -46,6 +53,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         title.font = .brandedFont(ofSize: 24, weight: .regular)
         return title
     }()
+    private lazy var viewSwitchBtn: UIButton = {
+        return UIButton.navigationBarButton(
+            image: UIImage(named: "calendar-view-five-day")!,
+            target: self,
+            action: #selector(onViewSwitch)
+        )
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,9 +68,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         overrideUserInterfaceStyle = .light
 
         if Ui.isWideScreen() {
-            columnsDisplay = ColumnsSetting(count: 7, centerOffset: -3)
+            columnsDisplay = ColumnsSetting(view: .seven, count: 7, centerOffset: -3)
         } else {
-            columnsDisplay = ColumnsSetting(count: 5, centerOffset: -2)
+            columnsDisplay = ColumnsSetting(view: .five, count: 5, centerOffset: -2)
         }
 
         self.setupViews()
@@ -368,17 +382,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             monthTitle.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 8)
         ])
 
-        let profileBtn = UIButton(type: .system)
-        profileBtn.translatesAutoresizingMaskIntoConstraints = false
-        profileBtn.tintColor = .secondary
-        profileBtn.setImage(UIImage(named: "profile")!, for: .normal)
-        profileBtn.addTarget(self, action: #selector(onProfileButton), for: .touchUpInside)
+        let profileBtn = UIButton.navigationBarButton(
+            image: UIImage(named: "profile")!,
+            target: self,
+            action: #selector(onProfileButton)
+        )
         topBar.addSubview(profileBtn)
+        viewSwitchBtn.setImage(UIImage(named: "calendar-view-five-day"), for: .normal)
+        topBar.addSubview(viewSwitchBtn)
         NSLayoutConstraint.activate([
-            profileBtn.widthAnchor.constraint(equalToConstant: 44),
-            profileBtn.heightAnchor.constraint(equalToConstant: 44),
+            viewSwitchBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
             profileBtn.centerYAnchor.constraint(equalTo: topBar.safeAreaLayoutGuide.centerYAnchor),
-            topBar.trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6)
+            topBar.trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6),
+            profileBtn.leadingAnchor.constraint(equalTo: viewSwitchBtn.trailingAnchor)
         ])
 
         navBarItems = [iconView, monthTitle, profileBtn]
@@ -519,6 +535,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             session.loadIfAvailableBlock(at: Int(round(Double(daysOffset) / Double(session.blockSize))))
         }
         return cell
+    }
+
+    @objc private func onViewSwitch() {
     }
 
     @objc private func onProfileButton() {
