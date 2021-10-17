@@ -21,8 +21,8 @@ final class TimelineHeader: UIView {
         let sepBtm = UIView(frame: CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1))
         sepBtm.backgroundColor = .calendarGrid
         sepBtm.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-        let sepRhtHeight = Sama.env.ui.calendarHeaderRightSeparatorHeight
-        let sepRht = UIView(frame: CGRect(x: frame.width - 1, y: frame.height - sepRhtHeight, width: 1, height: sepRhtHeight))
+        let sepRhtTopInset = Sama.env.ui.calendarHeaderRightSeparatorTopInset
+        let sepRht = UIView(frame: CGRect(x: frame.width - 1, y: sepRhtTopInset, width: 1, height: frame.height - sepRhtTopInset))
         sepRht.backgroundColor = .calendarGrid
         sepRht.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
         addSubview(sepBtm)

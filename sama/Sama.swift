@@ -12,7 +12,7 @@ struct Environment {
     struct UI {
         let calenarHeaderHeight: CGFloat = 48
         let calenarNoHeaderHeight: CGFloat = 12
-        let calendarHeaderRightSeparatorHeight: CGFloat = 40
+        let calendarHeaderRightSeparatorTopInset: CGFloat = 8
     }
 
     let productId = "meetsama"

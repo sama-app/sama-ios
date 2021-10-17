@@ -322,7 +322,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         timelineScrollView.contentSize = timelineSize
         timelineScrollView.addSubview(timeline)
 
-        self.drawCalendar(topBar: topBar, cellSize: cellSize, vOffset: contentVPadding)
+        self.drawCalendar(topBar: topBar, cellSize: cellSize)
 
         slotPickerContainer = ChildrenInteractiveView()
         slotPickerContainer.layer.masksToBounds = true
@@ -424,7 +424,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return CalendarLayout(size: CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset))
     }
 
-    private func drawCalendar(topBar: UIView, cellSize: CGSize, vOffset: CGFloat) {
+    private func drawCalendar(topBar: UIView, cellSize: CGSize) {
         calendar = UICollectionView(frame: .zero, collectionViewLayout: makeCalendarLayout())
         calendar.isDirectionalLockEnabled = true
         calendar.dataSource = self
