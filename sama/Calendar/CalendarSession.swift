@@ -94,6 +94,15 @@ final class CalendarSession: CalendarContextProvider {
         }
     }
 
+    func focusDay(isSingleDay: Bool, visibleColumnIndices: [Int]) -> Int {
+        let todayIndex = 5000
+        if isSingleDay {
+            return visibleColumnIndices.contains(todayIndex) ? todayIndex : (visibleColumnIndices.first ?? todayIndex)
+        } else {
+            return visibleColumnIndices.first ?? todayIndex
+        }
+    }
+
     func loadInitial() {
         loadCalendar(blockIndices: (-1 ... 1))
     }

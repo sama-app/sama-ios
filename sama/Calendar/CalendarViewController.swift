@@ -48,6 +48,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private let timelineWidth: CGFloat = 56
 
+    private var defaultColumnsDisplay: ColumnsSetting {
+        if Ui.isWideScreen() {
+            return ColumnsSetting(view: .seven, count: 7, centerOffset: -3)
+        } else {
+            return ColumnsSetting(view: .five, count: 5, centerOffset: -2)
+        }
+    }
     private var calculatedCellSize: CGSize {
         CGSize(
             width: (view.frame.width - timelineWidth) / CGFloat(columnsDisplay.count),
@@ -80,11 +87,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
-        if Ui.isWideScreen() {
-            columnsDisplay = ColumnsSetting(view: .seven, count: 7, centerOffset: -3)
-        } else {
-            columnsDisplay = ColumnsSetting(view: .five, count: 5, centerOffset: -2)
-        }
+        columnsDisplay = defaultColumnsDisplay
 
         setupTopBar()
         setupViews()
@@ -482,11 +485,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private func switchCalendarView() {
         if columnsDisplay.view == .single {
-            if Ui.isWideScreen() {
-                columnsDisplay = ColumnsSetting(view: .seven, count: 7, centerOffset: -3)
-            } else {
-                columnsDisplay = ColumnsSetting(view: .five, count: 5, centerOffset: -2)
-            }
+            columnsDisplay = defaultColumnsDisplay
         } else {
             columnsDisplay = ColumnsSetting(view: .single, count: 1, centerOffset: 0)
         }
@@ -510,8 +509,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         timeline.showInfoInHeader(columnsDisplay.view != .single, headerHeight: calculatedTopInset)
 
         let y = calendar.contentOffset.y
-        let xIdx = getVisibleColumnIndices().contains(5000) ? 5000 : getVisibleColumnIndices().first!
-
+        let xIdx = session.focusDay(isSingleDay: columnsDisplay.view == .single, visibleColumnIndices: getVisibleColumnIndices())
         calendar.setCollectionViewLayout(makeCalendarLayout(), animated: false)
         calendar.reloadData()
         calendar.contentOffset = CGPoint(
