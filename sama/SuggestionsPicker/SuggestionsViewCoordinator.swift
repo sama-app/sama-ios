@@ -69,6 +69,7 @@ class SuggestionsViewCoordinator {
     var onLock: ((Bool) -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
     var columnsCenterOffset = 0
+    var topInset: CGFloat = 0
     var cellSize: CGSize = .zero {
         didSet {
             repositionEventViews()
@@ -122,7 +123,7 @@ class SuggestionsViewCoordinator {
     }
 
     private var touchableCalendarMidY: CGFloat {
-        let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
+        let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - topInset
         return touchableCalendarHeight / 2
     }
 

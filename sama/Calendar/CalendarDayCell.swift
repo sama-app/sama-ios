@@ -19,7 +19,6 @@ let eventRightBottomInset = CGPoint(x: 3, y: 2)
 final class CalendarDayCell: UICollectionViewCell {
 
     var cellSize: CGSize = .zero
-    var vOffset: CGFloat = 0
 
     var blockedTimes: [CalendarBlockedTime] = []
     var date: Date! {
@@ -39,6 +38,7 @@ final class CalendarDayCell: UICollectionViewCell {
 
     private let headerView = CalendarDayHeader(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
 
+    private var topInset: CGFloat = 0
     private var isGreyedOut = false
 
     override init(frame: CGRect) {
@@ -62,7 +62,7 @@ final class CalendarDayCell: UICollectionViewCell {
         UIColor.calendarGrid.setFill()
         UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
         for i in (1 ... 24) {
-            UIRectFillUsingBlendMode(CGRect(x: 0, y: vOffset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
+            UIRectFillUsingBlendMode(CGRect(x: 0, y: topInset + CGFloat(i) * cellSize.height, width: frame.width, height: 1), .normal)
         }
 
         //text attributes
@@ -85,7 +85,7 @@ final class CalendarDayCell: UICollectionViewCell {
             let lengthHour = CGFloat(truncating: block.duration as NSNumber)
 
             let x: CGFloat = CGFloat(block.depth) * 8
-            let y = vOffset + CGFloat(truncating: block.start as NSNumber) * cellSize.height + 1
+            let y = topInset + CGFloat(truncating: block.start as NSNumber) * cellSize.height + 1
             UIColor.eventBackground.setFill()
             let boxWidth = cellSize.width - eventRightBottomInset.x - x
             let boxHeight = cellSize.height * CGFloat(lengthHour) - eventRightBottomInset.y
@@ -105,14 +105,10 @@ final class CalendarDayCell: UICollectionViewCell {
         }
     }
 
-    func showDateInHeader(_ isVisible: Bool) {
-        if isVisible {
-            headerView.frame.size.height = Sama.env.ui.calenarHeaderHeight
-            headerView.container.isHidden = false
-        } else {
-            headerView.frame.size.height = Sama.env.ui.calenarNoHeaderHeight
-            headerView.container.isHidden = true
-        }
+    func showDateInHeader(_ isVisible: Bool, headerHeight: CGFloat) {
+        topInset = headerHeight
+        headerView.frame.size.height = headerHeight
+        headerView.container.isHidden = !isVisible
     }
 
     private func setInfo() {

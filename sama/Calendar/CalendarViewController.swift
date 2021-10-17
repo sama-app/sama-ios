@@ -28,12 +28,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var timeline: TimelineView!
     private var timelineScrollView: UIScrollView!
     private var slotPickerContainer: UIView!
+    private var slotPickerTopConstraint: NSLayoutConstraint!
 
     private var navCenter = CalendarNavigationCenter()
     private var navCenterBottomConstraint: NSLayoutConstraint!
 
     private var cellSize: CGSize = .zero
-    private var vOffset: CGFloat = 0
     private var isFirstLoad: Bool = true
     private var isCalendarReady = false
 
@@ -53,6 +53,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             width: (view.frame.width - timelineWidth) / CGFloat(columnsDisplay.count),
             height: 65
         )
+    }
+    private var calculatedTopInset: CGFloat {
+        if columnsDisplay.view == .single {
+            return Sama.env.ui.calenarNoHeaderHeight
+        } else {
+            return Sama.env.ui.calenarHeaderHeight
+        }
+    }
+    private var calculatedTimelineSize: CGSize {
+        let contentHeight = cellSize.height * 24 + calculatedTopInset * 2
+        return CGSize(width: timelineWidth, height: contentHeight)
     }
     private var calendarViewImage: UIImage {
         switch columnsDisplay.view {
@@ -86,6 +97,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             container: slotPickerContainer
         )
         eventsCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        eventsCoordinator.topInset = calculatedTopInset
         eventsCoordinator.cellSize = cellSize
         eventsCoordinator.presentError = { [weak self] in self?.presentError($0) }
         suggestionsViewCoordinator = SuggestionsViewCoordinator(
@@ -96,6 +108,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             container: slotPickerContainer
         )
         suggestionsViewCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        suggestionsViewCoordinator.topInset = calculatedTopInset
         suggestionsViewCoordinator.cellSize = cellSize
         suggestionsViewCoordinator.onReset = { [weak self] in
             guard let self = self else { return }
@@ -269,7 +282,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             let startOfDay = Calendar.current.startOfDay(for: CalendarDateUtils.shared.dateNow)
             let absHours = CalendarDateUtils.shared.dateNow.timeIntervalSince(startOfDay) / 3600
             let hr = CGFloat(ceil(absHours))
-            let y = vOffset + cellSize.height * (hr + 1) - calendar.bounds.height / 2
+            let y = calculatedTopInset + cellSize.height * (hr + 1) - calendar.bounds.height / 2
             calendar.contentOffset = CGPoint(
                 x: cellSize.width * CGFloat(session.firstFocusDayIndex(centerOffset: columnsDisplay.centerOffset)),
                 y: y
@@ -299,11 +312,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     private func setupViews() {
         cellSize = calculatedCellSize
 
-        let contentVPadding = Sama.env.ui.calenarHeaderHeight
-        let contentHeight = cellSize.height * 24 + contentVPadding * 2
-        let timelineSize = CGSize(width: timelineWidth, height: contentHeight)
-        vOffset = contentVPadding
-
         timelineScrollView = UIScrollView(frame: .zero)
         timelineScrollView.translatesAutoresizingMaskIntoConstraints = false
         timelineScrollView.isUserInteractionEnabled = false
@@ -315,11 +323,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             view.bottomAnchor.constraint(equalTo: timelineScrollView.bottomAnchor)
         ])
 
-        timeline = TimelineView(frame: CGRect(origin: .zero, size: timelineSize))
+        timeline = TimelineView(frame: CGRect(origin: .zero, size: calculatedTimelineSize))
         timeline.cellSize = cellSize
-        timeline.vOffset = contentVPadding
-        timeline.showInfoInHeader(true)
-        timelineScrollView.contentSize = timelineSize
+        timeline.showInfoInHeader(true, headerHeight: calculatedTopInset)
+        timelineScrollView.contentSize = calculatedTimelineSize
         timelineScrollView.addSubview(timeline)
 
         self.drawCalendar(topBar: topBar, cellSize: cellSize)
@@ -329,9 +336,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         slotPickerContainer.backgroundColor = .clear
         slotPickerContainer.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(slotPickerContainer)
+        slotPickerTopConstraint = slotPickerContainer.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: calculatedTopInset)
         NSLayoutConstraint.activate([
             slotPickerContainer.leadingAnchor.constraint(equalTo: timelineScrollView.trailingAnchor),
-            slotPickerContainer.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: Sama.env.ui.calenarHeaderHeight),
+            slotPickerTopConstraint,
             view.trailingAnchor.constraint(equalTo: slotPickerContainer.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: slotPickerContainer.bottomAnchor)
         ])
@@ -421,7 +429,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func makeCalendarLayout() -> CalendarLayout {
-        return CalendarLayout(size: CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * vOffset))
+        return CalendarLayout(size: CGSize(width: cellSize.width, height: cellSize.height * 24 + 2 * calculatedTopInset))
     }
 
     private func drawCalendar(topBar: UIView, cellSize: CGSize) {
@@ -458,14 +466,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dayCell", for: indexPath) as! CalendarDayCell
         cell.cellSize = cellSize
-        cell.vOffset = vOffset
         cell.blockedTimes = session.blocksForDayIndex[indexPath.item] ?? []
         let daysOffset = -session.currentDayIndex + indexPath.item
         let date = Calendar.current.date(byAdding: .day, value: daysOffset, to: session.refDate)!
         cell.isCurrentDay = Calendar.current.isDate(date, inSameDayAs: CalendarDateUtils.shared.dateNow)
         cell.date = date
         cell.setNeedsDisplay()
-        cell.showDateInHeader(columnsDisplay.view != .single)
+        cell.showDateInHeader(columnsDisplay.view != .single, headerHeight: calculatedTopInset)
 
         if isCalendarReady {
             session.loadIfAvailableBlock(at: Int(round(Double(daysOffset) / Double(session.blockSize))))
@@ -488,14 +495,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         topBar.isSingleDayStyle = columnsDisplay.view == .single
 
         cellSize = calculatedCellSize
+        slotPickerTopConstraint.constant = calculatedTopInset
 
         eventsCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        eventsCoordinator.topInset = calculatedTopInset
         eventsCoordinator.cellSize = cellSize
 
         suggestionsViewCoordinator.columnsCenterOffset = columnsDisplay.centerOffset
+        suggestionsViewCoordinator.topInset = calculatedTopInset
         suggestionsViewCoordinator.cellSize = cellSize
 
-        timeline.showInfoInHeader(columnsDisplay.view != .single)
+        timeline.frame.size = calculatedTimelineSize
+        timelineScrollView.contentSize = calculatedTimelineSize
+        timeline.showInfoInHeader(columnsDisplay.view != .single, headerHeight: calculatedTopInset)
 
         let y = calendar.contentOffset.y
         let xIdx = getVisibleColumnIndices().contains(5000) ? 5000 : getVisibleColumnIndices().first!

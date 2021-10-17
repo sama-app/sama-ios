@@ -16,7 +16,6 @@ struct TimeZonesDiff {
 final class TimelineView: UIView {
 
     var cellSize: CGSize = .zero
-    var vOffset: CGFloat = 0
     var timezonesDiff: TimeZonesDiff? = nil {
         didSet {
             headerView.upperLabel.text = timezonesDiff?.targetTitle ?? ""
@@ -34,6 +33,8 @@ final class TimelineView: UIView {
     }
 
     private let headerView = TimelineHeader(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+
+    private var topInset: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,7 +54,7 @@ final class TimelineView: UIView {
         UIColor.calendarGrid.setFill()
         let sepWidth: CGFloat = 4
         for i in (1 ... 24) {
-            UIRectFillUsingBlendMode(CGRect(x: frame.width - sepWidth, y: vOffset + CGFloat(i) * cellSize.height, width: sepWidth, height: 1), .normal)
+            UIRectFillUsingBlendMode(CGRect(x: frame.width - sepWidth, y: topInset + CGFloat(i) * cellSize.height, width: sepWidth, height: 1), .normal)
         }
 
         //text attributes
@@ -75,7 +76,7 @@ final class TimelineView: UIView {
         let rightInset: CGFloat = sepWidth + 4
 
         for i in (0 ... 23) {
-            let cellRect = CGRect(x: 0, y: vOffset + (CGFloat(i) * cellSize.height), width: bounds.width - rightInset, height: cellSize.height)
+            let cellRect = CGRect(x: 0, y: topInset + (CGFloat(i) * cellSize.height), width: bounds.width - rightInset, height: cellSize.height)
             if let timezonesDiff = self.timezonesDiff {
                 (i + timezonesDiff.hours).toHour.hourToTime.draw(
                     inRect: cellRect,
@@ -103,14 +104,11 @@ final class TimelineView: UIView {
         UIRectFillUsingBlendMode(CGRect(x: frame.width - 1, y: 0, width: 1, height: frame.height), .normal)
     }
 
-    func showInfoInHeader(_ isVisible: Bool) {
-        if isVisible {
-            headerView.frame.size.height = Sama.env.ui.calenarHeaderHeight
-            headerView.container.isHidden = false
-        } else {
-            headerView.frame.size.height = Sama.env.ui.calenarNoHeaderHeight
-            headerView.container.isHidden = true
-        }
+    func showInfoInHeader(_ isVisible: Bool, headerHeight: CGFloat) {
+        topInset = headerHeight
+        headerView.frame.size.height = headerHeight
+        headerView.container.isHidden = !isVisible
+        setNeedsDisplay()
     }
 }
 
