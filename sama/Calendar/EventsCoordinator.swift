@@ -78,6 +78,13 @@ class EventsCoordinator {
     var onChanges: (() -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
     var api: Api
+    var columnsCenterOffset = 0
+    var topInset: CGFloat = 0
+    var cellSize: CGSize = .zero {
+        didSet {
+            repositionEventViews()
+        }
+    }
 
     private var constraints = EventConstraints(duration: 0.25, min: RescheduleTarget(daysOffset: 0, start: 0))
     private var intentCode = ""
@@ -94,7 +101,6 @@ class EventsCoordinator {
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
-    private let cellSize: CGSize
     private let calendar: UIScrollView
     private let container: UIView
 
@@ -128,15 +134,14 @@ class EventsCoordinator {
     }
 
     private var touchableCalendarMidY: CGFloat {
-        let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
+        let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - topInset
         return touchableCalendarHeight / 2
     }
 
-    init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
+    init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, calendar: UIScrollView, container: UIView) {
         self.api = api
         self.currentDayIndex = currentDayIndex
         self.context = context
-        self.cellSize = cellSize
         self.calendar = calendar
         self.container = container
     }
@@ -342,7 +347,7 @@ class EventsCoordinator {
         let timestamp = NSDecimalNumber(decimal: props.start).adding(NSDecimalNumber(decimal: props.duration).dividing(by: NSDecimalNumber(value: 2)))
         let y = CGFloat(truncating: timestamp) * cellSize.height - touchableCalendarMidY
         calendar.setContentOffset(CGPoint(
-            x: CGFloat(currentDayIndex + props.daysOffset + Sama.env.ui.columns.centerOffset) * cellSize.width,
+            x: CGFloat(currentDayIndex + props.daysOffset + columnsCenterOffset) * cellSize.width,
             y: y
         ), animated: true)
     }

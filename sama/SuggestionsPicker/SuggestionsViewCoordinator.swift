@@ -68,6 +68,13 @@ class SuggestionsViewCoordinator {
     var onChange: ((Int, ProposedAvailableSlot) -> Void)?
     var onLock: ((Bool) -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
+    var columnsCenterOffset = 0
+    var topInset: CGFloat = 0
+    var cellSize: CGSize = .zero {
+        didSet {
+            repositionEventViews()
+        }
+    }
 
     var onReset: (() -> Void)?
 
@@ -75,7 +82,6 @@ class SuggestionsViewCoordinator {
 
     private let context: CalendarContextProvider
     private let currentDayIndex: Int
-    private let cellSize: CGSize
     private let calendar: UIScrollView
     private let container: UIView
 
@@ -117,15 +123,14 @@ class SuggestionsViewCoordinator {
     }
 
     private var touchableCalendarMidY: CGFloat {
-        let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - Sama.env.ui.calenarHeaderHeight
+        let touchableCalendarHeight = calendar.bounds.height - calendar.contentInset.bottom - topInset
         return touchableCalendarHeight / 2
     }
 
-    init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, cellSize: CGSize, calendar: UIScrollView, container: UIView) {
+    init(api: Api, currentDayIndex: Int, context: CalendarContextProvider, calendar: UIScrollView, container: UIView) {
         self.api = api
         self.currentDayIndex = currentDayIndex
         self.context = context
-        self.cellSize = cellSize
         self.calendar = calendar
         self.container = container
     }
@@ -390,7 +395,7 @@ class SuggestionsViewCoordinator {
         let timestamp = NSDecimalNumber(decimal: props.start).adding(NSDecimalNumber(decimal: props.duration).dividing(by: NSDecimalNumber(value: 2)))
         let y = CGFloat(truncating: timestamp) * cellSize.height - touchableCalendarMidY
         calendar.setContentOffset(CGPoint(
-            x: CGFloat(currentDayIndex + props.daysOffset + Sama.env.ui.columns.centerOffset) * cellSize.width,
+            x: CGFloat(currentDayIndex + props.daysOffset + columnsCenterOffset) * cellSize.width,
             y: y
         ), animated: true)
     }
