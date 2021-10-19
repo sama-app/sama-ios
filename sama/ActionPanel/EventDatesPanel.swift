@@ -71,7 +71,20 @@ class EventDatesPanel: CalendarNavigationBlock {
             wrapper.trailingAnchor.constraint(equalTo: content.trailingAnchor),
         ])
 
-        actionButton = addMainActionButton(title: "Copy Suggestions", action: #selector(onCopySuggestions), topAnchor: wrapper.bottomAnchor)
+        let editBtn = UIButton(type: .system)
+        editBtn.setTitle("Edit meeting title", for: .normal)
+        editBtn.translatesAutoresizingMaskIntoConstraints = false
+        editBtn.setTitleColor(.primary, for: .normal)
+        editBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+        editBtn.addTarget(self, action: #selector(onEditTitle), for: .touchUpInside)
+        addSubview(editBtn)
+        editBtn.pinLeadingAndTrailing()
+        NSLayoutConstraint.activate([
+            editBtn.topAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: 8),
+            editBtn.heightAnchor.constraint(equalToConstant: 48)
+        ])
+
+        actionButton = addMainActionButton(title: "Copy Suggestions", action: #selector(onCopySuggestions), topAnchor: editBtn.bottomAnchor)
         actionButton.isHidden = true
 
         loader.translatesAutoresizingMaskIntoConstraints = false
@@ -139,6 +152,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         self.coordinator.setup(
             withCode: result.meetingIntentCode,
             durationMins: options.duration.duration,
+            defaultTitle: result.defaultMeetingTitle,
             properties: props
         )
     }
@@ -183,6 +197,12 @@ class EventDatesPanel: CalendarNavigationBlock {
     @objc private func onBackButton() {
         coordinator.resetEventViews()
         navigation?.pop()
+    }
+
+    @objc private func onEditTitle() {
+        let panel = SuggestionsEditPanel()
+        panel.coordinator = coordinator
+        navigation?.pushBlock(panel, animated: true)
     }
 
     @objc private func onAddNewSuggestion() {

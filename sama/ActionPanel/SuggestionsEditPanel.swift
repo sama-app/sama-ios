@@ -71,19 +71,7 @@ class SuggestionsEditPanel: CalendarNavigationBlock {
         inputField.isEnabled = false
         actionBtn.isEnabled = false
 
-        let title = enteredName
-        coordinator.updateMeetingTitle(with: title) { [weak self] in
-            self?.backBtn.isEnabled = true
-            self?.inputField.isEnabled = true
-            self?.actionBtn.isEnabled = true
-
-            switch $0 {
-            case .success:
-                self?.navigation?.pop()
-                self?.navigation?.showToast(withMessage: "Meeting title changed to “\(title)”")
-            case .failure:
-                break
-            }
-        }
+        coordinator.meetingTitle = enteredName
+        navigation?.pop()
     }
 }

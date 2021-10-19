@@ -15,6 +15,7 @@ struct ProposedSlot: Encodable {
 struct MeetingProposalBody: Encodable {
     let meetingIntentCode: String
     let proposedSlots: [ProposedSlot]
+    let title: String
 }
 
 struct MeetingProposalResult: Decodable {
@@ -61,6 +62,7 @@ struct MeetingSuggestedSlot: Decodable {
 struct MeetingInitiationResult: Decodable {
     let meetingIntentCode: String
     let durationMinutes: Int
+    let defaultMeetingTitle: String
     let suggestedSlots: [MeetingSuggestedSlot]
 }
 
@@ -86,6 +88,8 @@ class EventsCoordinator {
         }
     }
 
+    var meetingTitle = ""
+
     private var constraints = EventConstraints(duration: 0.25, min: RescheduleTarget(daysOffset: 0, start: 0))
     private var intentCode = ""
     private var meetingCode = ""
@@ -95,7 +99,6 @@ class EventsCoordinator {
             onChanges?()
         }
     }
-    private(set) var meetingTitle = ""
 
     private var eventViews: [EventView] = []
 
@@ -175,9 +178,10 @@ class EventsCoordinator {
         }
     }
 
-    func setup(withCode code: String, durationMins: Int, properties props: [EventProperties]) {
+    func setup(withCode code: String, durationMins: Int, defaultTitle: String, properties props: [EventProperties]) {
         intentCode = code
         meetingCode = ""
+        meetingTitle = defaultTitle
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
 
@@ -249,7 +253,8 @@ class EventsCoordinator {
         let req = MeetingProposalRequest(
             body: MeetingProposalBody(
                 meetingIntentCode: intentCode,
-                proposedSlots: slots
+                proposedSlots: slots,
+                title: meetingTitle
             )
         )
 
@@ -258,19 +263,6 @@ class EventsCoordinator {
             case let .success(result):
                 self.meetingTitle = result.meeting.title
                 self.meetingCode = result.meetingCode
-            case let .failure(err):
-                self.presentError(err)
-            }
-            completion($0)
-        }
-    }
-
-    func updateMeetingTitle(with title: String, completion: @escaping (Result<EmptyBody, ApiError>) -> Void) {
-        let req = MeetingTitleUpdateRequest(code: meetingCode, body: MeetingTitleUpdateBody(title: title))
-        api.request(for: req) {
-            switch $0 {
-            case .success:
-                self.meetingTitle = title
             case let .failure(err):
                 self.presentError(err)
             }
