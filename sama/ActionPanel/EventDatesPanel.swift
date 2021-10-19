@@ -35,13 +35,19 @@ class EventDatesPanel: CalendarNavigationBlock {
     private let refDate = CalendarDateUtils.shared.uiRefDate
     private let calendar = Calendar.current
 
+    private var backBtn: UIButton!
     private var actionButton: MainActionButton!
+    private var secondaryBtn: UIButton!
     private let titleLabel = UILabel()
     private let loader = UIActivityIndicatorView()
     private let content = UIStackView()
+    private var wrapperHeightConstraint: NSLayoutConstraint!
+
+    private var isProposed = false
+    private var cachedShareableMessage = ""
 
     override func didLoad() {
-        let backBtn = addBackButton(action: #selector(onBackButton))
+        backBtn = addBackButton(action: #selector(onBackButton))
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textColor = .neutral1
@@ -61,17 +67,32 @@ class EventDatesPanel: CalendarNavigationBlock {
         content.axis = .vertical
         wrapper.addSubview(content)
 
+        wrapperHeightConstraint = wrapper.heightAnchor.constraint(equalToConstant: 180)
         NSLayoutConstraint.activate([
             wrapper.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -8),
             wrapper.topAnchor.constraint(equalTo: backBtn.bottomAnchor),
             trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
-            wrapper.heightAnchor.constraint(equalToConstant: 180),
+            wrapperHeightConstraint,
             content.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
             content.topAnchor.constraint(equalTo: wrapper.topAnchor),
             wrapper.trailingAnchor.constraint(equalTo: content.trailingAnchor),
         ])
 
-        actionButton = addMainActionButton(title: "Copy Suggestions", action: #selector(onCopySuggestions), topAnchor: wrapper.bottomAnchor)
+        secondaryBtn = UIButton(type: .system)
+        secondaryBtn.setTitle("Edit meeting title", for: .normal)
+        secondaryBtn.translatesAutoresizingMaskIntoConstraints = false
+        secondaryBtn.setTitleColor(.primary, for: .normal)
+        secondaryBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
+        secondaryBtn.addTarget(self, action: #selector(onSecondaryActionButton), for: .touchUpInside)
+        addSubview(secondaryBtn)
+        secondaryBtn.pinLeadingAndTrailing()
+        NSLayoutConstraint.activate([
+            secondaryBtn.topAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: 8),
+            secondaryBtn.heightAnchor.constraint(equalToConstant: 48)
+        ])
+        secondaryBtn.isHidden = true
+
+        actionButton = addMainActionButton(title: "Copy Suggestions", action: #selector(onMainActionButton), topAnchor: secondaryBtn.bottomAnchor)
         actionButton.isHidden = true
 
         loader.translatesAutoresizingMaskIntoConstraints = false
@@ -132,6 +153,7 @@ class EventDatesPanel: CalendarNavigationBlock {
             }
         })
 
+        self.secondaryBtn.isHidden = false
         self.actionButton.isHidden = false
         self.titleLabel.text = "Here are your best slots:"
         self.loader.stopAnimating()
@@ -139,6 +161,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         self.coordinator.setup(
             withCode: result.meetingIntentCode,
             durationMins: options.duration.duration,
+            defaultTitle: result.defaultMeetingTitle,
             properties: props
         )
     }
@@ -148,8 +171,8 @@ class EventDatesPanel: CalendarNavigationBlock {
         for subview in content.subviews {
             subview.removeFromSuperview()
         }
-        let isRemovable = events.count > 1
-        let isButtonVisible = events.count < 3
+        let isRemovable = events.count > 1 && !isProposed
+        let isButtonVisible = events.count < 3 && !isProposed
         for (index, props) in events.enumerated() {
             let itemView = EventListItemView(props: props, isRemovable: isRemovable)
             itemView.handleRemove = { [weak self] in
@@ -185,13 +208,36 @@ class EventDatesPanel: CalendarNavigationBlock {
         navigation?.pop()
     }
 
+    private func editTitle() {
+        let panel = SuggestionsEditPanel()
+        panel.coordinator = coordinator
+        navigation?.pushBlock(panel, animated: true)
+    }
+
+    @objc private func onSecondaryActionButton() {
+        if isProposed {
+            coordinator.presentProposal(cachedShareableMessage)
+        } else {
+            editTitle()
+        }
+    }
+
     @objc private func onAddNewSuggestion() {
         Sama.bi.track(event: "addslot")
 
         coordinator.addClosestToCenter()
     }
 
-    @objc private func onCopySuggestions() {
+    @objc private func onMainActionButton() {
+        if isProposed {
+            coordinator.resetEventViews()
+            navigation?.popToRoot()
+        } else {
+            copySuggestions()
+        }
+    }
+
+    private func copySuggestions() {
         Sama.bi.track(event: "copy")
 
         actionButton.isEnabled = false
@@ -201,13 +247,12 @@ class EventDatesPanel: CalendarNavigationBlock {
 
             switch $0 {
             case let .success(result):
-                UIPasteboard.general.string = result.shareableMessage
+                self.cachedShareableMessage = result.shareableMessage
+
+                self.confirmProposal()
 
                 self.coordinator.lockPick(true)
-
-                let panel = InvitationCopiedPanel()
-                panel.coordinator = self.coordinator
-                self.navigation?.pushBlock(panel, animated: true)
+                self.coordinator.presentProposal(self.cachedShareableMessage)
             case .failure:
                 break
             }
@@ -218,5 +263,28 @@ class EventDatesPanel: CalendarNavigationBlock {
                 Crashlytics.crashlytics().record(error: err)
             }
         }
+    }
+
+    private func confirmProposal() {
+        self.isProposed = true
+
+        self.backBtn.isHidden = true
+        self.titleLabel.isHidden = true
+
+        let confirmationLabel = UILabel()
+        confirmationLabel.translatesAutoresizingMaskIntoConstraints = false
+        confirmationLabel.textColor = .neutral1
+        confirmationLabel.font = .brandedFont(ofSize: 20, weight: .semibold)
+        confirmationLabel.text = "Meeting created."
+        self.addSubview(confirmationLabel)
+        NSLayoutConstraint.activate([
+            confirmationLabel.centerYAnchor.constraint(equalTo: self.titleLabel.centerYAnchor),
+            confirmationLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        ])
+
+        self.wrapperHeightConstraint.constant = CGFloat(self.coordinator.eventProperties.count * 60)
+        self.secondaryBtn.setTitle("Share again", for: .normal)
+        self.actionButton.setTitle("Done", for: .normal)
+        self.reloadEventsList()
     }
 }
