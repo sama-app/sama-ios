@@ -79,6 +79,7 @@ class EventsCoordinator {
 
     var onChanges: (() -> Void)?
     var presentError: (ApiError) -> Void = { _ in }
+    var presentProposal: (String) -> Void = { _ in }
     var api: Api
     var columnsCenterOffset = 0
     var topInset: CGFloat = 0
