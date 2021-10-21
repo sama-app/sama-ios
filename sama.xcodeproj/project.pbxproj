@@ -41,6 +41,9 @@
 		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
 		E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */; };
 		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
+		E77CB9A42721487B00BC0405 /* TimelineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7392950271B65CC0097745F /* TimelineHeader.swift */; };
+		E77CB9A52721488000BC0405 /* CalendarTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294C271B20CF0097745F /* CalendarTopBar.swift */; };
+		E77CB9A62721488500BC0405 /* CalendarDayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294E271B5BD30097745F /* CalendarDayHeader.swift */; };
 		E787D1DC26DFBD3F00AE0652 /* TimezonePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E787D1DB26DFBD3F00AE0652 /* TimezonePickerViewController.swift */; };
 		E790EEC626D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E790EEC526D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift */; };
 		E794D32F26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */; };
@@ -826,7 +829,10 @@
 				E7D481D726E6A8E6008B7CEE /* CalendarSession.swift in Sources */,
 				E7D481D826E6A8E6008B7CEE /* CalendarLayout.swift in Sources */,
 				E7D481D926E6A8E6008B7CEE /* CalendarViewController.swift in Sources */,
+				E77CB9A52721488000BC0405 /* CalendarTopBar.swift in Sources */,
 				E7D481DA26E6A8E6008B7CEE /* CalendarDayCell.swift in Sources */,
+				E77CB9A42721487B00BC0405 /* TimelineHeader.swift in Sources */,
+				E77CB9A62721488500BC0405 /* CalendarDayHeader.swift in Sources */,
 				E7D481DB26E6A8E6008B7CEE /* CalendarNavigationCenter.swift in Sources */,
 				E7D481DC26E6A8E6008B7CEE /* EventView.swift in Sources */,
 				E7D481DD26E6A8E6008B7CEE /* ScrollLock.swift in Sources */,
