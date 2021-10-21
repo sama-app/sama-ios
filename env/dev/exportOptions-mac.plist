@@ -7,14 +7,14 @@
 	<key>method</key>
 	<string>developer-id</string>
 	<key>signingCertificate</key>
-	<string>98B3C8B88523E531AB7C617D18DDFBBC794D36B1</string>
+	<string>E77FB8228142723F895CC070CB48A1C00474C937</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>teamID</key>
-	<string>6QTT2B2N75</string>
+	<string>F299X48S2K</string>
     <key>provisioningProfiles</key>
     <dict>
-        <key>com.meetsama.app.dev</key>
+        <key>com.meetsama.sama.dev</key>
         <string>sama_dev_id_signed</string>
     </dict>
 </dict>
