@@ -103,9 +103,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         eventsCoordinator.topInset = calculatedTopInset
         eventsCoordinator.cellSize = cellSize
         eventsCoordinator.presentError = { [weak self] in self?.presentError($0) }
-        eventsCoordinator.presentProposal = { [weak self] message in
+        eventsCoordinator.presentProposal = { [weak self] sourceView, message, isAgain, presentationCompletion in
             let sheet = UIActivityViewController(activityItems: [message], applicationActivities: nil)
-            self?.present(sheet, animated: true)
+            sheet.completionWithItemsHandler = { type, isShared, _, _ in
+                if isShared {
+                    Sama.bi.track(event: "share-pick", parameters: ["destination": type?.rawValue ?? "N/A"])
+                }
+            }
+            sheet.popoverPresentationController?.sourceView = sourceView
+            self?.present(sheet, animated: true, completion: {
+                presentationCompletion()
+            })
         }
         suggestionsViewCoordinator = SuggestionsViewCoordinator(
             api: session.api,

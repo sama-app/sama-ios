@@ -92,7 +92,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         ])
         secondaryBtn.isHidden = true
 
-        actionButton = addMainActionButton(title: "Copy Suggestions", action: #selector(onMainActionButton), topAnchor: secondaryBtn.bottomAnchor)
+        actionButton = addMainActionButton(title: "Share suggestions", action: #selector(onMainActionButton), topAnchor: secondaryBtn.bottomAnchor)
         actionButton.isHidden = true
 
         loader.translatesAutoresizingMaskIntoConstraints = false
@@ -216,7 +216,8 @@ class EventDatesPanel: CalendarNavigationBlock {
 
     @objc private func onSecondaryActionButton() {
         if isProposed {
-            coordinator.presentProposal(cachedShareableMessage)
+            Sama.bi.track(event: "share-again")
+            coordinator.presentProposal(secondaryBtn, cachedShareableMessage, true, {})
         } else {
             editTitle()
         }
@@ -238,23 +239,23 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     private func copySuggestions() {
-        Sama.bi.track(event: "copy")
+        Sama.bi.track(event: "share")
 
         actionButton.isEnabled = false
         coordinator.proposeSlots { [weak self] in
             guard let self = self else { return }
-            self.actionButton.isEnabled = true
 
             switch $0 {
             case let .success(result):
                 self.cachedShareableMessage = result.shareableMessage
 
-                self.confirmProposal()
-
                 self.coordinator.lockPick(true)
-                self.coordinator.presentProposal(self.cachedShareableMessage)
+                self.coordinator.presentProposal(self.actionButton, self.cachedShareableMessage, false, { [weak self] in
+                    self?.actionButton.isEnabled = true
+                    self?.confirmProposal()
+                })
             case .failure:
-                break
+                self.actionButton.isEnabled = true
             }
         }
 
