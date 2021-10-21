@@ -174,7 +174,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         let isRemovable = events.count > 1 && !isProposed
         let isButtonVisible = events.count < 3 && !isProposed
         for (index, props) in events.enumerated() {
-            let itemView = EventListItemView(props: props, isRemovable: isRemovable)
+            let itemView = EventListItemView(props: props, isRemovable: isRemovable, isFocusable: !isProposed)
             itemView.handleRemove = { [weak self] in
                 Sama.bi.track(event: "deleteslot")
 
@@ -276,7 +276,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         confirmationLabel.translatesAutoresizingMaskIntoConstraints = false
         confirmationLabel.textColor = .neutral1
         confirmationLabel.font = .brandedFont(ofSize: 20, weight: .semibold)
-        confirmationLabel.text = "Meeting created."
+        confirmationLabel.text = "You suggested these times"
         self.addSubview(confirmationLabel)
         NSLayoutConstraint.activate([
             confirmationLabel.centerYAnchor.constraint(equalTo: self.titleLabel.centerYAnchor),

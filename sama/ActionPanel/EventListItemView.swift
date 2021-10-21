@@ -13,7 +13,7 @@ class EventListItemView: UIView {
     var handleFocus: (() -> Void)?
     let calendar = Calendar.current
 
-    init(props: EventProperties, isRemovable: Bool) {
+    init(props: EventProperties, isRemovable: Bool, isFocusable: Bool) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -22,6 +22,7 @@ class EventListItemView: UIView {
         focusButton.translatesAutoresizingMaskIntoConstraints = false
         focusButton.tintColor = .primary
         focusButton.setImage(UIImage(named: "focus")!, for: .normal)
+        focusButton.isHidden = !isFocusable
         addSubview(focusButton)
 
         let removalButton = UIButton(type: .system)
@@ -37,7 +38,9 @@ class EventListItemView: UIView {
         textsStack.axis = .vertical
         addSubview(textsStack)
         NSLayoutConstraint.activate([
-            textsStack.leadingAnchor.constraint(equalTo: focusButton.trailingAnchor, constant: 4),
+            isFocusable ?
+                textsStack.leadingAnchor.constraint(equalTo: focusButton.trailingAnchor, constant: 4) :
+                textsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             textsStack.centerYAnchor.constraint(equalTo: centerYAnchor),
             focusButton.leadingAnchor.constraint(equalTo: leadingAnchor),
         ])
