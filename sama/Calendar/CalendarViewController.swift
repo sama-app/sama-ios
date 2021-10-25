@@ -319,7 +319,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         topBar.setupCalendarScreenTopBar()
 
-        topBar.handleProfileIntent = { [weak self] in self?.present(ProfileViewController(), animated: true, completion: nil) }
+        topBar.handleProfileIntent = { [weak self] in
+            guard let self = self else { return }
+            let api = self.session.api
+            self.present(ProfileViewController(api: api), animated: true, completion: nil)
+        }
         topBar.handleMeetingInviteClose = { [weak self] in self?.suggestionsViewCoordinator.reset() }
         topBar.handleCalendarViewSwitch = { [weak self] in self?.switchCalendarView() }
     }

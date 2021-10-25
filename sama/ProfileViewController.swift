@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-enum ProfileItem {
+enum AppSettingsItem {
     case feedback
     case support
     case privacy
@@ -28,16 +28,60 @@ enum ProfileItem {
     }
 }
 
+enum AccountItem {
+    case connection(Int)
+}
+
+enum ProfileItem {
+    case account(AccountItem)
+    case appSettings(AppSettingsItem)
+}
+
+struct ProfileSection {
+    let title: String?
+    let items: [ProfileItem]
+}
+
+struct LinkedAccount: Decodable {
+    let email: String
+}
+
+struct IntegrationsResult: Decodable {
+    let linkedAccounts: [LinkedAccount]
+}
+
+struct IntegrationsRequest: ApiRequest {
+    typealias T = EmptyBody
+    typealias U = IntegrationsResult
+    let uri = "/integration/google"
+    let logKey = "/integration/google"
+    let method: HttpMethod = .get
+}
+
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
-    private let sections: [[ProfileItem]] = [
-        [.feedback, .support],
-        [.privacy, .terms, .acknowledgements, .logout]
+    private var linkedAccounts: [LinkedAccount] = []
+    private var sections: [ProfileSection] = [
+        ProfileSection(title: "Settings", items: [.appSettings(.feedback), .appSettings(.support)]),
+        ProfileSection(title: nil, items: [.appSettings(.privacy), .appSettings(.terms), .appSettings(.acknowledgements)]),
+        ProfileSection(title: nil, items: [.appSettings(.logout)])
     ]
 
     private let tableView = UITableView()
+
+    private let api: Api
     private var emailCoordinator: EmailComposeCoordinator!
+
+    init(api: Api) {
+
+        self.api = api
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +93,23 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         setupTableView()
         setupNavigationBar()
+
+        api.request(for: IntegrationsRequest()) { [weak self] in
+            switch $0 {
+            case let .success(result):
+                self?.linkedAccounts = result.linkedAccounts
+                let section = ProfileSection(
+                    title: "Connected Accounts",
+                    items: result.linkedAccounts.enumerated().map { index, _ in
+                        .account(.connection(index))
+                    }
+                )
+                self?.sections.insert(section, at: 0)
+                self?.tableView.reloadData()
+            case .failure:
+                break
+            }
+        }
     }
 
     private func setupTableView() {
@@ -109,7 +170,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].count
+        return sections[section].items.count
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -121,14 +182,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = sections[indexPath.section][indexPath.row].text
-        cell.textLabel?.textColor = .primary
-        let fontSize: CGFloat = indexPath.section == 0 ? 28 : 24
-        cell.textLabel?.font = .brandedFont(ofSize: fontSize, weight: .semibold)
-        cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
-        cell.backgroundColor = .clear
-        return cell
+        switch sections[indexPath.section].items[indexPath.row] {
+        case let .appSettings(item):
+            return configureAppSettingsCell(tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath), item: item)
+        case let .account(item):
+            switch item {
+            case let .connection(index):
+                return configureAccountItemCell(tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath), index: index)
+            }
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -138,7 +200,34 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        let item = sections[indexPath.section][indexPath.row]
+        switch sections[indexPath.section].items[indexPath.row] {
+        case let .appSettings(item):
+            handleSelection(of: item)
+        case .account:
+            break
+        }
+    }
+
+    private func configureAppSettingsCell(_ cell: UITableViewCell, item: AppSettingsItem) -> UITableViewCell {
+        cell.textLabel?.text = item.text
+        cell.textLabel?.textColor = .secondary
+        cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .regular)
+        cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
+        cell.backgroundColor = .clear
+        return cell
+    }
+
+    private func configureAccountItemCell(_ cell: UITableViewCell, index: Int) -> UITableViewCell {
+        let account = linkedAccounts[index]
+        cell.textLabel?.text = account.email
+        cell.textLabel?.textColor = .secondary
+        cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .semibold)
+        cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
+        cell.backgroundColor = .clear
+        return cell
+    }
+
+    private func handleSelection(of item: AppSettingsItem) {
         switch item {
         case .feedback:
             Sama.bi.track(event: "feedback")
