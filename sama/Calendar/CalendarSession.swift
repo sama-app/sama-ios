@@ -44,10 +44,25 @@ struct DomainUser: Decodable {
     let userId: String
 }
 
+struct DomainUserSettings: Decodable {
+    struct Marketing: Decodable {
+        let newsletterSubscriptionEnabled: Bool?
+    }
+
+    let marketingPreferences: Marketing
+}
+
 struct UserDetailsRequest: ApiRequest {
     typealias U = DomainUser
     let uri = "/user/me/"
     let logKey = "/user/me/"
+    let method: HttpMethod = .get
+}
+
+struct UserSettingsRequest: ApiRequest {
+    typealias U = DomainUserSettings
+    let uri = "/user/me/settings"
+    let logKey = "/user/me/settings"
     let method: HttpMethod = .get
 }
 

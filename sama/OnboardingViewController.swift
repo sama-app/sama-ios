@@ -37,10 +37,11 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     private var currentBlock: UIView?
     private var currentBlockLeadingConstraint: NSLayoutConstraint?
     private var emailNotificationConsentBtns: [UIButton] = []
+    private var signInButtons: [UIButton] = []
 
     private let api = Sama.makeUnauthApi()
 
-    private var capturedToken: AuthToken?
+    private var calendarSession: CalendarSession?
 
     private var didClickConnectCal = false
     private var didClickNotUsingGCal = false
@@ -154,6 +155,8 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         notUsingGCalBtn.addTarget(self, action: #selector(onNotUsingGCalCase), for: .touchUpInside)
         notUsingGCalBtn.addAndPinActionButton(to: block)
 
+        signInButtons = [actionBtn, notUsingGCalBtn]
+
         NSLayoutConstraint.activate([
             actionBtn.constraintLeadingToParent(inset: 0),
             notUsingGCalBtn.topAnchor.constraint(equalTo: actionBtn.bottomAnchor, constant: 16)
@@ -197,27 +200,26 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
     }
 
     private func startCalendarSession(isEmailNotificationsEnabled: Bool) {
-        guard let token = capturedToken else { return }
-
-        let auth = AuthContainer.makeAndStore(with: token)
-        let session = makeCalendarSession(with: auth)
-
         let req = MarketingPreferencesUpdateRequest(
             body: MarketingPreferencesUpdateData(newsletterSubscriptionEnabled: isEmailNotificationsEnabled)
         )
 
         emailNotificationConsentBtns.forEach { $0.isEnabled = false }
-        session.api.request(for: req) {
+        calendarSession!.api.request(for: req) {
             switch $0 {
             case .success:
-                let viewController = CalendarViewController()
-                viewController.session = session
-                UIApplication.shared.rootWindow?.rootViewController = viewController
+                self.openCalendar()
             case let .failure(err):
                 self.emailNotificationConsentBtns.forEach { $0.isEnabled = true }
                 self.presentError(err)
             }
         }
+    }
+
+    private func openCalendar() {
+        let viewController = CalendarViewController()
+        viewController.session = calendarSession!
+        UIApplication.shared.rootWindow?.rootViewController = viewController
     }
 
     private func slideInBlock(_ block: UIView) {
@@ -275,24 +277,39 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             Sama.bi.track(event: "connectcal-after-notusinggcal")
         }
 
+        signInButtons.forEach { $0.isEnabled = false }
         api.request(for: GoogleAuthRequest()) {
             switch $0 {
             case let .success(directions):
-                self.authenticate(with: directions.authorizationUrl)
+                self.authenticate(with: directions.authorizationUrl) {
+                    self.signInButtons.forEach { $0.isEnabled = true }
+                }
             case let .failure(err):
                 self.presentError(err)
+                self.signInButtons.forEach { $0.isEnabled = true }
             }
         }
     }
 
-    private func authenticate(with url: String) {
+    private func routeViaEmailNotificationConsentIfNeeded() {
+        calendarSession!.api.request(for: UserSettingsRequest()) {
+            if case let .success(result) = $0, result.marketingPreferences.newsletterSubscriptionEnabled != true {
+                self.presentEmailNotificationConsent()
+            } else {
+                self.openCalendar()
+            }
+        }
+    }
+
+    private func authenticate(with url: String, onFailure: @escaping () -> Void) {
         let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
             do {
                 let token = try AuthResultHandler().handle(callbackUrl: callbackUrl, error: err)
 
                 DispatchQueue.main.async {
-                    self.capturedToken = token
-                    self.presentEmailNotificationConsent()
+                    let auth = AuthContainer.makeAndStore(with: token)
+                    self.calendarSession = makeCalendarSession(with: auth)
+                    self.routeViaEmailNotificationConsentIfNeeded()
                 }
             } catch let err {
                 Crashlytics.crashlytics().record(error: err)
@@ -301,6 +318,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
                 } else {
                     DispatchQueue.main.async {
                         self.presentError(err)
+                        onFailure()
                     }
                 }
             }
