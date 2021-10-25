@@ -12,6 +12,8 @@ struct CalendarBlocks: Decodable {
 }
 
 struct CalendarBlock: Decodable {
+    let accountId: String
+    let calendarId: String
     let title: String?
     let startDateTime: String
     let endDateTime: String

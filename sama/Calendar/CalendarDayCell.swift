@@ -8,10 +8,12 @@
 import UIKit
 
 struct CalendarBlockedTime: Equatable {
+    let id: AccountCalendarId
     let title: String
     let start: Decimal
     let duration: Decimal
     var depth: Int
+    var colour: Int?
 }
 
 let eventRightBottomInset = CGPoint(x: 3, y: 2)
@@ -69,12 +71,6 @@ final class CalendarDayCell: UICollectionViewCell {
         let font = UIFont.systemFont(ofSize: 12, weight: .regular)
         let text_style = NSMutableParagraphStyle()
         text_style.lineBreakMode = .byWordWrapping
-        let text_color = UIColor.secondary
-        let attributes: [NSAttributedString.Key : Any] = [
-            .font: font,
-            .paragraphStyle: text_style,
-            .foregroundColor: text_color
-        ]
 
         //vertically center (depending on font)
 //        let text_h=font.lineHeight
@@ -82,11 +78,20 @@ final class CalendarDayCell: UICollectionViewCell {
         let padding: CGFloat = 8
 
         for block in blockedTimes {
+            let baseColor = (block.colour?.fromHexToColour() ?? UIColor.eventBackground)
+            let text_color = baseColor
+            let attributes: [NSAttributedString.Key : Any] = [
+                .font: font,
+                .paragraphStyle: text_style,
+                .foregroundColor: text_color
+            ]
+
             let lengthHour = CGFloat(truncating: block.duration as NSNumber)
 
             let x: CGFloat = CGFloat(block.depth) * 8
             let y = topInset + CGFloat(truncating: block.start as NSNumber) * cellSize.height + 1
-            UIColor.eventBackground.setFill()
+            baseColor.withAlphaComponent(0.17).setFill()
+
             let boxWidth = cellSize.width - eventRightBottomInset.x - x
             let boxHeight = cellSize.height * CGFloat(lengthHour) - eventRightBottomInset.y
             UIBezierPath(
@@ -130,5 +135,16 @@ final class CalendarDayCell: UICollectionViewCell {
             headerView.upperLabel.backgroundColor = .clear
             headerView.upperLabel.textColor = .neutral1
         }
+    }
+}
+
+private extension Int {
+    func fromHexToColour() -> UIColor {
+        return UIColor(
+            red: CGFloat((self >> 16) & 0xFF) / 255.0,
+            green: CGFloat((self >> 8) & 0xFF) / 255.0,
+            blue: CGFloat(self & 0xFF) / 255.0,
+            alpha: 1
+        )
     }
 }

@@ -16,6 +16,29 @@ struct CalendarEventsRequest: ApiRequest {
     let query: [URLQueryItem]
 }
 
+struct CalendarMetadata: Decodable, Equatable {
+    let accountId: String
+    let calendarId: String
+    let colour: String?
+}
+
+struct CalendarsResponse: Decodable {
+    let calendars: [CalendarMetadata]
+}
+
+struct AccountCalendarId: Hashable {
+    let accountId: String
+    let calendarId: String
+}
+
+struct CalendarsRequest: ApiRequest {
+    typealias T = EmptyBody
+    typealias U = CalendarsResponse
+    let uri = "/calendar/calendars"
+    let logKey = "/calendar/calendars"
+    let method: HttpMethod = .get
+}
+
 protocol CalendarContextProvider {
     var blocksForDayIndex: [Int: [CalendarBlockedTime]] { get }
 }
@@ -66,6 +89,24 @@ struct UserSettingsRequest: ApiRequest {
     let method: HttpMethod = .get
 }
 
+enum DataReadiness<T>: Equatable where T: Equatable {
+    case idle
+    case failed
+    case loading
+    case ready(T)
+
+    var isDisplayable: Bool {
+        switch self {
+        case .idle, .loading: return false
+        case .failed, .ready: return true
+        }
+    }
+}
+
+struct CalendarUiMetadata: Equatable {
+    let colours: [AccountCalendarId: Int?]
+}
+
 final class CalendarSession: CalendarContextProvider {
 
     var reloadHandler: () -> Void = {}
@@ -75,12 +116,14 @@ final class CalendarSession: CalendarContextProvider {
     let blockSize = 5
 
     private(set) var blocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
+    private var queuedBlocksForDayIndex: [Int: [CalendarBlockedTime]] = [:]
 
     let api: Api
     let refDate = CalendarDateUtils.shared.uiRefDate
     private let calendar = Calendar.current
 
     private var isBlockBusy: [Int: Bool] = [:]
+    private var calendarMetadataReadiness: DataReadiness<CalendarUiMetadata> = .idle
 
     private lazy var dateF: DateFormatter = {
         let f = DateFormatter()
@@ -165,9 +208,73 @@ final class CalendarSession: CalendarContextProvider {
         }
     }
 
+    private func loadCalendarsMetadataIfNeeded() {
+        guard calendarMetadataReadiness == .idle || calendarMetadataReadiness == .failed else { return }
+
+        calendarMetadataReadiness = .loading
+
+        api.request(for: CalendarsRequest()) {
+            switch $0 {
+            case let .success(response):
+                var result: [AccountCalendarId: Int] = [:]
+
+                let colourBase = 0x6B5844
+                let redBase = Double((colourBase >> 16) & 0xFF)
+                let greenBase = Double((colourBase >> 8) & 0xFF)
+                let blueBase = Double(colourBase & 0xFF)
+
+                for calendar in response.calendars {
+                    let id = AccountCalendarId(
+                        accountId: calendar.accountId,
+                        calendarId: calendar.calendarId
+                    )
+                    let externalColour = 0x7886CB
+                    let externalColourRed = Double((externalColour >> 16) & 0xFF)
+                    let externalColourGreen = Double((externalColour >> 8) & 0xFF)
+                    let externalColourBlue = Double(externalColour & 0xFF)
+
+                    let red = Int((redBase + externalColourRed) / 2)
+                    let green = Int((greenBase + externalColourGreen) / 2)
+                    let blue = Int((blueBase + externalColourBlue) / 2)
+
+                    let colour = (red << 16) + (green << 8) + blue
+
+                    result[id] = colour
+//                    if let colour = calendar.colour {
+//                        result[id] = 0x0
+//                    } else {
+//                        result[id] = nil
+//                    }
+                }
+
+                self.calendarMetadataReadiness = .ready(CalendarUiMetadata(colours: result))
+            case .failure:
+                self.calendarMetadataReadiness = .failed
+            }
+            self.enrichBlocksWithContextAndReload(keys: nil)
+        }
+    }
+
+    private func enrichBlocksWithContextAndReload(keys: [Int]?) {
+        switch calendarMetadataReadiness {
+        case let .ready(metadata):
+            for key in (keys ?? Array(queuedBlocksForDayIndex.keys)) {
+                blocksForDayIndex[key] = queuedBlocksForDayIndex[key]?.map {
+                    var r = $0
+                    r.colour = metadata.colours[$0.id] ?? nil
+                    return r
+                }
+            }
+            self.reloadHandler()
+        default:
+            self.reloadHandler()
+        }
+    }
+
     private func loadCalendar(blockIndices: ClosedRange<Int>) {
         updateTimeZoneIfNeeded()
         updateUserIfNeeded()
+        loadCalendarsMetadataIfNeeded()
 
         for idx in blockIndices {
             isBlockBusy[idx] = true
@@ -188,12 +295,16 @@ final class CalendarSession: CalendarContextProvider {
             switch $0 {
             case let .success(model):
                 let daysRange = (daysBack ... (daysBack + daysForward))
-                for (k, v) in self.transformer.transform(model: model, in: daysRange) {
-                    self.blocksForDayIndex[k] = v
+                let result = self.transformer.transform(model: model, in: daysRange)
+                let touchedKeys = Array(result.keys)
+                for (k, v) in result {
+                    self.queuedBlocksForDayIndex[k] = v
                 }
 
                 DispatchQueue.main.async {
-                    self.reloadHandler()
+                    if self.calendarMetadataReadiness.isDisplayable {
+                        self.enrichBlocksWithContextAndReload(keys: touchedKeys)
+                    }
                 }
             case let .failure(err):
                 for idx in blockIndices {
