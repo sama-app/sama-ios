@@ -43,7 +43,7 @@ extension UIColor {
     static var neutralN = UIColor.white
 
     /// #684c2b 0.17
-    static var eventBackground = UIColor(red: 104/255.0, green: 76/255.0, blue: 43/255.0, alpha: 0.17)
+    static var eventBackground = UIColor(red: 107/255.0, green: 88/255.0, blue: 68/255.0, alpha: 1)
 
     /// #684c2b 0.1
     static var calendarGrid = UIColor(red: 104/255.0, green: 76/255.0, blue: 43/255.0, alpha: 0.1)
