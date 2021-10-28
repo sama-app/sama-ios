@@ -228,7 +228,7 @@ final class CalendarSession: CalendarContextProvider {
                         accountId: calendar.accountId,
                         calendarId: calendar.calendarId
                     )
-                    let externalColour = 0x7886CB
+                    let externalColour = calendar.colour?.fromHex ?? colourBase
                     let externalColourRed = Double((externalColour >> 16) & 0xFF)
                     let externalColourGreen = Double((externalColour >> 8) & 0xFF)
                     let externalColourBlue = Double(externalColour & 0xFF)
@@ -240,11 +240,6 @@ final class CalendarSession: CalendarContextProvider {
                     let colour = (red << 16) + (green << 8) + blue
 
                     result[id] = colour
-//                    if let colour = calendar.colour {
-//                        result[id] = 0x0
-//                    } else {
-//                        result[id] = nil
-//                    }
                 }
 
                 self.calendarMetadataReadiness = .ready(CalendarUiMetadata(colours: result))
@@ -313,5 +308,12 @@ final class CalendarSession: CalendarContextProvider {
                 self.presentError(err)
             }
         }
+    }
+}
+
+private extension String {
+    var fromHex: Int? {
+        let hexStr = starts(with: "#") ? String(dropFirst()) : self
+        return Int(hexStr, radix: 16)
     }
 }
