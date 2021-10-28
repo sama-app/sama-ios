@@ -30,6 +30,7 @@ enum AppSettingsItem {
 
 enum AccountItem {
     case connection(Int)
+    case addNew
 }
 
 enum ProfileItem {
@@ -102,7 +103,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     title: "Connected Accounts",
                     items: result.linkedAccounts.enumerated().map { index, _ in
                         .account(.connection(index))
-                    }
+                    } + [.account(.addNew)]
                 )
                 self?.sections.insert(section, at: 0)
                 self?.tableView.reloadData()
@@ -189,6 +190,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             switch item {
             case let .connection(index):
                 return configureAccountItemCell(tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath), index: index)
+            case .addNew:
+                return configureAccountAddNewCell(tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath))
             }
         }
     }
@@ -203,8 +206,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch sections[indexPath.section].items[indexPath.row] {
         case let .appSettings(item):
             handleSelection(of: item)
-        case .account:
-            break
+        case let .account(item):
+            switch item {
+            case .connection:
+                break
+            case .addNew:
+                navigationController?.pushViewController(AccountConnectionScreen(), animated: true)
+            }
         }
     }
 
@@ -221,6 +229,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let account = linkedAccounts[index]
         cell.textLabel?.text = account.email
         cell.textLabel?.textColor = .secondary
+        cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .semibold)
+        cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
+        cell.backgroundColor = .clear
+        return cell
+    }
+
+    private func configureAccountAddNewCell(_ cell: UITableViewCell) -> UITableViewCell {
+        cell.textLabel?.text = "Connect New Account"
+        cell.textLabel?.textColor = .primary
         cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .semibold)
         cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
         cell.backgroundColor = .clear

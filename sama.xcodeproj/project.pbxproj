@@ -41,6 +41,7 @@
 		E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */; };
 		E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */; };
 		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
+		E77A0C2E272AF8AD00A0F60D /* AccountConnectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */; };
 		E77CB9A42721487B00BC0405 /* TimelineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7392950271B65CC0097745F /* TimelineHeader.swift */; };
 		E77CB9A52721488000BC0405 /* CalendarTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294C271B20CF0097745F /* CalendarTopBar.swift */; };
 		E77CB9A62721488500BC0405 /* CalendarDayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294E271B5BD30097745F /* CalendarDayHeader.swift */; };
@@ -222,6 +223,7 @@
 		E76E8621264D237400FAC1DF /* RemoteNotificationsTokenSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTokenSync.swift; sourceTree = "<group>"; };
 		E77571EF26C4EFAE0034BAC9 /* SlotSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotSuggestionView.swift; sourceTree = "<group>"; };
 		E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCoordinator.swift; sourceTree = "<group>"; };
+		E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountConnectionScreen.swift; sourceTree = "<group>"; };
 		E787D1DB26DFBD3F00AE0652 /* TimezonePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimezonePickerViewController.swift; sourceTree = "<group>"; };
 		E790EEC526D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedAvailableSlotsTransformer.swift; sourceTree = "<group>"; };
 		E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInviteRecipientInputPanel.swift; sourceTree = "<group>"; };
@@ -354,6 +356,14 @@
 			path = Licenses;
 			sourceTree = "<group>";
 		};
+		E77A0C2C272AF82B00A0F60D /* AccountDetails */ = {
+			isa = PBXGroup;
+			children = (
+				E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */,
+			);
+			path = AccountDetails;
+			sourceTree = "<group>";
+		};
 		E795793D266F5F40005B9F39 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -434,6 +444,7 @@
 		E7D3C08926413340009CAB88 /* sama */ = {
 			isa = PBXGroup;
 			children = (
+				E77A0C2C272AF82B00A0F60D /* AccountDetails */,
 				E763A6D8269737F900082BCE /* Resources */,
 				E7AD47F626E947C100634F2B /* Utils */,
 				E79C90BF2684C37200398E41 /* Api */,
@@ -780,6 +791,7 @@
 				E794D32F26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift in Sources */,
 				E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */,
 				E7BD94D526F600E300FDB867 /* UiUtils.swift in Sources */,
+				E77A0C2E272AF8AD00A0F60D /* AccountConnectionScreen.swift in Sources */,
 				E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */,
 				E7B8970C2694CFB200A9BD17 /* BlockedTimesForDaysTransformer.swift in Sources */,
 				E77571F026C4EFAE0034BAC9 /* SlotSuggestionView.swift in Sources */,
