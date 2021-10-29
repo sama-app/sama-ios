@@ -324,7 +324,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             let api = self.session.api
             let nav = UINavigationController()
             nav.isNavigationBarHidden = true
-            nav.setViewControllers([ProfileViewController(api: api)], animated: false)
+            let screen = ProfileViewController(api: api) { [weak self] in
+                self?.invalidateDataAndReloadDisplayedBlocks(timeout: 0)
+            }
+            nav.setViewControllers([screen], animated: false)
             self.present(nav, animated: true, completion: nil)
         }
         topBar.handleMeetingInviteClose = { [weak self] in self?.suggestionsViewCoordinator.reset() }

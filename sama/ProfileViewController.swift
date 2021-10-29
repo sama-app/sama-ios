@@ -69,11 +69,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     private let tableView = UITableView()
 
     private let api: Api
+    private let onAccountChange: () -> Void
     private var emailCoordinator: EmailComposeCoordinator!
 
-    init(api: Api) {
-
+    init(api: Api, onAccountChange: @escaping () -> Void) {
         self.api = api
+        self.onAccountChange = onAccountChange
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -121,6 +122,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
 
         tableView.reloadData()
+    }
+
+    private func notifyAboutAccountsChangeAndReload() {
+        onAccountChange()
+        freshReload()
     }
 
     private func setupTableView() {
@@ -239,12 +245,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let screen = ConnectedGoogleAccountScreen()
                 screen.api = api
                 screen.account = linkedAccounts[index]
-                screen.onReload = { [weak self] in self?.freshReload() }
+                screen.onReload = { [weak self] in self?.notifyAboutAccountsChangeAndReload() }
                 navigationController?.pushViewController(screen, animated: true)
             case .addNew:
                 let screen = AccountConnectionScreen()
                 screen.api = api
-                screen.onReload = { [weak self] in self?.freshReload() }
+                screen.onReload = { [weak self] in self?.notifyAboutAccountsChangeAndReload() }
                 navigationController?.pushViewController(screen, animated: true)
             }
         }
