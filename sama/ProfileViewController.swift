@@ -244,6 +244,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             case .addNew:
                 let screen = AccountConnectionScreen()
                 screen.api = api
+                screen.onReload = { [weak self] in self?.freshReload() }
                 navigationController?.pushViewController(screen, animated: true)
             }
         }

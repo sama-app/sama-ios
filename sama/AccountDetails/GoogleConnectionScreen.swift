@@ -17,14 +17,13 @@ struct GoogleLinkAccountRequest: ApiRequest {
 }
 
 class GoogleConnectionScreen: UIViewController, ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return view.window!
-    }
-
 
     var api: Api!
+    var onReload: (() -> Void)?
 
     private var topBar: UIView!
+
+    private var isPerformingAction = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +31,7 @@ class GoogleConnectionScreen: UIViewController, ASWebAuthenticationPresentationC
         view.backgroundColor = .base
         overrideUserInterfaceStyle = .light
 
-        isModalInPresentation = true
+        isModalInPresentation = false
 
         addNavigationBar()
 
@@ -105,29 +104,38 @@ class GoogleConnectionScreen: UIViewController, ASWebAuthenticationPresentationC
     }
 
     @objc private func onBack() {
+        guard !isPerformingAction else { return }
         navigationController?.popViewController(animated: true)
     }
 
     @objc private func onConnectGoogle() {
+        guard !isPerformingAction else { return }
+        isPerformingAction = true
+
         api.request(for: GoogleLinkAccountRequest()) {
             switch $0 {
             case let .success(directions):
-                self.authenticate(with: directions.authorizationUrl) {
-//                    self.signInButtons.forEach { $0.isEnabled = true }
-                }
+                self.authenticate(with: directions.authorizationUrl)
             case let .failure(err):
-                print(err)
-//                self.presentError(err)
-//                self.signInButtons.forEach { $0.isEnabled = true }
+                self.isPerformingAction = false
             }
         }
     }
 
-    private func authenticate(with url: String, onFailure: @escaping () -> Void) {
+    private func authenticate(with url: String) {
         let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
-            print("OK")
+            if callbackUrl?.absoluteString.hasSuffix("/success") == true {
+                self.onReload?()
+                let vcs = self.navigationController!.viewControllers
+                self.navigationController?.setViewControllers(vcs.dropLast(2), animated: true)
+            }
+            self.isPerformingAction = false
         }
         session.presentationContextProvider = self
         session.start()
+    }
+
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return view.window!
     }
 }

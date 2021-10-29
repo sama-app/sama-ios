@@ -10,6 +10,7 @@ import UIKit
 class AccountConnectionScreen: UIViewController {
 
     var api: Api!
+    var onReload: (() -> Void)?
 
     private var topBar: UIView!
 
@@ -98,6 +99,7 @@ class AccountConnectionScreen: UIViewController {
     @objc private func onConnectGoogle() {
         let screen = GoogleConnectionScreen()
         screen.api = api
+        screen.onReload = onReload
         navigationController?.pushViewController(screen, animated: true)
     }
 }
