@@ -43,6 +43,7 @@
 		E777A93E2680F1E50004AE8E /* EventsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */; };
 		E77A0C2E272AF8AD00A0F60D /* AccountConnectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */; };
 		E77A0C30272B055B00A0F60D /* GoogleConnectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C2F272B055B00A0F60D /* GoogleConnectionScreen.swift */; };
+		E77A0C32272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C31272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift */; };
 		E77CB9A42721487B00BC0405 /* TimelineHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7392950271B65CC0097745F /* TimelineHeader.swift */; };
 		E77CB9A52721488000BC0405 /* CalendarTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294C271B20CF0097745F /* CalendarTopBar.swift */; };
 		E77CB9A62721488500BC0405 /* CalendarDayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294E271B5BD30097745F /* CalendarDayHeader.swift */; };
@@ -226,6 +227,7 @@
 		E777A93D2680F1E50004AE8E /* EventsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCoordinator.swift; sourceTree = "<group>"; };
 		E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountConnectionScreen.swift; sourceTree = "<group>"; };
 		E77A0C2F272B055B00A0F60D /* GoogleConnectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleConnectionScreen.swift; sourceTree = "<group>"; };
+		E77A0C31272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedGoogleAccountScreen.swift; sourceTree = "<group>"; };
 		E787D1DB26DFBD3F00AE0652 /* TimezonePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimezonePickerViewController.swift; sourceTree = "<group>"; };
 		E790EEC526D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedAvailableSlotsTransformer.swift; sourceTree = "<group>"; };
 		E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInviteRecipientInputPanel.swift; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 			children = (
 				E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */,
 				E77A0C2F272B055B00A0F60D /* GoogleConnectionScreen.swift */,
+				E77A0C31272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift */,
 			);
 			path = AccountDetails;
 			sourceTree = "<group>";
@@ -793,6 +796,7 @@
 				E76E8622264D237400FAC1DF /* RemoteNotificationsTokenSync.swift in Sources */,
 				E763A5C62643E16D00135A2F /* AuthToken.swift in Sources */,
 				E794D32F26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift in Sources */,
+				E77A0C32272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift in Sources */,
 				E7480393269390A600573DE2 /* Calendar+Convenience.swift in Sources */,
 				E7BD94D526F600E300FDB867 /* UiUtils.swift in Sources */,
 				E77A0C2E272AF8AD00A0F60D /* AccountConnectionScreen.swift in Sources */,

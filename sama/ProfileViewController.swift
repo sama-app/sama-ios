@@ -60,18 +60,6 @@ struct IntegrationsRequest: ApiRequest {
     let method: HttpMethod = .get
 }
 
-struct GoogleUnlinkAccountBody: Encodable {
-    let googleAccountId: String
-}
-
-struct GoogleUnlinkAccountRequest: ApiRequest {
-    typealias U = EmptyBody
-    let uri = "/integration/google/unlink-account"
-    let logKey = "/integration/google/unlink-account"
-    let method = HttpMethod.post
-    let body: GoogleUnlinkAccountBody
-}
-
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
@@ -248,18 +236,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         case let .account(item):
             switch item {
             case let .connection(index):
-                let account = linkedAccounts[index]
-                let req = GoogleUnlinkAccountRequest(
-                    body: GoogleUnlinkAccountBody(googleAccountId: account.id)
-                )
-                api.request(for: req) {
-                    switch $0 {
-                    case .success:
-                        self.freshReload()
-                    case .failure:
-                        break
-                    }
-                }
+                let screen = ConnectedGoogleAccountScreen()
+                screen.api = api
+                screen.account = linkedAccounts[index]
+                screen.onReload = { [weak self] in self?.freshReload() }
+                navigationController?.pushViewController(screen, animated: true)
             case .addNew:
                 let screen = AccountConnectionScreen()
                 screen.api = api
