@@ -1,13 +1,26 @@
 //
-//  AccountConnectionScreen.swift
+//  GoogleConnectionScreen.swift
 //  sama
 //
 //  Created by Viktoras Laukevičius on 10/28/21.
 //
 
 import UIKit
+import AuthenticationServices
 
-class AccountConnectionScreen: UIViewController {
+struct GoogleLinkAccountRequest: ApiRequest {
+    typealias T = EmptyBody
+    typealias U = AuthDirections
+    let uri = "/integration/google/link-account"
+    let logKey = "/integration/google/link-account"
+    let method = HttpMethod.post
+}
+
+class GoogleConnectionScreen: UIViewController, ASWebAuthenticationPresentationContextProviding {
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return view.window!
+    }
+
 
     var api: Api!
 
@@ -24,7 +37,7 @@ class AccountConnectionScreen: UIViewController {
         addNavigationBar()
 
         let title = UILabel().forAutoLayout()
-        title.text = "Connect a New Account"
+        title.text = "Connect Google Calendar"
         title.makeMultiline()
         title.font = .brandedFont(ofSize: 28, weight: .semibold)
         title.textColor = .neutral1
@@ -96,8 +109,25 @@ class AccountConnectionScreen: UIViewController {
     }
 
     @objc private func onConnectGoogle() {
-        let screen = GoogleConnectionScreen()
-        screen.api = api
-        navigationController?.pushViewController(screen, animated: true)
+        api.request(for: GoogleLinkAccountRequest()) {
+            switch $0 {
+            case let .success(directions):
+                self.authenticate(with: directions.authorizationUrl) {
+//                    self.signInButtons.forEach { $0.isEnabled = true }
+                }
+            case let .failure(err):
+                print(err)
+//                self.presentError(err)
+//                self.signInButtons.forEach { $0.isEnabled = true }
+            }
+        }
+    }
+
+    private func authenticate(with url: String, onFailure: @escaping () -> Void) {
+        let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
+            print("OK")
+        }
+        session.presentationContextProvider = self
+        session.start()
     }
 }

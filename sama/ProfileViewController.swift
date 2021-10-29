@@ -44,6 +44,7 @@ struct ProfileSection {
 }
 
 struct LinkedAccount: Decodable {
+    let id: String
     let email: String
 }
 
@@ -59,15 +60,23 @@ struct IntegrationsRequest: ApiRequest {
     let method: HttpMethod = .get
 }
 
+struct GoogleUnlinkAccountBody: Encodable {
+    let googleAccountId: String
+}
+
+struct GoogleUnlinkAccountRequest: ApiRequest {
+    typealias U = EmptyBody
+    let uri = "/integration/google/unlink-account"
+    let logKey = "/integration/google/unlink-account"
+    let method = HttpMethod.post
+    let body: GoogleUnlinkAccountBody
+}
+
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
     private var linkedAccounts: [LinkedAccount] = []
-    private var sections: [ProfileSection] = [
-        ProfileSection(title: "Settings", items: [.appSettings(.feedback), .appSettings(.support)]),
-        ProfileSection(title: nil, items: [.appSettings(.privacy), .appSettings(.terms), .appSettings(.acknowledgements)]),
-        ProfileSection(title: nil, items: [.appSettings(.logout)])
-    ]
+    private var sections: [ProfileSection] = []
 
     private let tableView = UITableView()
 
@@ -95,6 +104,17 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         setupTableView()
         setupNavigationBar()
 
+        freshReload()
+    }
+
+    private func freshReload() {
+        let constSections = [
+            ProfileSection(title: "Settings", items: [.appSettings(.feedback), .appSettings(.support)]),
+            ProfileSection(title: nil, items: [.appSettings(.privacy), .appSettings(.terms), .appSettings(.acknowledgements)]),
+            ProfileSection(title: nil, items: [.appSettings(.logout)])
+        ]
+        sections = constSections
+
         api.request(for: IntegrationsRequest()) { [weak self] in
             switch $0 {
             case let .success(result):
@@ -105,12 +125,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                         .account(.connection(index))
                     } + [.account(.addNew)]
                 )
-                self?.sections.insert(section, at: 0)
+                self?.sections = [section] + constSections
                 self?.tableView.reloadData()
             case .failure:
                 break
             }
         }
+
+        tableView.reloadData()
     }
 
     private func setupTableView() {
@@ -208,10 +230,23 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             handleSelection(of: item)
         case let .account(item):
             switch item {
-            case .connection:
-                break
+            case let .connection(index):
+                let account = linkedAccounts[index]
+                let req = GoogleUnlinkAccountRequest(
+                    body: GoogleUnlinkAccountBody(googleAccountId: account.id)
+                )
+                api.request(for: req) {
+                    switch $0 {
+                    case .success:
+                        self.freshReload()
+                    case .failure:
+                        break
+                    }
+                }
             case .addNew:
-                navigationController?.pushViewController(AccountConnectionScreen(), animated: true)
+                let screen = AccountConnectionScreen()
+                screen.api = api
+                navigationController?.pushViewController(screen, animated: true)
             }
         }
     }
