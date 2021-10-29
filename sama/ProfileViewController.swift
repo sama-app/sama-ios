@@ -196,12 +196,29 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         return sections[section].items.count
     }
 
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
+    func tableView(_ tableView: UITableView, viewForHeaderInSection index: Int) -> UIView? {
+        guard let sectionTitle = sections[index].title?.uppercased() else {
+            return UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 16))
+        }
+
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 64))
+        let label = UILabel().forAutoLayout()
+        label.textColor = .secondary
+        label.font = .brandedFont(ofSize: 14, weight: .semibold)
+        label.attributedText = NSAttributedString(string: sectionTitle, attributes: [.kern: 1.5])
+        header.addSubview(label)
+        NSLayoutConstraint.activate([
+            header.bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: 12),
+            label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 40)
+        ])
+        return header
     }
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return section == 0 ? 16 : 0
+    func tableView(_ tableView: UITableView, heightForHeaderInSection index: Int) -> CGFloat {
+        guard sections[index].title?.uppercased() != nil else {
+            return 16
+        }
+        return 64
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
