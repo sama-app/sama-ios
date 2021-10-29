@@ -47,33 +47,32 @@ class GoogleConnectionScreen: UIViewController, ASWebAuthenticationPresentationC
             title.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: 16)
         ])
 
-        let googleBtn = UIButton(type: .system)
-        googleBtn.addTarget(self, action: #selector(onConnectGoogle), for: .touchUpInside)
-        googleBtn.translatesAutoresizingMaskIntoConstraints = false
-        googleBtn.setImage(UIImage(named: "google-logo")!.withRenderingMode(.alwaysOriginal), for: .normal)
-        googleBtn.setTitle("Google Calendar", for: .normal)
-        googleBtn.titleLabel?.font = .brandedFont(ofSize: 24, weight: .semibold)
-        googleBtn.titleEdgeInsets.left = 16
-        googleBtn.titleEdgeInsets.right = -16
-        googleBtn.contentEdgeInsets.right = 16
-        googleBtn.tintColor = .primary
-        googleBtn.tintAdjustmentMode = .normal
-        view.addSubview(googleBtn)
+        let permissionsInfo = UILabel().forAutoLayout()
+        permissionsInfo.text = "Make sure you check these additional checkboxes."
+        permissionsInfo.textColor = .neutral1
+        permissionsInfo.font = .brandedFont(ofSize: 28, weight: .regular)
+        permissionsInfo.makeMultiline()
+        view.addSubview(permissionsInfo)
         NSLayoutConstraint.activate([
-            googleBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            googleBtn.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 62)
+            permissionsInfo.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            view.trailingAnchor.constraint(equalTo: permissionsInfo.trailingAnchor, constant: 40),
+            permissionsInfo.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 64)
         ])
 
-        let disclosure = UILabel().forAutoLayout()
-        disclosure.text = "More calendar services will be supported in the future."
-        disclosure.makeMultiline()
-        disclosure.font = .systemFont(ofSize: 15, weight: .regular)
-        disclosure.textColor = .secondary
-        view.addSubview(disclosure)
+        let permissionsImageView = UIImageView.build()
+        permissionsImageView.image = UIImage(named: "google-permissions")
+        view.addSubview(permissionsImageView)
         NSLayoutConstraint.activate([
-            disclosure.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            view.trailingAnchor.constraint(equalTo: disclosure.trailingAnchor, constant: 40),
-            disclosure.topAnchor.constraint(equalTo: googleBtn.bottomAnchor, constant: 22)
+            permissionsImageView.topAnchor.constraint(equalTo: permissionsInfo.bottomAnchor, constant: 24),
+            permissionsImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28)
+        ])
+
+        let actionBtn = SignInGoogleButton(frame: .zero)
+        actionBtn.addTarget(self, action: #selector(onConnectGoogle), for: .touchUpInside)
+        view.addSubview(actionBtn)
+        NSLayoutConstraint.activate([
+            actionBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            actionBtn.topAnchor.constraint(equalTo: permissionsImageView.bottomAnchor, constant: 45)
         ])
     }
 
@@ -124,7 +123,7 @@ class GoogleConnectionScreen: UIViewController, ASWebAuthenticationPresentationC
 
     private func authenticate(with url: String) {
         let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
-            if callbackUrl?.absoluteString.hasSuffix("/success") == true {
+            if callbackUrl?.absoluteString.contains("link-account/success") == true {
                 self.onReload?()
                 let vcs = self.navigationController!.viewControllers
                 self.navigationController?.setViewControllers(vcs.dropLast(2), animated: true)
