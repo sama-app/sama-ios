@@ -27,6 +27,8 @@ class ConnectedGoogleAccountScreen: UIViewController {
 
     private var topBar: UIView!
 
+    private var isPerformingAction = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -103,10 +105,14 @@ class ConnectedGoogleAccountScreen: UIViewController {
     }
 
     @objc private func onBack() {
+        guard !isPerformingAction else { return }
         navigationController?.popViewController(animated: true)
     }
 
     @objc private func onDisconnectGoogle() {
+        guard !isPerformingAction else { return }
+        isPerformingAction = true
+
         api.request(for: GoogleUnlinkAccountRequest(body: GoogleUnlinkAccountBody(googleAccountId: account.id))) { [weak self] in
             switch $0 {
             case .success:
@@ -115,6 +121,8 @@ class ConnectedGoogleAccountScreen: UIViewController {
             case let .failure(err):
                 print(err)
             }
+
+            self?.isPerformingAction = false
         }
     }
 }
