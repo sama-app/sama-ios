@@ -19,6 +19,82 @@ struct GoogleUnlinkAccountRequest: ApiRequest {
     let body: GoogleUnlinkAccountBody
 }
 
+struct AccountCalendarSwitchBody: Encodable {
+    let accountId: String
+    let calendarId: String
+}
+
+struct CalendarAddRequest: ApiRequest {
+    typealias U = EmptyBody
+    let uri = "/calendar/calendars/add"
+    let logKey = "/calendar/calendars/add"
+    let method = HttpMethod.post
+    let body: AccountCalendarSwitchBody
+}
+
+struct CalendarRemoveRequest: ApiRequest {
+    typealias U = EmptyBody
+    let uri = "/calendar/calendars/remove"
+    let logKey = "/calendar/calendars/remove"
+    let method = HttpMethod.post
+    let body: AccountCalendarSwitchBody
+}
+
+class ConnectedCalendarView: UIView {
+
+    private let handleSwitch: (Bool) -> Void
+
+    init(calendar: CalendarMetadata, handleSwitch: @escaping (Bool) -> Void) {
+        self.handleSwitch = handleSwitch
+        super.init(frame: .zero)
+
+        let bubble = UIView().forAutoLayout()
+        bubble.layer.cornerRadius = 8
+        bubble.layer.masksToBounds = true
+        bubble.backgroundColor = (calendar.colour?.fromHex ?? Int.samaHexBase).fromHexToColour()
+        addSubview(bubble)
+        NSLayoutConstraint.activate([
+            bubble.widthAnchor.constraint(equalToConstant: 16),
+            bubble.heightAnchor.constraint(equalToConstant: 16),
+            bubble.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+            bubble.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+
+        let toggle = UISwitch().forAutoLayout()
+        toggle.onTintColor = .primary
+        toggle.isOn = calendar.selected
+        addSubview(toggle)
+        NSLayoutConstraint.activate([
+            trailingAnchor.constraint(equalTo: toggle.trailingAnchor),
+            toggle.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+        toggle.addTarget(self, action: #selector(onToggle(_:)), for: .valueChanged)
+
+        let title = UILabel().forAutoLayout()
+        title.textColor = calendar.colour.samafiedHex.fromHexToColour()
+        title.font = .brandedFont(ofSize: 24, weight: .semibold)
+        title.text = calendar.title
+        addSubview(title)
+        NSLayoutConstraint.activate([
+            title.leadingAnchor.constraint(equalTo: bubble.trailingAnchor, constant: 12),
+            toggle.leadingAnchor.constraint(equalTo: title.trailingAnchor),
+            title.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+
+        NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: 64)
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func onToggle(_ toggle: UISwitch) {
+        handleSwitch(toggle.isOn)
+    }
+}
+
 class ConnectedGoogleAccountScreen: UIViewController {
 
     var api: Api!
@@ -27,6 +103,7 @@ class ConnectedGoogleAccountScreen: UIViewController {
 
     private var topBar: UIView!
 
+    private var accountCalendars: [CalendarMetadata] = []
     private var isPerformingAction = false
 
     override func viewDidLoad() {
@@ -82,10 +159,9 @@ class ConnectedGoogleAccountScreen: UIViewController {
         api.request(for: CalendarsRequest()) {
             switch $0 {
             case let .success(result):
-                let accCalendars = result.calendars
+                self.accountCalendars = result.calendars
                     .filter { $0.accountId == self.account.id }
                 self.displayCalendars(
-                    calendars: accCalendars,
                     topView: googleImg,
                     bottomView: disconnectBtn
                 )
@@ -121,49 +197,14 @@ class ConnectedGoogleAccountScreen: UIViewController {
         ])
     }
 
-    private func displayCalendars(calendars: [CalendarMetadata], topView: UIView, bottomView: UIView) {
+    private func displayCalendars(topView: UIView, bottomView: UIView) {
         let calendarsStack = UIStackView().forAutoLayout()
         calendarsStack.axis = .vertical
 
-        calendars.forEach { calendar in
-            let view = UIView().forAutoLayout()
-            NSLayoutConstraint.activate([
-                view.heightAnchor.constraint(equalToConstant: 64)
-            ])
-
-            let bubble = UIView().forAutoLayout()
-            bubble.layer.cornerRadius = 8
-            bubble.layer.masksToBounds = true
-            bubble.backgroundColor = (calendar.colour?.fromHex ?? Int.samaHexBase).fromHexToColour()
-            view.addSubview(bubble)
-            NSLayoutConstraint.activate([
-                bubble.widthAnchor.constraint(equalToConstant: 16),
-                bubble.heightAnchor.constraint(equalToConstant: 16),
-                bubble.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
-                bubble.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            ])
-
-            let toggle = UISwitch().forAutoLayout()
-            toggle.onTintColor = .primary
-            toggle.isOn = calendar.selected
-            view.addSubview(toggle)
-            NSLayoutConstraint.activate([
-                view.trailingAnchor.constraint(equalTo: toggle.trailingAnchor),
-                toggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            ])
-
-            let title = UILabel().forAutoLayout()
-            title.textColor = calendar.colour.samafiedHex.fromHexToColour()
-            title.font = .brandedFont(ofSize: 24, weight: .semibold)
-            title.text = calendar.title
-            view.addSubview(title)
-            NSLayoutConstraint.activate([
-                title.leadingAnchor.constraint(equalTo: bubble.trailingAnchor, constant: 12),
-                toggle.leadingAnchor.constraint(equalTo: title.trailingAnchor),
-                title.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            ])
-
-            calendarsStack.addArrangedSubview(view)
+        accountCalendars.enumerated().forEach { idx, calendar in
+            calendarsStack.addArrangedSubview(ConnectedCalendarView(calendar: calendar) { [weak self] isSelected in
+                self?.switchCalendar(index: idx, isSelected: isSelected)
+            })
         }
 
         self.view.addSubview(calendarsStack)
@@ -173,6 +214,26 @@ class ConnectedGoogleAccountScreen: UIViewController {
             calendarsStack.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 52),
             bottomView.topAnchor.constraint(equalTo: calendarsStack.bottomAnchor, constant: 52)
         ])
+    }
+
+    private func switchCalendar(index: Int, isSelected: Bool) {
+        let body = AccountCalendarSwitchBody(
+            accountId: account.id,
+            calendarId: accountCalendars[index].calendarId
+        )
+        let completion: (Result<EmptyBody, ApiError>) -> Void = { [weak self] result in
+            switch result {
+            case .success:
+                self?.onReload?()
+            case let .failure(err):
+                print(err)
+            }
+        }
+        if isSelected {
+            api.request(for: CalendarAddRequest(body: body), completion: completion)
+        } else {
+            api.request(for: CalendarRemoveRequest(body: body), completion: completion)
+        }
     }
 
     @objc private func onBack() {
