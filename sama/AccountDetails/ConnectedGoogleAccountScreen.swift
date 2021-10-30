@@ -72,10 +72,27 @@ class ConnectedGoogleAccountScreen: UIViewController {
         disconnectBtn.setTitleColor(.primary, for: .normal)
         disconnectBtn.titleLabel?.font = .brandedFont(ofSize: 24, weight: .regular)
         view.addSubview(disconnectBtn)
+        let disconnectBtnTopToGoogleImg = disconnectBtn.topAnchor.constraint(equalTo: googleImg.bottomAnchor, constant: 66)
+        disconnectBtnTopToGoogleImg.priority = .defaultLow
         NSLayoutConstraint.activate([
             disconnectBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            disconnectBtn.topAnchor.constraint(equalTo: googleImg.bottomAnchor, constant: 66)
+            disconnectBtnTopToGoogleImg
         ])
+
+        api.request(for: CalendarsRequest()) {
+            switch $0 {
+            case let .success(result):
+                let accCalendars = result.calendars
+                    .filter { $0.accountId == self.account.id }
+                self.displayCalendars(
+                    calendars: accCalendars,
+                    topView: googleImg,
+                    bottomView: disconnectBtn
+                )
+            case .failure:
+                break
+            }
+        }
     }
 
     private func addNavigationBar() {
@@ -101,6 +118,60 @@ class ConnectedGoogleAccountScreen: UIViewController {
             backBtn.heightAnchor.constraint(equalToConstant: 44),
             backBtn.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 8),
             backBtn.centerYAnchor.constraint(equalTo: topBar.centerYAnchor)
+        ])
+    }
+
+    private func displayCalendars(calendars: [CalendarMetadata], topView: UIView, bottomView: UIView) {
+        let calendarsStack = UIStackView().forAutoLayout()
+        calendarsStack.axis = .vertical
+
+        calendars.forEach { calendar in
+            let view = UIView().forAutoLayout()
+            NSLayoutConstraint.activate([
+                view.heightAnchor.constraint(equalToConstant: 64)
+            ])
+
+            let bubble = UIView().forAutoLayout()
+            bubble.layer.cornerRadius = 8
+            bubble.layer.masksToBounds = true
+            bubble.backgroundColor = (calendar.colour?.fromHex ?? Int.samaHexBase).fromHexToColour()
+            view.addSubview(bubble)
+            NSLayoutConstraint.activate([
+                bubble.widthAnchor.constraint(equalToConstant: 16),
+                bubble.heightAnchor.constraint(equalToConstant: 16),
+                bubble.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
+                bubble.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+
+            let toggle = UISwitch().forAutoLayout()
+            toggle.onTintColor = .primary
+            toggle.isOn = calendar.selected
+            view.addSubview(toggle)
+            NSLayoutConstraint.activate([
+                view.trailingAnchor.constraint(equalTo: toggle.trailingAnchor),
+                toggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            ])
+
+            let title = UILabel().forAutoLayout()
+            title.textColor = calendar.colour.samafiedHex.fromHexToColour()
+            title.font = .brandedFont(ofSize: 24, weight: .semibold)
+            title.text = calendar.title
+            view.addSubview(title)
+            NSLayoutConstraint.activate([
+                title.leadingAnchor.constraint(equalTo: bubble.trailingAnchor, constant: 12),
+                toggle.leadingAnchor.constraint(equalTo: title.trailingAnchor),
+                title.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+
+            calendarsStack.addArrangedSubview(view)
+        }
+
+        self.view.addSubview(calendarsStack)
+        NSLayoutConstraint.activate([
+            calendarsStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 40),
+            self.view.trailingAnchor.constraint(equalTo: calendarsStack.trailingAnchor, constant: 40),
+            calendarsStack.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 52),
+            bottomView.topAnchor.constraint(equalTo: calendarsStack.bottomAnchor, constant: 52)
         ])
     }
 

@@ -137,14 +137,3 @@ final class CalendarDayCell: UICollectionViewCell {
         }
     }
 }
-
-private extension Int {
-    func fromHexToColour() -> UIColor {
-        return UIColor(
-            red: CGFloat((self >> 16) & 0xFF) / 255.0,
-            green: CGFloat((self >> 8) & 0xFF) / 255.0,
-            blue: CGFloat(self & 0xFF) / 255.0,
-            alpha: 1
-        )
-    }
-}

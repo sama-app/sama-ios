@@ -20,6 +20,8 @@ struct CalendarMetadata: Decodable, Equatable {
     let accountId: String
     let calendarId: String
     let colour: String?
+    let title: String
+    let selected: Bool
 }
 
 struct CalendarsResponse: Decodable {
@@ -308,12 +310,5 @@ final class CalendarSession: CalendarContextProvider {
                 self.presentError(err)
             }
         }
-    }
-}
-
-private extension String {
-    var fromHex: Int? {
-        let hexStr = starts(with: "#") ? String(dropFirst()) : self
-        return Int(hexStr, radix: 16)
     }
 }

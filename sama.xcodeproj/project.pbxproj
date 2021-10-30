@@ -48,6 +48,7 @@
 		E77CB9A52721488000BC0405 /* CalendarTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294C271B20CF0097745F /* CalendarTopBar.swift */; };
 		E77CB9A62721488500BC0405 /* CalendarDayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E739294E271B5BD30097745F /* CalendarDayHeader.swift */; };
 		E787D1DC26DFBD3F00AE0652 /* TimezonePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E787D1DB26DFBD3F00AE0652 /* TimezonePickerViewController.swift */; };
+		E78F9881272D8005005758D7 /* SamaHexColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78F9880272D8005005758D7 /* SamaHexColours.swift */; };
 		E790EEC626D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E790EEC526D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift */; };
 		E794D32F26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */; };
 		E795793F266F5F4C005B9F39 /* CalendarBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */; };
@@ -229,6 +230,7 @@
 		E77A0C2F272B055B00A0F60D /* GoogleConnectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleConnectionScreen.swift; sourceTree = "<group>"; };
 		E77A0C31272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedGoogleAccountScreen.swift; sourceTree = "<group>"; };
 		E787D1DB26DFBD3F00AE0652 /* TimezonePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimezonePickerViewController.swift; sourceTree = "<group>"; };
+		E78F9880272D8005005758D7 /* SamaHexColours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamaHexColours.swift; sourceTree = "<group>"; };
 		E790EEC526D2B630002261A2 /* ProposedAvailableSlotsTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProposedAvailableSlotsTransformer.swift; sourceTree = "<group>"; };
 		E794D32E26CECCEC001FB521 /* MeetingInviteRecipientInputPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInviteRecipientInputPanel.swift; sourceTree = "<group>"; };
 		E795793E266F5F4C005B9F39 /* CalendarBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBlocks.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 			isa = PBXGroup;
 			children = (
 				E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */,
+				E78F9880272D8005005758D7 /* SamaHexColours.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -775,6 +778,7 @@
 				E7B8F7DD2694683300E4954F /* EmailComposeCoordinator.swift in Sources */,
 				E7F5AD1A2670A58A00138E42 /* TimeZoneOption.swift in Sources */,
 				E72D774C26DD3AF100F751E9 /* SuggestionsEditPanel.swift in Sources */,
+				E78F9881272D8005005758D7 /* SamaHexColours.swift in Sources */,
 				E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */,
 				E7BFB368269AEB6500EA6AFD /* SamaKeys.swift in Sources */,
 				E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */,
