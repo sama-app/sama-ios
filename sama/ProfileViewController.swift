@@ -48,6 +48,11 @@ struct LinkedAccount: Decodable {
     let email: String
 }
 
+struct ProfileAccount {
+    let linked: LinkedAccount
+    let calendarsCount: Int
+}
+
 struct IntegrationsResult: Decodable {
     let linkedAccounts: [LinkedAccount]
 }
@@ -63,7 +68,7 @@ struct IntegrationsRequest: ApiRequest {
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     private let illustration = UIImageView(image: UIImage(named: "main-illustration")!)
-    private var linkedAccounts: [LinkedAccount] = []
+    private var accounts: [ProfileAccount] = []
     private var sections: [ProfileSection] = []
 
     private let tableView = UITableView()
@@ -104,20 +109,53 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         ]
         sections = constSections
 
-        api.request(for: IntegrationsRequest()) { [weak self] in
+        let group = DispatchGroup()
+
+        var calendars: [CalendarMetadata] = []
+        var accounts: [LinkedAccount] = []
+        var error: ApiError? = nil
+
+        group.enter()
+        api.request(for: CalendarsRequest()) {
             switch $0 {
             case let .success(result):
-                self?.linkedAccounts = result.linkedAccounts
+                calendars = result.calendars
+            case let .failure(err):
+                error = err
+            }
+            group.leave()
+        }
+
+        group.enter()
+        api.request(for: IntegrationsRequest()) {
+            switch $0 {
+            case let .success(result):
+                accounts = result.linkedAccounts
+            case let .failure(err):
+                error = err
+            }
+            group.leave()
+        }
+
+        group.notify(queue: .main) { [weak self] in
+            if error != nil {
+
+            } else {
+                let entries = accounts.map { acc in
+                    ProfileAccount(
+                        linked: acc,
+                        calendarsCount: calendars.filter { $0.accountId == acc.id && $0.selected }.count
+                    )
+                }
+                self?.accounts = entries
                 let section = ProfileSection(
                     title: "Connected Accounts",
-                    items: result.linkedAccounts.enumerated().map { index, _ in
+                    items: entries.enumerated().map { index, _ in
                         .account(.connection(index))
                     } + [.account(.addNew)]
                 )
                 self?.sections = [section] + constSections
                 self?.tableView.reloadData()
-            case .failure:
-                break
             }
         }
 
@@ -142,7 +180,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         ])
         tableView.backgroundColor = .base
         tableView.separatorStyle = .none
-        tableView.register(HighlightableSimpleCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "add-new-cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "item-cell")
 
         let header = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 200))
 
@@ -218,13 +257,17 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch sections[indexPath.section].items[indexPath.row] {
         case let .appSettings(item):
-            return configureAppSettingsCell(tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath), item: item)
+            return configureAppSettingsCell(tableView.dequeueReusableCell(withIdentifier: "item-cell", for: indexPath), item: item)
         case let .account(item):
             switch item {
             case let .connection(index):
-                return configureAccountItemCell(tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath), index: index)
+                var cell = tableView.dequeueReusableCell(withIdentifier: "account-cell")
+                if cell == nil {
+                    cell = UITableViewCell(style: .subtitle, reuseIdentifier: "account-cell")
+                }
+                return configureAccountItemCell(cell!, index: index)
             case .addNew:
-                return configureAccountAddNewCell(tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath))
+                return configureAccountAddNewCell(tableView.dequeueReusableCell(withIdentifier: "add-new-cell", for: indexPath))
             }
         }
     }
@@ -244,7 +287,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             case let .connection(index):
                 let screen = ConnectedGoogleAccountScreen()
                 screen.api = api
-                screen.account = linkedAccounts[index]
+                screen.account = accounts[index].linked
                 screen.onReload = { [weak self] in self?.notifyAboutAccountsChangeAndReload() }
                 navigationController?.pushViewController(screen, animated: true)
             case .addNew:
@@ -262,26 +305,46 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .regular)
         cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
         cell.backgroundColor = .clear
+        cell.selectionStyle = .none
         return cell
     }
 
     private func configureAccountItemCell(_ cell: UITableViewCell, index: Int) -> UITableViewCell {
-        let account = linkedAccounts[index]
-        cell.textLabel?.text = account.email
+        let entry = accounts[index]
+        cell.textLabel?.text = entry.linked.email
         cell.textLabel?.textColor = .secondary
         cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .semibold)
+        if entry.calendarsCount == 1 {
+            cell.detailTextLabel?.text = "\(entry.calendarsCount) calendar selected"
+        } else {
+            cell.detailTextLabel?.text = "\(entry.calendarsCount) calendars selected"
+        }
+        cell.detailTextLabel?.textColor = .secondary
+        cell.detailTextLabel?.font = .systemFont(ofSize: 15)
         cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
         cell.backgroundColor = .clear
+        cell.selectionStyle = .none
         return cell
     }
 
     private func configureAccountAddNewCell(_ cell: UITableViewCell) -> UITableViewCell {
         cell.textLabel?.text = "Connect New Account"
         cell.textLabel?.textColor = .primary
+        cell.imageView?.image = UIImage(named: "plus")
+        cell.imageView?.tintColor = .primary
         cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .semibold)
         cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
         cell.backgroundColor = .clear
+        cell.selectionStyle = .none
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.contentView.alpha = 0.35
+    }
+
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.contentView.alpha = 1
     }
 
     private func handleSelection(of item: AppSettingsItem) {
