@@ -172,6 +172,7 @@
 		E7F5AD15266FBFD900138E42 /* CalendarNavigationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD14266FBFD900138E42 /* CalendarNavigationCenter.swift */; };
 		E7F5AD182670A57900138E42 /* FindTimePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD172670A57900138E42 /* FindTimePanel.swift */; };
 		E7F5AD1A2670A58A00138E42 /* TimeZoneOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD192670A58A00138E42 /* TimeZoneOption.swift */; };
+		E7F89E7D2732790F00690BA7 /* UIViewController+Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F89E7C2732790F00690BA7 /* UIViewController+Errors.swift */; };
 		E7F8DD83264EB61D00CD3759 /* CalendarDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD82264EB61D00CD3759 /* CalendarDayCell.swift */; };
 		E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8DD872651931500CD3759 /* TimelineView.swift */; };
 		E7FD55DC26D8B48100C81364 /* MeetingInviteDeepLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FD55DB26D8B48100C81364 /* MeetingInviteDeepLinkService.swift */; };
@@ -284,6 +285,7 @@
 		E7F5AD14266FBFD900138E42 /* CalendarNavigationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNavigationCenter.swift; sourceTree = "<group>"; };
 		E7F5AD172670A57900138E42 /* FindTimePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindTimePanel.swift; sourceTree = "<group>"; };
 		E7F5AD192670A58A00138E42 /* TimeZoneOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeZoneOption.swift; sourceTree = "<group>"; };
+		E7F89E7C2732790F00690BA7 /* UIViewController+Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Errors.swift"; sourceTree = "<group>"; };
 		E7F8DD82264EB61D00CD3759 /* CalendarDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayCell.swift; sourceTree = "<group>"; };
 		E7F8DD872651931500CD3759 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		E7FD55DB26D8B48100C81364 /* MeetingInviteDeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingInviteDeepLinkService.swift; sourceTree = "<group>"; };
@@ -409,6 +411,7 @@
 			children = (
 				E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */,
 				E78F9880272D8005005758D7 /* SamaHexColours.swift */,
+				E7F89E7C2732790F00690BA7 /* UIViewController+Errors.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -810,6 +813,7 @@
 				E7F8DD882651931500CD3759 /* TimelineView.swift in Sources */,
 				E7392951271B65CC0097745F /* TimelineHeader.swift in Sources */,
 				E758054426D2AAFF00E9DEAD /* SuggestionsPickCalendarSlider.swift in Sources */,
+				E7F89E7D2732790F00690BA7 /* UIViewController+Errors.swift in Sources */,
 				E7957943266F5F7B005B9F39 /* CalendarLayout.swift in Sources */,
 				E7F5AD0F266FB03700138E42 /* UIFont+Branded.swift in Sources */,
 				E71EE89E26DA927D00E0D2CA /* InvitationCopiedPanel.swift in Sources */,

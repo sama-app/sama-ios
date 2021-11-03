@@ -42,9 +42,9 @@ struct CalendarRemoveRequest: ApiRequest {
 
 class ConnectedCalendarView: UIView {
 
-    private let handleSwitch: (Bool) -> Void
+    private let handleSwitch: (Bool, @escaping (Bool) -> Void) -> Void
 
-    init(calendar: CalendarMetadata, handleSwitch: @escaping (Bool) -> Void) {
+    init(calendar: CalendarMetadata, handleSwitch: @escaping (Bool, @escaping (Bool) -> Void) -> Void) {
         self.handleSwitch = handleSwitch
         super.init(frame: .zero)
 
@@ -91,7 +91,14 @@ class ConnectedCalendarView: UIView {
     }
 
     @objc private func onToggle(_ toggle: UISwitch) {
-        handleSwitch(toggle.isOn)
+        toggle.isUserInteractionEnabled = false
+        let oldValue = !toggle.isOn
+        handleSwitch(toggle.isOn) { isSuccess in
+            if !isSuccess {
+                toggle.setOn(oldValue, animated: true)
+            }
+            toggle.isUserInteractionEnabled = true
+        }
     }
 }
 
@@ -202,8 +209,8 @@ class ConnectedGoogleAccountScreen: UIViewController {
         calendarsStack.axis = .vertical
 
         accountCalendars.enumerated().forEach { idx, calendar in
-            calendarsStack.addArrangedSubview(ConnectedCalendarView(calendar: calendar) { [weak self] isSelected in
-                self?.switchCalendar(index: idx, isSelected: isSelected)
+            calendarsStack.addArrangedSubview(ConnectedCalendarView(calendar: calendar) { [weak self] isSelected, completion in
+                self?.switchCalendar(index: idx, isSelected: isSelected, completion: completion)
             })
         }
 
@@ -216,7 +223,7 @@ class ConnectedGoogleAccountScreen: UIViewController {
         ])
     }
 
-    private func switchCalendar(index: Int, isSelected: Bool) {
+    private func switchCalendar(index: Int, isSelected: Bool, completion: @escaping (Bool) -> Void) {
         let body = AccountCalendarSwitchBody(
             accountId: account.id,
             calendarId: accountCalendars[index].calendarId
@@ -224,9 +231,11 @@ class ConnectedGoogleAccountScreen: UIViewController {
         let completion: (Result<EmptyBody, ApiError>) -> Void = { [weak self] result in
             switch result {
             case .success:
+                completion(true)
                 self?.onReload?()
             case let .failure(err):
-                print(err)
+                completion(false)
+                self?.presentError(err)
             }
         }
         if isSelected {
