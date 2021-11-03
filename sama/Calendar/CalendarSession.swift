@@ -180,6 +180,10 @@ final class CalendarSession: CalendarContextProvider {
         loadCalendar(blockIndices: indices)
     }
 
+    func invalidateCalendarsMetadata() {
+        calendarMetadataReadiness = .idle
+    }
+
     func setupNotificationsTokenObserver() {
         RemoteNotificationsTokenSync.shared.observer = { [weak self] data in
             self?.api.request(for: RegisterDeviceRequest(body: data)) { _ in }

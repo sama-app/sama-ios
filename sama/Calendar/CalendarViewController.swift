@@ -280,6 +280,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             let nav = UINavigationController()
             nav.isNavigationBarHidden = true
             let screen = ProfileViewController(api: api) { [weak self] in
+                self?.session.invalidateCalendarsMetadata()
                 self?.invalidateDataAndReloadDisplayedBlocks(timeout: 0)
             }
             nav.setViewControllers([screen], animated: false)
