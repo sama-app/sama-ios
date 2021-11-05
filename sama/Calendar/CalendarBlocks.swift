@@ -17,4 +17,5 @@ struct CalendarBlock: Decodable {
     let title: String?
     let startDateTime: String
     let endDateTime: String
+    let meetingBlock: Bool
 }

@@ -47,4 +47,29 @@ extension UIColor {
 
     /// #684c2b 0.1
     static var calendarGrid = UIColor(red: 104/255.0, green: 76/255.0, blue: 43/255.0, alpha: 0.1)
+
+    /// make a diagonal striped pattern
+    class func patternStripes(_ color1: UIColor, color2: UIColor, barThickness t: CGFloat) -> UIColor {
+        let dim: CGFloat = t * 2.0 * sqrt(2.0)
+
+        let img = UIGraphicsImageRenderer(size: .init(width: dim, height: dim)).image { context in
+
+            // rotate the context and shift up
+            context.cgContext.rotate(by: -CGFloat.pi / 4.0)
+            context.cgContext.translateBy(x: -2.0 * t, y: 0)
+
+            let bars: [(UIColor,UIBezierPath)] = [
+                (color1,  UIBezierPath(rect: .init(x: 0.0, y: 0.0, width: dim * 2.0, height: t))),
+                (color2,UIBezierPath(rect: .init(x: 0.0, y: t, width: dim * 2.0, height: t)))
+            ]
+
+            bars.forEach {  $0.0.setFill(); $0.1.fill() }
+
+            // move down and paint again
+            context.cgContext.translateBy(x: 0, y: 2.0 * t)
+            bars.forEach {  $0.0.setFill(); $0.1.fill() }
+        }
+
+        return UIColor(patternImage: img)
+    }
 }

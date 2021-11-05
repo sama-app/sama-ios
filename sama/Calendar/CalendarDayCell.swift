@@ -12,6 +12,7 @@ struct CalendarBlockedTime: Equatable {
     let title: String
     let start: Decimal
     let duration: Decimal
+    let isBlockedTime: Bool
     var depth: Int
     var colour: Int?
 }
@@ -90,7 +91,13 @@ final class CalendarDayCell: UICollectionViewCell {
 
             let x: CGFloat = CGFloat(block.depth) * 8
             let y = topInset + CGFloat(truncating: block.start as NSNumber) * cellSize.height + 1
-            baseColor.withAlphaComponent(0.17).setFill()
+
+            let bgColor = baseColor.withAlphaComponent(0.17)
+            if block.isBlockedTime {
+                UIColor.patternStripes(bgColor, color2: baseColor.withAlphaComponent(0.1), barThickness: 7).setFill()
+            } else {
+                bgColor.setFill()
+            }
 
             let boxWidth = cellSize.width - eventRightBottomInset.x - x
             let boxHeight = cellSize.height * CGFloat(lengthHour) - eventRightBottomInset.y

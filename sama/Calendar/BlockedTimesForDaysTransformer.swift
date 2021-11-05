@@ -40,6 +40,7 @@ struct BlockedTimesForDaysTransformer {
                     title: block.title ?? "",
                     start: Decimal(start.timeIntervalSince(self.calendar.startOfDay(for: start)) / 3600),
                     duration: Decimal(duration / 3600),
+                    isBlockedTime: block.meetingBlock,
                     depth: 0,
                     colour: nil
                 )
