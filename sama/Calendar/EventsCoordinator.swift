@@ -16,6 +16,7 @@ struct MeetingProposalBody: Encodable {
     let meetingIntentCode: String
     let proposedSlots: [ProposedSlot]
     let title: String
+    let blockOutSlots: Bool
 }
 
 struct MeetingProposalResult: Decodable {
@@ -75,6 +76,11 @@ struct MeetingInitiationRequest: ApiRequest {
     var body: EventSearchRequestData
 }
 
+struct MeetingSettings {
+    let title: String
+    let isBlockingEnabled: Bool
+}
+
 class EventsCoordinator {
 
     var onChanges: (() -> Void)?
@@ -89,7 +95,7 @@ class EventsCoordinator {
         }
     }
 
-    var meetingTitle = ""
+    var meetingSettings = MeetingSettings(title: "", isBlockingEnabled: false)
 
     private var constraints = EventConstraints(duration: 0.25, min: RescheduleTarget(daysOffset: 0, start: 0))
     private var intentCode = ""
@@ -182,7 +188,10 @@ class EventsCoordinator {
     func setup(withCode code: String, durationMins: Int, defaultTitle: String, properties props: [EventProperties]) {
         intentCode = code
         meetingCode = ""
-        meetingTitle = defaultTitle
+        meetingSettings = MeetingSettings(
+            title: defaultTitle,
+            isBlockingEnabled: false
+        )
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
 
@@ -255,14 +264,18 @@ class EventsCoordinator {
             body: MeetingProposalBody(
                 meetingIntentCode: intentCode,
                 proposedSlots: slots,
-                title: meetingTitle
+                title: meetingSettings.title,
+                blockOutSlots: meetingSettings.isBlockingEnabled
             )
         )
 
         api.request(for: req) {
             switch $0 {
             case let .success(result):
-                self.meetingTitle = result.meeting.title
+                self.meetingSettings = MeetingSettings(
+                    title: result.meeting.title,
+                    isBlockingEnabled: false
+                )
                 self.meetingCode = result.meetingCode
             case let .failure(err):
                 self.presentError(err)

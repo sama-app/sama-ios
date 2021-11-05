@@ -79,7 +79,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         ])
 
         secondaryBtn = UIButton(type: .system)
-        secondaryBtn.setTitle("Edit meeting title", for: .normal)
+        secondaryBtn.setTitle("Edit meeting settings", for: .normal)
         secondaryBtn.translatesAutoresizingMaskIntoConstraints = false
         secondaryBtn.setTitleColor(.primary, for: .normal)
         secondaryBtn.titleLabel?.font = .brandedFont(ofSize: 20, weight: .semibold)
