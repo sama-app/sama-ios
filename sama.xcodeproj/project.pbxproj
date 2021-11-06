@@ -81,6 +81,11 @@
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
 		E7BFB365269AC59800EA6AFD /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
 		E7BFB368269AEB6500EA6AFD /* SamaKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */; };
+		E7CE2C3727352DEE00D6A1C8 /* ConnectedGoogleAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C31272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift */; };
+		E7CE2C3827352DF700D6A1C8 /* AccountConnectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */; };
+		E7CE2C3927352DFC00D6A1C8 /* SamaHexColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78F9880272D8005005758D7 /* SamaHexColours.swift */; };
+		E7CE2C3A27352E0300D6A1C8 /* UIViewController+Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F89E7C2732790F00690BA7 /* UIViewController+Errors.swift */; };
+		E7CE2C3B27352E1100D6A1C8 /* GoogleConnectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C2F272B055B00A0F60D /* GoogleConnectionScreen.swift */; };
 		E7D3C08B26413340009CAB88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08A26413340009CAB88 /* AppDelegate.swift */; };
 		E7D3C08D26413340009CAB88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D3C08C26413340009CAB88 /* SceneDelegate.swift */; };
 		E7D3C09226413340009CAB88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
@@ -876,12 +881,14 @@
 				E7D481E626E6A8E6008B7CEE /* SuggestionsViewCoordinator.swift in Sources */,
 				E7D481E726E6A8E6008B7CEE /* SlotSuggestionView.swift in Sources */,
 				E7D481E826E6A8E6008B7CEE /* SuggestionsPickerView.swift in Sources */,
+				E7CE2C3B27352E1100D6A1C8 /* GoogleConnectionScreen.swift in Sources */,
 				E7D481E926E6A8E6008B7CEE /* SuggestionsPickerLayout.swift in Sources */,
 				E7D481EA26E6A8E6008B7CEE /* SuggestionsPickerViewCell.swift in Sources */,
 				E7D481EB26E6A8E6008B7CEE /* MeetingInviteRecipientInputPanel.swift in Sources */,
 				E7D481EC26E6A8E6008B7CEE /* SuggestionsPickCalendarSlider.swift in Sources */,
 				E7D481ED26E6A8E6008B7CEE /* ProposedAvailableSlotsTransformer.swift in Sources */,
 				E7D481EE26E6A8E6008B7CEE /* TimeConfirmedPanel.swift in Sources */,
+				E7CE2C3827352DF700D6A1C8 /* AccountConnectionScreen.swift in Sources */,
 				E7D481EF26E6A8E6008B7CEE /* AppDelegate.swift in Sources */,
 				E7D481F026E6A8E6008B7CEE /* SceneDelegate.swift in Sources */,
 				E7D481F126E6A8E6008B7CEE /* RemoteNotificationsTokenSync.swift in Sources */,
@@ -890,8 +897,10 @@
 				E7D481F426E6A8E6008B7CEE /* UIView+NSLayoutConstraint.swift in Sources */,
 				E7D481F526E6A8E6008B7CEE /* RoutingViewController.swift in Sources */,
 				E7D481F626E6A8E6008B7CEE /* OnboardingViewController.swift in Sources */,
+				E7CE2C3727352DEE00D6A1C8 /* ConnectedGoogleAccountScreen.swift in Sources */,
 				E7D481F726E6A8E6008B7CEE /* UIFont+Branded.swift in Sources */,
 				E7D481F826E6A8E6008B7CEE /* ProfileViewController.swift in Sources */,
+				E7CE2C3927352DFC00D6A1C8 /* SamaHexColours.swift in Sources */,
 				E7D481F926E6A8E6008B7CEE /* MainActionButton.swift in Sources */,
 				E7D481FA26E6A8E6008B7CEE /* HighlightableSimpleCell.swift in Sources */,
 				E7D481FB26E6A8E6008B7CEE /* Sama.swift in Sources */,
@@ -907,6 +916,7 @@
 				E7D4820426E6A8E6008B7CEE /* AcknowledgementsViewController.swift in Sources */,
 				E7D4820526E6A8E6008B7CEE /* SamaKeys.swift in Sources */,
 				E7D4820626E6A8E6008B7CEE /* SignInGoogleButton.swift in Sources */,
+				E7CE2C3A27352E0300D6A1C8 /* UIViewController+Errors.swift in Sources */,
 				E7D4820726E6A8E6008B7CEE /* LightTextField.swift in Sources */,
 				E7D4820826E6A8E6008B7CEE /* MeetingInviteDeepLinkService.swift in Sources */,
 			);
