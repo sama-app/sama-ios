@@ -9,6 +9,7 @@ import UIKit
 import SafariServices
 
 enum AppSettingsItem {
+    case meetingPrefs
     case feedback
     case support
     case privacy
@@ -18,6 +19,7 @@ enum AppSettingsItem {
 
     var text: String {
         switch self {
+        case .meetingPrefs: return "Meeting Preferences"
         case .feedback: return "Give us feedback"
         case .support: return "Support"
         case .privacy: return "Privacy"
@@ -103,7 +105,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     private func freshReload() {
         let constSections = [
-            ProfileSection(title: "Settings", items: [.appSettings(.feedback), .appSettings(.support)]),
+            ProfileSection(title: "Settings", items: [.appSettings(.meetingPrefs)]),
+            ProfileSection(title: nil, items: [.appSettings(.feedback), .appSettings(.support)]),
             ProfileSection(title: nil, items: [.appSettings(.privacy), .appSettings(.terms), .appSettings(.acknowledgements)]),
             ProfileSection(title: nil, items: [.appSettings(.logout)])
         ]
@@ -302,7 +305,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     private func configureAppSettingsCell(_ cell: UITableViewCell, item: AppSettingsItem) -> UITableViewCell {
         cell.textLabel?.text = item.text
         cell.textLabel?.textColor = .secondary
-        cell.textLabel?.font = .brandedFont(ofSize: 24, weight: .regular)
+        cell.textLabel?.font = .brandedFont(
+            ofSize: 24,
+            weight: item == .meetingPrefs ? .semibold : .regular
+        )
         cell.layoutMargins = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
@@ -349,6 +355,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     private func handleSelection(of item: AppSettingsItem) {
         switch item {
+        case .meetingPrefs:
+            let screen = MeetingPreferencesScreen()
+            screen.api = api
+            navigationController?.pushViewController(screen, animated: true)
         case .feedback:
             Sama.bi.track(event: "feedback")
             openBrowser(with: "https://sama.nolt.io")

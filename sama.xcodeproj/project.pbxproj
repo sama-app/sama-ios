@@ -167,6 +167,8 @@
 		E7D4821526E6AE1F008B7CEE /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
 		E7D4821626E6AE22008B7CEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */; };
 		E7D5FE8226C971190047B6D3 /* SuggestionsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */; };
+		E7EBFBEF2736D90F0038CDC9 /* MeetingPreferencesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EBFBEE2736D90F0038CDC9 /* MeetingPreferencesScreen.swift */; };
+		E7EBFBF02736D90F0038CDC9 /* MeetingPreferencesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EBFBEE2736D90F0038CDC9 /* MeetingPreferencesScreen.swift */; };
 		E7ED04A426E3B4E2001FCE0D /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = E7ED04A326E3B4E2001FCE0D /* FirebaseDynamicLinks */; };
 		E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
 		E7F2810226C4620E0051BB5B /* SuggestionsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */; };
@@ -281,6 +283,7 @@
 		E7D3C0CC26413952009CAB88 /* AuthDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDirections.swift; sourceTree = "<group>"; };
 		E7D481B726E6A87D008B7CEE /* Sama.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sama.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsPickerView.swift; sourceTree = "<group>"; };
+		E7EBFBEE2736D90F0038CDC9 /* MeetingPreferencesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingPreferencesScreen.swift; sourceTree = "<group>"; };
 		E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarSession+Factory.swift"; sourceTree = "<group>"; };
 		E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsViewCoordinator.swift; sourceTree = "<group>"; };
 		E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt Regular.otf"; sourceTree = "<group>"; };
@@ -375,6 +378,7 @@
 				E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */,
 				E77A0C2F272B055B00A0F60D /* GoogleConnectionScreen.swift */,
 				E77A0C31272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift */,
+				E7EBFBEE2736D90F0038CDC9 /* MeetingPreferencesScreen.swift */,
 			);
 			path = AccountDetails;
 			sourceTree = "<group>";
@@ -763,6 +767,7 @@
 				E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */,
 				E72634CC26CADB380041886D /* SuggestionsPickerViewCell.swift in Sources */,
 				E739294F271B5BD30097745F /* CalendarDayHeader.swift in Sources */,
+				E7EBFBEF2736D90F0038CDC9 /* MeetingPreferencesScreen.swift in Sources */,
 				E7AD47F826E947DC00634F2B /* UIApplication+Helpers.swift in Sources */,
 				E732E95E266280EA008A8B82 /* UIView+NSLayoutConstraint.swift in Sources */,
 				E763A6D7269733EE00082BCE /* AcknowledgementsViewController.swift in Sources */,
@@ -860,6 +865,7 @@
 				E7D481D626E6A8E6008B7CEE /* CalendarBlocks.swift in Sources */,
 				E7AD47F926E9485100634F2B /* UIApplication+Helpers.swift in Sources */,
 				E7D481D726E6A8E6008B7CEE /* CalendarSession.swift in Sources */,
+				E7EBFBF02736D90F0038CDC9 /* MeetingPreferencesScreen.swift in Sources */,
 				E7D481D826E6A8E6008B7CEE /* CalendarLayout.swift in Sources */,
 				E7D481D926E6A8E6008B7CEE /* CalendarViewController.swift in Sources */,
 				E77CB9A52721488000BC0405 /* CalendarTopBar.swift in Sources */,

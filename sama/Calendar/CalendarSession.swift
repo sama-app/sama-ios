@@ -74,7 +74,13 @@ struct DomainUserSettings: Decodable {
         let newsletterSubscriptionEnabled: Bool?
     }
 
+    struct Meeting: Decodable {
+        let defaultTitle: String?
+        let blockOutSlots: Bool
+    }
+
     let marketingPreferences: Marketing
+    let meetingPreferences: Meeting
 }
 
 struct UserDetailsRequest: ApiRequest {

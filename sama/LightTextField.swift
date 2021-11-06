@@ -10,10 +10,12 @@ import UIKit
 class LightTextField: UITextField {
 
     private let border = CALayer()
+    private let backgroundLayer = CALayer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        layer.addSublayer(backgroundLayer)
         layer.addSublayer(border)
     }
 
@@ -27,6 +29,10 @@ class LightTextField: UITextField {
         let path = UIBezierPath(roundedRect: bounds.insetBy(dx: -1, dy:-1), cornerRadius:8)
         let cutout = UIBezierPath(roundedRect: bounds, cornerRadius:8).reversing()
         path.append(cutout)
+
+        backgroundLayer.backgroundColor = UIColor.white.cgColor
+        backgroundLayer.cornerRadius = 8
+        backgroundLayer.frame = bounds
 
         border.frame = bounds
         border.shadowPath = path.cgPath
