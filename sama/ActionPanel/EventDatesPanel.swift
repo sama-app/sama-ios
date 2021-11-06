@@ -127,7 +127,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         let timezoneOffset = options.timezone.hoursFromGMT - options.usersTimezoneHoursFromGMT
         let refStart = calendar.startOfDay(for: refDate)
 
-        let props = result.suggestedSlots.map { slot -> EventProperties in
+        let props = result.context.suggestedSlots.map { slot -> EventProperties in
             let parsedStart = self.apiDateF.date(from: slot.startDateTime)
             let startDate = self.calendar.toTimeZone(date: parsedStart)
             let parsedEnd = self.apiDateF.date(from: slot.endDateTime)
@@ -159,9 +159,12 @@ class EventDatesPanel: CalendarNavigationBlock {
         self.loader.stopAnimating()
         self.loader.isHidden = true
         self.coordinator.setup(
-            withCode: result.meetingIntentCode,
+            withCode: result.context.meetingIntentCode,
             durationMins: options.duration.duration,
-            defaultTitle: result.defaultMeetingTitle,
+            settings: MeetingSettings(
+                title: result.context.defaultMeetingTitle,
+                isBlockingEnabled: result.isBlockingEnabled
+            ),
             properties: props
         )
     }

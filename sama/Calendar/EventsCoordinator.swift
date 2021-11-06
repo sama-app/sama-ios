@@ -60,16 +60,21 @@ struct MeetingSuggestedSlot: Decodable {
     let endDateTime: String
 }
 
-struct MeetingInitiationResult: Decodable {
+struct MeetingInitiationContext: Decodable {
     let meetingIntentCode: String
     let durationMinutes: Int
     let defaultMeetingTitle: String
     let suggestedSlots: [MeetingSuggestedSlot]
 }
 
+struct MeetingInitiationResult {
+    let context: MeetingInitiationContext
+    let isBlockingEnabled: Bool
+}
+
 struct MeetingInitiationRequest: ApiRequest {
     typealias T = EventSearchRequestData
-    typealias U = MeetingInitiationResult
+    typealias U = MeetingInitiationContext
     let uri = "/meeting/initiate"
     let logKey = "/meeting/initiate"
     let method: HttpMethod = .post
@@ -172,26 +177,56 @@ class EventsCoordinator {
     }
 
     func initiateMeeting(duration: Int, timeZoneId: String, completion: @escaping (Result<MeetingInitiationResult, ApiError>) -> Void) {
+        var error: ApiError?
+        var isBlockingEnabled: Bool?
+        var context: MeetingInitiationContext?
+
+        let group = DispatchGroup()
+        group.enter()
+        api.request(for: UserSettingsRequest()) {
+            switch $0 {
+            case let .success(settings):
+                isBlockingEnabled = settings.meetingPreferences.blockOutSlots
+            case let .failure(err):
+                error = err
+            }
+            group.leave()
+        }
+
+        group.enter()
         let data = EventSearchRequestData(
             durationMinutes: duration,
             timeZone: timeZoneId,
             suggestionSlotCount: 3
         )
-        api.request(for: MeetingInitiationRequest(body: data)) { result in
-            if case let .failure(err) = result {
-                self.presentError(err)
+        api.request(for: MeetingInitiationRequest(body: data)) {
+            switch $0 {
+            case let .success(result):
+                context = result
+            case let .failure(err):
+                error = err
             }
-            completion(result)
+            group.leave()
+        }
+
+        group.notify(queue: .main) {
+            if let err = error {
+                self.presentError(err)
+                completion(.failure(err))
+            } else {
+                let result = MeetingInitiationResult(
+                    context: context!,
+                    isBlockingEnabled: isBlockingEnabled!
+                )
+                completion(.success(result))
+            }
         }
     }
 
-    func setup(withCode code: String, durationMins: Int, defaultTitle: String, properties props: [EventProperties]) {
+    func setup(withCode code: String, durationMins: Int, settings: MeetingSettings, properties props: [EventProperties]) {
         intentCode = code
         meetingCode = ""
-        meetingSettings = MeetingSettings(
-            title: defaultTitle,
-            isBlockingEnabled: false
-        )
+        meetingSettings = settings
         eventViews = props.map { _ in self.makeEventView() }
         eventProperties = props
 
