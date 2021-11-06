@@ -301,7 +301,7 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
         }
     }
 
-    private func authenticate(with url: String, onFailure: @escaping () -> Void) {
+    private func authenticate(with url: String, onAbort: @escaping () -> Void) {
         let session = ASWebAuthenticationSession(url: URL(string: url)!, callbackURLScheme: Sama.env.productId) { (callbackUrl, err) in
             do {
                 let token = try AuthResultHandler().handle(callbackUrl: callbackUrl, error: err)
@@ -314,11 +314,11 @@ class OnboardingViewController: UIViewController, ASWebAuthenticationPresentatio
             } catch let err {
                 Crashlytics.crashlytics().record(error: err)
                 if let authErr = err as? ASWebAuthenticationSessionError, authErr.code == .canceledLogin {
-                    // cancelled
+                    onAbort()
                 } else {
                     DispatchQueue.main.async {
                         self.presentError(err)
-                        onFailure()
+                        onAbort()
                     }
                 }
             }
