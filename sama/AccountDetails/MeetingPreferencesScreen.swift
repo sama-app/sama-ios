@@ -13,7 +13,6 @@ class MeetingPreferencesScreen: UIViewController {
 
     private let titleLabel = UILabel().forAutoLayout()
     private let blockingToggle = UISwitch().forAutoLayout()
-    private let inputField = LightTextField().forAutoLayout()
 
     private var topBar: UIView!
 
@@ -75,35 +74,12 @@ class MeetingPreferencesScreen: UIViewController {
     }
 
     private func displayPreferences(_ preferences: DomainUserSettings.Meeting) {
-        let inputTitle = UILabel().forAutoLayout()
-        inputTitle.textColor = .secondary
-        inputTitle.font = .brandedFont(ofSize: 14, weight: .semibold)
-        inputTitle.attributedText = NSAttributedString(string: "DEFAULT MEETING TITLE", attributes: [.kern: 1.5])
-        view.addSubview(inputTitle)
-        NSLayoutConstraint.activate([
-            inputTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            view.trailingAnchor.constraint(equalTo: inputTitle.trailingAnchor, constant: 40),
-            inputTitle.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 48)
-        ])
-
-        inputField.font = .brandedFont(ofSize: 20, weight: .regular)
-        inputField.placeholder = preferences.defaultTitle ?? ""
-        inputField.autocorrectionType = .no
-        inputField.autocapitalizationType = .sentences
-        view.addSubview(inputField)
-        NSLayoutConstraint.activate([
-            inputField.heightAnchor.constraint(equalToConstant: 48),
-            inputField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            view.trailingAnchor.constraint(equalTo: inputField.trailingAnchor, constant: 40),
-            inputField.topAnchor.constraint(equalTo: inputTitle.bottomAnchor, constant: 8)
-        ])
-
         let blockingTimesContainer = setupBlockTimesContainer(isOn: preferences.blockOutSlots)
         view.addSubview(blockingTimesContainer)
         NSLayoutConstraint.activate([
             blockingTimesContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             view.trailingAnchor.constraint(equalTo: blockingTimesContainer.trailingAnchor, constant: 40),
-            blockingTimesContainer.topAnchor.constraint(equalTo: inputField.bottomAnchor, constant: 24)
+            blockingTimesContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 48)
         ])
     }
 
