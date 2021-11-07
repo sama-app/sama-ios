@@ -7,6 +7,19 @@
 
 import UIKit
 
+struct UpdateMeetingPreferencesBody: Encodable {
+    let defaultTitle: String?
+    let blockOutSlots: Bool
+}
+
+struct UpdateMeetingPreferencesRequest: ApiRequest {
+    typealias U = EmptyBody
+    let uri = "/user/me/update-meeting-preferences"
+    let logKey = "/user/me/update-meeting-preferences"
+    let method: HttpMethod = .post
+    let body: UpdateMeetingPreferencesBody
+}
+
 class MeetingPreferencesScreen: UIViewController {
 
     var api: Api!
@@ -93,6 +106,7 @@ class MeetingPreferencesScreen: UIViewController {
         label.text = "Block proposed times by default"
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
+        blockingToggle.addTarget(self, action: #selector(onBlockingTimesToggle(_:)), for: .valueChanged)
         blockingToggle.onTintColor = .primary
         blockingToggle.isOn = isOn
 
@@ -113,5 +127,21 @@ class MeetingPreferencesScreen: UIViewController {
 
     @objc private func onBack() {
         navigationController?.popViewController(animated: true)
+    }
+
+    @objc private func onBlockingTimesToggle(_ toggle: UISwitch) {
+        let oldValue = !toggle.isOn
+        toggle.isUserInteractionEnabled = false
+        let req = UpdateMeetingPreferencesRequest(body: .init(defaultTitle: nil, blockOutSlots: toggle.isOn))
+        api.request(for: req) { [weak self] in
+            switch $0 {
+            case .success:
+                break
+            case let .failure(err):
+                self?.presentError(err)
+                toggle.setOn(oldValue, animated: true)
+            }
+            toggle.isUserInteractionEnabled = true
+        }
     }
 }
