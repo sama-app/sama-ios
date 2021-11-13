@@ -20,7 +20,7 @@ set -o pipefail && \
 set -o pipefail && \
  xcodebuild -exportArchive \
  -archivePath $archivePath \
- -exportOptionsPlist "./env/dev/exportOptions-mac.plist" \
+ -exportOptionsPlist $EXPORT_OPTIONS_PLIST \
  -exportPath $buildPath \
  | xcpretty
 
