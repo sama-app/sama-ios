@@ -6,8 +6,8 @@ BUILD_CERT_PATH=$RUNNER_TEMP/build_certificate.p12
 DEV_ID_CERT_PATH=$RUNNER_TEMP/developer_id_certificate.p12
 MAC_INSTALLER_CERT_PATH=$RUNNER_TEMP/mac_installer_certificate.p12
 BUILD_PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-DEV_ID_PP_PATH=$RUNNER_TEMP/dev_id_pp.mobileprovision
-BUILD_MAC_PP_PATH=$RUNNER_TEMP/build_mac_pp.mobileprovision
+DEV_ID_PP_PATH=$RUNNER_TEMP/dev_id_pp.provisionprofile
+BUILD_MAC_PP_PATH=$RUNNER_TEMP/build_mac_pp.provisionprofile
 KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
 # import certificate and provisioning profile from secrets
@@ -31,8 +31,5 @@ security list-keychain -d user -s $KEYCHAIN_PATH
 
 # apply provisioning profile
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-cp $BUILD_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-build_mac_pp_uuid=`grep UUID -A1 -a $BUILD_MAC_PP_PATH | grep -io "[-A-F0-9]\{36\}"`
-# cp $BUILD_MAC_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-mv $BUILD_MAC_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$build_mac_pp_uuid.mobileprovision
-# cp $DEV_ID_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+cp $BUILD_MAC_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+cp $DEV_ID_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
