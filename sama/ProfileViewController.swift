@@ -288,12 +288,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         case let .account(item):
             switch item {
             case let .connection(index):
+                Sama.bi.track(event: "open-account")
                 let screen = ConnectedGoogleAccountScreen()
                 screen.api = api
                 screen.account = accounts[index].linked
                 screen.onReload = { [weak self] in self?.notifyAboutAccountsChangeAndReload() }
                 navigationController?.pushViewController(screen, animated: true)
             case .addNew:
+                Sama.bi.track(event: "add-account")
                 let screen = AccountConnectionScreen()
                 screen.api = api
                 screen.onReload = { [weak self] in self?.notifyAboutAccountsChangeAndReload() }
@@ -356,6 +358,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     private func handleSelection(of item: AppSettingsItem) {
         switch item {
         case .meetingPrefs:
+            Sama.bi.track(event: "meeting-preferences")
             let screen = MeetingPreferencesScreen()
             screen.api = api
             navigationController?.pushViewController(screen, animated: true)

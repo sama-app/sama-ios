@@ -111,6 +111,8 @@ class GoogleConnectionScreen: UIViewController, ASWebAuthenticationPresentationC
         guard !isPerformingAction else { return }
         isPerformingAction = true
 
+        Sama.bi.track(event: "add-account-google")
+
         api.request(for: GoogleLinkAccountRequest()) {
             switch $0 {
             case let .success(directions):

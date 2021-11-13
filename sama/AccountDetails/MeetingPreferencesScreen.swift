@@ -130,6 +130,8 @@ class MeetingPreferencesScreen: UIViewController {
     }
 
     @objc private func onBlockingTimesToggle(_ toggle: UISwitch) {
+        Sama.bi.track(event: "block-times-global", parameters: ["enable": toggle.isOn])
+
         let oldValue = !toggle.isOn
         toggle.isUserInteractionEnabled = false
         let req = UpdateMeetingPreferencesRequest(body: .init(defaultTitle: nil, blockOutSlots: toggle.isOn))

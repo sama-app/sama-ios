@@ -224,6 +224,8 @@ class ConnectedGoogleAccountScreen: UIViewController {
     }
 
     private func switchCalendar(index: Int, isSelected: Bool, completion: @escaping (Bool) -> Void) {
+        Sama.bi.track(event: "toggle-calendar", parameters: ["enable": isSelected])
+
         let body = AccountCalendarSwitchBody(
             accountId: account.id,
             calendarId: accountCalendars[index].calendarId
@@ -253,6 +255,8 @@ class ConnectedGoogleAccountScreen: UIViewController {
     @objc private func onDisconnectGoogle() {
         guard !isPerformingAction else { return }
         isPerformingAction = true
+
+        Sama.bi.track(event: "disconnect-account")
 
         api.request(for: GoogleUnlinkAccountRequest(body: GoogleUnlinkAccountBody(googleAccountId: account.id))) { [weak self] in
             switch $0 {

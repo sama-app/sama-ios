@@ -233,6 +233,7 @@ class EventDatesPanel: CalendarNavigationBlock {
                 UIPasteboard.general.string = cachedShareableMessage
             }
         } else {
+            Sama.bi.track(event: "meeting-settings")
             editTitle()
         }
     }
