@@ -30,6 +30,14 @@ class Sama {
     /// Business insights
     static let bi = Banalytics()
 
+    static var isShareMainFlow: Bool {
+        #if targetEnvironment(macCatalyst)
+        return false
+        #else
+        return true
+        #endif
+    }
+
     private init() {}
 
     static func makeApi(with auth: AuthContainer) -> Api {

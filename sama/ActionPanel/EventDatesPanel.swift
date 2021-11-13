@@ -46,6 +46,8 @@ class EventDatesPanel: CalendarNavigationBlock {
     private var isProposed = false
     private var cachedShareableMessage = ""
 
+    private let isShareFlow = Sama.isShareMainFlow
+
     override func didLoad() {
         backBtn = addBackButton(action: #selector(onBackButton))
 
@@ -92,7 +94,11 @@ class EventDatesPanel: CalendarNavigationBlock {
         ])
         secondaryBtn.isHidden = true
 
-        actionButton = addMainActionButton(title: "Share suggestions", action: #selector(onMainActionButton), topAnchor: secondaryBtn.bottomAnchor)
+        actionButton = addMainActionButton(
+            title: isShareFlow ? "Share suggestions" : "Copy Suggestions",
+            action: #selector(onMainActionButton),
+            topAnchor: wrapper.bottomAnchor
+        )
         actionButton.isHidden = true
 
         loader.translatesAutoresizingMaskIntoConstraints = false
@@ -153,7 +159,7 @@ class EventDatesPanel: CalendarNavigationBlock {
             }
         })
 
-        self.secondaryBtn.isHidden = false
+        self.secondaryBtn.isHidden = !isShareFlow
         self.actionButton.isHidden = false
         self.titleLabel.text = "Here are your best slots:"
         self.loader.stopAnimating()
@@ -242,7 +248,11 @@ class EventDatesPanel: CalendarNavigationBlock {
     }
 
     private func copySuggestions() {
-        Sama.bi.track(event: "share")
+        if isShareFlow {
+            Sama.bi.track(event: "share")
+        } else {
+            Sama.bi.track(event: "copy")
+        }
 
         actionButton.isEnabled = false
         coordinator.proposeSlots { [weak self] in
@@ -253,10 +263,20 @@ class EventDatesPanel: CalendarNavigationBlock {
                 self.cachedShareableMessage = result.shareableMessage
 
                 self.coordinator.lockPick(true)
-                self.coordinator.presentProposal(self.actionButton, self.cachedShareableMessage, false, { [weak self] in
-                    self?.actionButton.isEnabled = true
-                    self?.confirmProposal()
-                })
+                if self.isShareFlow {
+                    self.coordinator.presentProposal(self.actionButton, self.cachedShareableMessage, false, { [weak self] in
+                        self?.actionButton.isEnabled = true
+                        self?.confirmProposal()
+                    })
+                } else {
+                    self.actionButton.isEnabled = true
+
+                    UIPasteboard.general.string = self.cachedShareableMessage
+
+                    let panel = InvitationCopiedPanel()
+                    panel.coordinator = self.coordinator
+                    self.navigation?.pushBlock(panel, animated: true)
+                }
             case .failure:
                 self.actionButton.isEnabled = true
             }
