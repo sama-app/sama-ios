@@ -97,7 +97,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         actionButton = addMainActionButton(
             title: isShareFlow ? "Share suggestions" : "Copy Suggestions",
             action: #selector(onMainActionButton),
-            topAnchor: wrapper.bottomAnchor
+            topAnchor: secondaryBtn.bottomAnchor
         )
         actionButton.isHidden = true
 
@@ -159,7 +159,7 @@ class EventDatesPanel: CalendarNavigationBlock {
             }
         })
 
-        self.secondaryBtn.isHidden = !isShareFlow
+        self.secondaryBtn.isHidden = false
         self.actionButton.isHidden = false
         self.titleLabel.text = "Here are your best slots:"
         self.loader.stopAnimating()
@@ -225,8 +225,13 @@ class EventDatesPanel: CalendarNavigationBlock {
 
     @objc private func onSecondaryActionButton() {
         if isProposed {
-            Sama.bi.track(event: "share-again")
-            coordinator.presentProposal(secondaryBtn, cachedShareableMessage, true, {})
+            if isShareFlow {
+                Sama.bi.track(event: "share-again")
+                coordinator.presentProposal(secondaryBtn, cachedShareableMessage, true, {})
+            } else {
+                Sama.bi.track(event: "copy-again")
+                UIPasteboard.general.string = cachedShareableMessage
+            }
         } else {
             editTitle()
         }
@@ -269,13 +274,10 @@ class EventDatesPanel: CalendarNavigationBlock {
                         self?.confirmProposal()
                     })
                 } else {
-                    self.actionButton.isEnabled = true
-
                     UIPasteboard.general.string = self.cachedShareableMessage
 
-                    let panel = InvitationCopiedPanel()
-                    panel.coordinator = self.coordinator
-                    self.navigation?.pushBlock(panel, animated: true)
+                    self.actionButton.isEnabled = true
+                    self.confirmProposal()
                 }
             case .failure:
                 self.actionButton.isEnabled = true
@@ -299,7 +301,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         confirmationLabel.translatesAutoresizingMaskIntoConstraints = false
         confirmationLabel.textColor = .neutral1
         confirmationLabel.font = .brandedFont(ofSize: 20, weight: .semibold)
-        confirmationLabel.text = "You suggested these times"
+        confirmationLabel.text = isShareFlow ? "You suggested these times" : "You can now paste it in any app."
         self.addSubview(confirmationLabel)
         NSLayoutConstraint.activate([
             confirmationLabel.centerYAnchor.constraint(equalTo: self.titleLabel.centerYAnchor),
@@ -307,7 +309,7 @@ class EventDatesPanel: CalendarNavigationBlock {
         ])
 
         self.wrapperHeightConstraint.constant = CGFloat(self.coordinator.eventProperties.count * 60)
-        self.secondaryBtn.setTitle("Share again", for: .normal)
+        self.secondaryBtn.setTitle(isShareFlow ? "Share again" : "Copy again", for: .normal)
         self.actionButton.setTitle("Done", for: .normal)
         self.reloadEventsList()
     }
