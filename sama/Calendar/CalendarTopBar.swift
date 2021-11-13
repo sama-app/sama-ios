@@ -35,6 +35,8 @@ class CalendarTopBar: UIView {
         }
     }
 
+    private let isViewSwitchEnabled: Bool
+
     private lazy var monthTitle: UILabel = {
         let title = UILabel(frame: .zero)
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -65,8 +67,9 @@ class CalendarTopBar: UIView {
     }()
     private var navBarItems: [UIView] = []
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(isViewSwitchEnabled: Bool) {
+        self.isViewSwitchEnabled = isViewSwitchEnabled
+        super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .base
     }
@@ -120,14 +123,20 @@ class CalendarTopBar: UIView {
             action: #selector(onProfileButton)
         )
         addSubview(profileBtn)
-        viewSwitchBtn.setImage(calendarViewImage, for: .normal)
-        addSubview(viewSwitchBtn)
+
         NSLayoutConstraint.activate([
-            viewSwitchBtn.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
             profileBtn.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
-            trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6),
-            profileBtn.leadingAnchor.constraint(equalTo: viewSwitchBtn.trailingAnchor)
+            trailingAnchor.constraint(equalTo: profileBtn.trailingAnchor, constant: 6)
         ])
+
+        if isViewSwitchEnabled {
+            viewSwitchBtn.setImage(calendarViewImage, for: .normal)
+            addSubview(viewSwitchBtn)
+            NSLayoutConstraint.activate([
+                viewSwitchBtn.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+                profileBtn.leadingAnchor.constraint(equalTo: viewSwitchBtn.trailingAnchor)
+            ])
+        }
 
         navBarItems = [iconView, monthTitle, viewSwitchBtn, profileBtn]
     }

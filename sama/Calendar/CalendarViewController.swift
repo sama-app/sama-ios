@@ -265,7 +265,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func setupTopBar() {
-        topBar = CalendarTopBar(frame: .zero)
+        topBar = CalendarTopBar(isViewSwitchEnabled: !Ui.isWideScreen())
         view.addSubview(topBar)
         topBar.pinLeadingAndTrailing(top: 0, and: [topBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44)])
 
