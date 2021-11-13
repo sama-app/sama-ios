@@ -53,7 +53,7 @@ while true; do
   if [ "$status" != "in progress" ]; then
     break;
   fi;
-  sleep 30
+  sleep 10
 done
 
 xcrun stapler staple $appPath

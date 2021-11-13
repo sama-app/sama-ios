@@ -12,10 +12,10 @@
 	<string>manual</string>
 	<key>teamID</key>
 	<string>F299X48S2K</string>
-    <key>provisioningProfiles</key>
-    <dict>
-        <key>com.meetsama.sama.dev</key>
-        <string>sama_dev_id_signed</string>
-    </dict>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.meetsama.sama.dev</key>
+		<string>sama_dev_id_signed</string>
+	</dict>
 </dict>
 </plist>
