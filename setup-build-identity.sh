@@ -34,5 +34,5 @@ mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 cp $BUILD_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 build_mac_pp_uuid=`grep UUID -A1 -a $BUILD_MAC_PP_PATH | grep -io "[-A-F0-9]\{36\}"`
 # cp $BUILD_MAC_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-mv $BUILD_MAC_PP_PATH "~/Library/MobileDevice/Provisioning Profiles/$build_mac_pp_uuid.mobileprovision"
+mv $BUILD_MAC_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$build_mac_pp_uuid.mobileprovision
 # cp $DEV_ID_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
