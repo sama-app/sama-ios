@@ -20,6 +20,7 @@ jobs:
           MAC_INSTALLER_CERT_BASE64: ${{ secrets.MAC_INSTALLER_CERT_BASE64 }}
           MAC_INSTALLER_CERT_PASS: ${{ secrets.MAC_INSTALLER_CERT_PASS }}
           BUILD_PROVISIONING: ${{ secrets.DEV_PROVISIONING }}
+          BUILD_MAC_PROVISIONING: ${{ secrets.BUILD_MAC_PROVISIONING }}
           DEV_ID_PROVISIONING: ${{ secrets.DEV_ID_PROVISIONING }}
           KEYCHAIN_PASS: ${{ secrets.DEV_KEYCHAIN_PASS }}
         run: ./setup-build-identity.sh
