@@ -18,6 +18,11 @@ jobs:
           BUILD_CERT_PASS: ${{ secrets.PROD_CERT_PASS }}
           BUILD_PROVISIONING: ${{ secrets.PROD_PROVISIONING }}
           KEYCHAIN_PASS: ${{ secrets.PROD_KEYCHAIN_PASS }}
+          MAC_INSTALLER_CERT_BASE64: ${{ secrets.MAC_INSTALLER_CERT_BASE64 }}
+          MAC_INSTALLER_CERT_PASS: ${{ secrets.MAC_INSTALLER_CERT_PASS }}
+          BUILD_PROVISIONING: ${{ secrets.DEV_PROVISIONING }}
+          BUILD_MAC_PROVISIONING: ${{ secrets.BUILD_MAC_PROVISIONING }}
+          DEV_ID_PROVISIONING: ${{ secrets.DEV_ID_PROVISIONING }}
         run: ./setup-build-identity.sh
 
       - name: Setup auth key
