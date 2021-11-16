@@ -46,26 +46,26 @@ xcrun altool \
  > $notarizationRequestPath
 
 echo "wait for result"
-requestUUID=`/usr/libexec/PlistBuddy -c "Print :notarization-upload:RequestUUID" $notarizationRequestPath`
-echo $requestUUID
-while true; do
-  xcrun altool \
-    --notarization-info "$requestUUID" \
-    --apiKey "$APPSTORE_API_KEY" \
-    --apiIssuer "$APPSTORE_API_ISSUER" \
-    --output-format xml > $notarizationResultPath
-  status=`/usr/libexec/PlistBuddy -c "Print :notarization-info:Status" $notarizationResultPath`
-  if [ "$status" != "in progress" ]; then
-    break;
-  fi;
-  sleep 10
-done
+# requestUUID=`/usr/libexec/PlistBuddy -c "Print :notarization-upload:RequestUUID" $notarizationRequestPath`
+# echo $requestUUID
+# while true; do
+#   xcrun altool \
+#     --notarization-info "$requestUUID" \
+#     --apiKey "$APPSTORE_API_KEY" \
+#     --apiIssuer "$APPSTORE_API_ISSUER" \
+#     --output-format xml > $notarizationResultPath
+#   status=`/usr/libexec/PlistBuddy -c "Print :notarization-info:Status" $notarizationResultPath`
+#   if [ "$status" != "in progress" ]; then
+#     break;
+#   fi;
+#   sleep 10
+# done
 
-echo "staple"
-xcrun stapler staple $appPath
+# echo "staple"
+# xcrun stapler staple $appPath
 
-echo "zip notarized"
-ditto -c -k --keepParent $appPath $appZipPath
+# echo "zip notarized"
+# ditto -c -k --keepParent $appPath $appZipPath
 
 # distribute
 # TODO
