@@ -1,4 +1,4 @@
-name: prod-ios
+name: prod-mac
 
 on:
   push:
