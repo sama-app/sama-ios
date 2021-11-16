@@ -5,28 +5,24 @@ archivePath='sama.xcarchive'
 buildPath='build-sama'
 
 # clean
-# rm -rf $buildPath
-# rm -rf $archivePath
+rm -rf $buildPath
+rm -rf $archivePath
 
-mkdir buildPath
-
-cp Sama-pre-notarization.zip build-sama/Sama-pre-notarization.zip
-
-# # build and archive
-# set -o pipefail && \
-#  xcodebuild \
-#  -project sama.xcodeproj \
-#  -scheme sama-mac \
-#  -configuration Release \
-#  -archivePath $archivePath \
-#  archive CODE_SIGN_STYLE=Manual \
-#  | xcpretty
-# set -o pipefail && \
-#  xcodebuild -exportArchive \
-#  -archivePath $archivePath \
-#  -exportOptionsPlist $EXPORT_OPTIONS_PLIST \
-#  -exportPath $buildPath \
-#  | xcpretty
+# build and archive
+set -o pipefail && \
+ xcodebuild \
+ -project sama.xcodeproj \
+ -scheme sama-mac \
+ -configuration Release \
+ -archivePath $archivePath \
+ archive CODE_SIGN_STYLE=Manual \
+ | xcpretty
+set -o pipefail && \
+ xcodebuild -exportArchive \
+ -archivePath $archivePath \
+ -exportOptionsPlist "./env/dev/exportOptions-mac.plist" \
+ -exportPath $buildPath \
+ | xcpretty
 
 # notarize
 
@@ -36,8 +32,8 @@ appZipPath="$buildPath/Sama.zip"
 notarizationRequestPath="$buildPath/notarization-request.plist"
 notarizationResultPath="$buildPath/notarization-result.plist"
 
-# echo "zip pre notarization"
-# ditto -c -k --keepParent $appPath $appPreNotarizationZipPath
+echo "zip pre notarization"
+ditto -c -k --keepParent $appPath $appPreNotarizationZipPath
 
 echo "notarize"
 xcrun altool \
@@ -50,9 +46,11 @@ xcrun altool \
  > $notarizationRequestPath
 
 echo "wait for result"
+requestUUID=`/usr/libexec/PlistBuddy -c "Print :notarization-upload:RequestUUID" $notarizationRequestPath`
+echo $requestUUID
 while true; do
   xcrun altool \
-    --notarization-info `/usr/libexec/PlistBuddy -c "Print :notarization-upload:RequestUUID" $notarizationRequestPath` \
+    --notarization-info "$requestUUID" \
     --apiKey "$APPSTORE_API_KEY" \
     --apiIssuer "$APPSTORE_API_ISSUER" \
     --output-format xml > $notarizationResultPath
