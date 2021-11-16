@@ -59,6 +59,19 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: notarization-request
-          path: build-sama/notarization-request.plist
+          name: sama-zip
+          path: build-sama/Sama.zip
           retention-days: 1
+
+      - name: Send zip to slack
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          APPSTORE_API_ISSUER: ${{ secrets.APPSTORE_API_ISSUER }}
+        run: |
+          #!/bin/bash
+          curl \
+           -F file=@build-sama/Sama.zip \
+           -F "initial_comment=Sama app" \
+           -F channels=C02M9MAF7B5 \
+           -H "Authorization: Bearer $SLACK_API_TOKEN" \
+           https://slack.com/api/files.upload
