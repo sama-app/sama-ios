@@ -31,5 +31,6 @@ security list-keychain -d user -s $KEYCHAIN_PATH
 
 # apply provisioning profile
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+cp $BUILD_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 cp $BUILD_MAC_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 cp $DEV_ID_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
