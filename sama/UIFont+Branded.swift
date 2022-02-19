@@ -9,12 +9,12 @@ import UIKit
 
 extension UIFont {
 
-    enum RecoletaAltWeight: String {
+    enum RufinaWeight: String {
         case regular = "Regular"
-        case semibold = "SemiBold"
+        case semibold = "Bold"
     }
 
-    class func brandedFont(ofSize size: CGFloat, weight: RecoletaAltWeight) -> UIFont {
-        return UIFont(name: "RecoletaAlt-\(weight.rawValue)", size: size)!
+    class func brandedFont(ofSize size: CGFloat, weight: RufinaWeight) -> UIFont {
+        return UIFont(name: "Rufina-\(weight.rawValue)", size: size)!
     }
 }

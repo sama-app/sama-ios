@@ -65,6 +65,10 @@
 		E79C90C52684D58600398E41 /* AuthContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C42684D58600398E41 /* AuthContainer.swift */; };
 		E79C90C72684E8CB00398E41 /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */; };
 		E79C90C92684E8DC00398E41 /* ApiDateTimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */; };
+		E7AA470A27C130620001BD0C /* Rufina-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7AA470827C130620001BD0C /* Rufina-Regular.ttf */; };
+		E7AA470B27C130620001BD0C /* Rufina-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7AA470827C130620001BD0C /* Rufina-Regular.ttf */; };
+		E7AA470C27C130620001BD0C /* Rufina-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7AA470927C130620001BD0C /* Rufina-Bold.ttf */; };
+		E7AA470D27C130620001BD0C /* Rufina-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7AA470927C130620001BD0C /* Rufina-Bold.ttf */; };
 		E7AD47F826E947DC00634F2B /* UIApplication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */; };
 		E7AD47F926E9485100634F2B /* UIApplication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */; };
 		E7AF65D526944F3900F5DAD5 /* BackgroundShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */; };
@@ -158,8 +162,6 @@
 		E7D4820C26E6ADEA008B7CEE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = E7D4820B26E6ADEA008B7CEE /* FirebaseMessaging */; };
 		E7D4820E26E6ADF2008B7CEE /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = E7D4820D26E6ADF2008B7CEE /* FirebaseDynamicLinks */; };
 		E7D4820F26E6AE00008B7CEE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09526413342009CAB88 /* LaunchScreen.storyboard */; };
-		E7D4821026E6AE05008B7CEE /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
-		E7D4821126E6AE05008B7CEE /* Latinotype - Recoleta Alt SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */; };
 		E7D4821226E6AE0C008B7CEE /* firebase in Resources */ = {isa = PBXBuildFile; fileRef = E763A6DA2697383B00082BCE /* firebase */; };
 		E7D4821326E6AE0F008B7CEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09326413342009CAB88 /* Assets.xcassets */; };
 		E7D4821426E6AE13008B7CEE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
@@ -170,8 +172,6 @@
 		E7ED04A426E3B4E2001FCE0D /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = E7ED04A326E3B4E2001FCE0D /* FirebaseDynamicLinks */; };
 		E7EE1D9726BAE2ED00DCE729 /* CalendarSession+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */; };
 		E7F2810226C4620E0051BB5B /* SuggestionsViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */; };
-		E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */; };
-		E7F5AD0D266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */; };
 		E7F5AD0F266FB03700138E42 /* UIFont+Branded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */; };
 		E7F5AD13266FBF8F00138E42 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */; };
 		E7F5AD15266FBFD900138E42 /* CalendarNavigationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5AD14266FBFD900138E42 /* CalendarNavigationCenter.swift */; };
@@ -253,6 +253,8 @@
 		E79C90C42684D58600398E41 /* AuthContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainer.swift; sourceTree = "<group>"; };
 		E79C90C62684E8CB00398E41 /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
 		E79C90C82684E8DC00398E41 /* ApiDateTimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiDateTimeFormatter.swift; sourceTree = "<group>"; };
+		E7AA470827C130620001BD0C /* Rufina-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rufina-Regular.ttf"; sourceTree = "<group>"; };
+		E7AA470927C130620001BD0C /* Rufina-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rufina-Bold.ttf"; sourceTree = "<group>"; };
 		E7AD47F726E947DC00634F2B /* UIApplication+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Helpers.swift"; sourceTree = "<group>"; };
 		E7AF65D426944F3900F5DAD5 /* BackgroundShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundShadowView.swift; sourceTree = "<group>"; };
 		E7B46FFD2694708D00558BB9 /* SlotFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotFinder.swift; sourceTree = "<group>"; };
@@ -284,8 +286,6 @@
 		E7EBFBEE2736D90F0038CDC9 /* MeetingPreferencesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingPreferencesScreen.swift; sourceTree = "<group>"; };
 		E7EE1D9626BAE2ED00DCE729 /* CalendarSession+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarSession+Factory.swift"; sourceTree = "<group>"; };
 		E7F2810126C4620E0051BB5B /* SuggestionsViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsViewCoordinator.swift; sourceTree = "<group>"; };
-		E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt Regular.otf"; sourceTree = "<group>"; };
-		E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Latinotype - Recoleta Alt SemiBold.otf"; sourceTree = "<group>"; };
 		E7F5AD0E266FB03700138E42 /* UIFont+Branded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Branded.swift"; sourceTree = "<group>"; };
 		E7F5AD12266FBF8F00138E42 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E7F5AD14266FBFD900138E42 /* CalendarNavigationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNavigationCenter.swift; sourceTree = "<group>"; };
@@ -542,8 +542,8 @@
 		E7F5AD09266FAF4B00138E42 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
-				E7F5AD0A266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf */,
-				E7F5AD0B266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf */,
+				E7AA470927C130620001BD0C /* Rufina-Bold.ttf */,
+				E7AA470827C130620001BD0C /* Rufina-Regular.ttf */,
 			);
 			path = fonts;
 			sourceTree = "<group>";
@@ -703,12 +703,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D3C09726413342009CAB88 /* LaunchScreen.storyboard in Resources */,
-				E7F5AD0D266FAF5B00138E42 /* Latinotype - Recoleta Alt SemiBold.otf in Resources */,
 				E761E12D26EF8BD6003FB1BF /* timezones-source.json in Resources */,
-				E7F5AD0C266FAF5B00138E42 /* Latinotype - Recoleta Alt Regular.otf in Resources */,
+				E7AA470A27C130620001BD0C /* Rufina-Regular.ttf in Resources */,
 				E763A6DB2697383B00082BCE /* firebase in Resources */,
 				E7D3C09426413342009CAB88 /* Assets.xcassets in Resources */,
 				E7D3C09226413340009CAB88 /* Main.storyboard in Resources */,
+				E7AA470C27C130620001BD0C /* Rufina-Bold.ttf in Resources */,
 				E7B50CAB2694A44B00BBEFD9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -732,12 +732,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D4820F26E6AE00008B7CEE /* LaunchScreen.storyboard in Resources */,
-				E7D4821126E6AE05008B7CEE /* Latinotype - Recoleta Alt SemiBold.otf in Resources */,
-				E7D4821026E6AE05008B7CEE /* Latinotype - Recoleta Alt Regular.otf in Resources */,
 				E7D4821226E6AE0C008B7CEE /* firebase in Resources */,
+				E7AA470B27C130620001BD0C /* Rufina-Regular.ttf in Resources */,
 				E7D4821326E6AE0F008B7CEE /* Assets.xcassets in Resources */,
 				E7D4821426E6AE13008B7CEE /* Main.storyboard in Resources */,
 				E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */,
+				E7AA470D27C130620001BD0C /* Rufina-Bold.ttf in Resources */,
 				E7D4821626E6AE22008B7CEE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

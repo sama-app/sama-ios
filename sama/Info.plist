@@ -48,8 +48,8 @@
 	<string>2021 Sama</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Latinotype - Recoleta Alt Regular.otf</string>
-		<string>Latinotype - Recoleta Alt SemiBold.otf</string>
+		<string>Rufina-Regular.ttf</string>
+		<string>Rufina-Bold.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
