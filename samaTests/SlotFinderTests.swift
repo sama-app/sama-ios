@@ -53,8 +53,8 @@ class SlotFinderTests: XCTestCase {
             with: SlotFinder.Context(
                 eventProperties: [],
                 blocksForDayIndex: [
-                    5001: [CalendarBlockedTime(title: "SAMA Standup", start: 12.5, duration: 1, depth: 0)],
-                    5003: [CalendarBlockedTime(title: "SAMA Standup", start: 12.5, duration: 1, depth: 0)]
+                    5001: [CalendarBlockedTime(id: AccountCalendarId(accountId: "1", calendarId: "1"), title: "SAMA Standup", start: 12.5, duration: 1, isBlockedTime: false, depth: 0)],
+                    5003: [CalendarBlockedTime(id: AccountCalendarId(accountId: "1", calendarId: "1"), title: "SAMA Standup", start: 12.5, duration: 1, isBlockedTime: false, depth: 0)]
                 ],
                 totalDaysOffset: 5001,
                 currentDayIndex: 5000,
@@ -64,7 +64,6 @@ class SlotFinderTests: XCTestCase {
             )
         )
         let exp = [
-            SlotFinder.PossibleSlot(daysOffset: 0, start: 11.5),
             SlotFinder.PossibleSlot(daysOffset: 1, start: 13.5),
             SlotFinder.PossibleSlot(daysOffset: 1, start: 9.5),
             SlotFinder.PossibleSlot(daysOffset: 2, start: 11.5),

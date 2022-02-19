@@ -36,8 +36,8 @@ class BlockedTimesForDaysTransformerTests: XCTestCase {
     func test_transformsModel() {
         let model = CalendarBlocks(
             events: [
-                CalendarBlock(title: "SAMA Standup #1", startDateTime: "2021-07-07T09:30:00Z", endDateTime: "2021-07-07T10:30:00Z"),
-                CalendarBlock(title: "SAMA Standup #2", startDateTime: "2021-07-09T09:30:00Z", endDateTime: "2021-07-09T10:30:00Z"),
+                CalendarBlock(accountId: "a1", calendarId: "c1", title: "SAMA Standup #1", startDateTime: "2021-07-07T09:30:00Z", endDateTime: "2021-07-07T10:30:00Z", meetingBlock: false),
+                CalendarBlock(accountId: "a1", calendarId: "c1", title: "SAMA Standup #2", startDateTime: "2021-07-09T09:30:00Z", endDateTime: "2021-07-09T10:30:00Z", meetingBlock: true),
             ]
         )
         let result = transformer.transform(model: model, in: (-5 ... 5))
@@ -48,9 +48,9 @@ class BlockedTimesForDaysTransformerTests: XCTestCase {
             4998: [],
             4999: [],
             5000: [],
-            5001: [CalendarBlockedTime(title: "SAMA Standup #1", start: 12.5, duration: 1, depth: 0)],
+            5001: [CalendarBlockedTime(id: AccountCalendarId(accountId: "a1", calendarId: "c1"), title: "SAMA Standup #1", start: 12.5, duration: 1, isBlockedTime: false, depth: 0)],
             5002: [],
-            5003: [CalendarBlockedTime(title: "SAMA Standup #2", start: 12.5, duration: 1, depth: 0)],
+            5003: [CalendarBlockedTime(id: AccountCalendarId(accountId: "a1", calendarId: "c1"), title: "SAMA Standup #2", start: 12.5, duration: 1, isBlockedTime: true, depth: 0)],
             5004: [],
             5005: []
         ]

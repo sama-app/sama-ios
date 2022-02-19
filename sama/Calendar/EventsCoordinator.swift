@@ -138,8 +138,8 @@ class EventsCoordinator {
 
     private var minTarget: RescheduleTarget {
         let comps = Calendar.current.dateComponents([.hour, .minute], from: CalendarDateUtils.shared.dateNow)
-        let ab = Int(floor(Double(comps.minute!) / Double(minsBase))) + 1
-        let minsNormalized = NSDecimalNumber(value: ab * minsBase).dividing(by: NSDecimalNumber(value: 60))
+        let next = Int(floor(Double(comps.minute!) / Double(minsBase))) + 1
+        let minsNormalized = NSDecimalNumber(value: next * minsBase).dividing(by: NSDecimalNumber(value: 60))
         let start = NSDecimalNumber(value: comps.hour!).adding(minsNormalized).decimalValue
         if start == 25 {
             return RescheduleTarget(daysOffset: 1, start: 0)
