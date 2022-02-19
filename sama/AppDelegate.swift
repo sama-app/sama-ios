@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseCrashlytics
 #if !targetEnvironment(macCatalyst)
 import FirebaseDynamicLinks
 #endif

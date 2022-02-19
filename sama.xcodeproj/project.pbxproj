@@ -79,7 +79,6 @@
 		E7BD94D526F600E300FDB867 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BD94D426F600E300FDB867 /* UiUtils.swift */; };
 		E7BD94D626F600E300FDB867 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BD94D426F600E300FDB867 /* UiUtils.swift */; };
 		E7BF6A702694488C0081C638 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BF6A6F2694488C0081C638 /* ToastMessageView.swift */; };
-		E7BFB365269AC59800EA6AFD /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
 		E7BFB368269AEB6500EA6AFD /* SamaKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFB367269AEB6500EA6AFD /* SamaKeys.swift */; };
 		E7CE2C3727352DEE00D6A1C8 /* ConnectedGoogleAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C31272BD4D800A0F60D /* ConnectedGoogleAccountScreen.swift */; };
 		E7CE2C3827352DF700D6A1C8 /* AccountConnectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77A0C2D272AF8AD00A0F60D /* AccountConnectionScreen.swift */; };
@@ -164,7 +163,6 @@
 		E7D4821226E6AE0C008B7CEE /* firebase in Resources */ = {isa = PBXBuildFile; fileRef = E763A6DA2697383B00082BCE /* firebase */; };
 		E7D4821326E6AE0F008B7CEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09326413342009CAB88 /* Assets.xcassets */; };
 		E7D4821426E6AE13008B7CEE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7D3C09026413340009CAB88 /* Main.storyboard */; };
-		E7D4821526E6AE1F008B7CEE /* sama.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E7BFB364269AC59800EA6AFD /* sama.xcconfig */; };
 		E7D4821626E6AE22008B7CEE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7B50CAA2694A44B00BBEFD9 /* GoogleService-Info.plist */; };
 		E7D5FE8226C971190047B6D3 /* SuggestionsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D5FE8126C971190047B6D3 /* SuggestionsPickerView.swift */; };
 		E7EBFBEF2736D90F0038CDC9 /* MeetingPreferencesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EBFBEE2736D90F0038CDC9 /* MeetingPreferencesScreen.swift */; };
@@ -657,7 +655,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					E7D3C08626413340009CAB88 = {
 						CreatedOnToolsVersion = 12.4;
@@ -711,7 +709,6 @@
 				E763A6DB2697383B00082BCE /* firebase in Resources */,
 				E7D3C09426413342009CAB88 /* Assets.xcassets in Resources */,
 				E7D3C09226413340009CAB88 /* Main.storyboard in Resources */,
-				E7BFB365269AC59800EA6AFD /* sama.xcconfig in Resources */,
 				E7B50CAB2694A44B00BBEFD9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -741,7 +738,6 @@
 				E7D4821326E6AE0F008B7CEE /* Assets.xcassets in Resources */,
 				E7D4821426E6AE13008B7CEE /* Main.storyboard in Resources */,
 				E736E23E26F2623200C6CFDC /* timezones-source.json in Resources */,
-				E7D4821526E6AE1F008B7CEE /* sama.xcconfig in Resources */,
 				E7D4821626E6AE22008B7CEE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
