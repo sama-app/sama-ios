@@ -3,9 +3,9 @@
 </p>
 
 <p>
-<img src="docs/appstore/Mac/2.png" height="260px"/>
-<img src="docs/appstore/FaceID/3.jpg" height="260px"/>
-<img src="docs/appstore/iPad/4.jpg" height="260px"/>
+<img src="docs/appstore/Mac/2.png" height="240px"/>
+<img src="docs/appstore/FaceID/3.jpg" height="240px"/>
+<img src="docs/appstore/iPad/4.jpg" height="240px"/>
 </p>
 
 <a href="https://www.producthunt.com/posts/sama?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-product-hunt-trending-new-tab-extension" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=315016&theme=light" alt="Sama - AI assistant to find the best times to meet" style="width: 250px; height: 54px;" width="250px" height="54px" /></a>
