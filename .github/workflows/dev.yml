@@ -2,7 +2,7 @@ name: dev
 
 on:
   push:
-    branches: [ main ]
+    branches: [ your_main_branch ]
 
 jobs:
   build:
